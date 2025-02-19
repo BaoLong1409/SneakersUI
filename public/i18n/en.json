@@ -1,0 +1,47 @@
+{
+    "login": {
+      "title": "LOGIN",
+      "subtitle": "Please enter your email and password!",
+      "email": "Email",
+      "password": "Password",
+      "forgotPassword": "Forgot password?",
+      "loginButton": "Login",
+      "signupQues": "Don't have an account yet?",
+      "signupLink": "Sign up",
+      "confirmLink": "Confirm",
+      "confirmSentence": "your email if you have not done yet"
+    },
+    "register": {
+      "title": "REGISTER",
+      "subtitle": "Please enter your infomation to create account!",
+      "email": "Email",
+      "phoneNumber": "Phone Number",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "registerButton": "Register",
+      "signinQues": "Have account?",
+      "signinLink": "Sign in"
+    },
+    "emailConfirmed": {
+      "success": "Your email confirmed successful!",
+      "fail": "Your email confirmation failed! Please try again",
+      "invalid": "Invalid token or email!",
+      "notFound": "User not found!",
+      "backToLogin": "Go back to the login page"
+    },
+    "header": {
+      "login": "Login",
+      "register": "Sign up",
+      "settingLabel": "Setting",
+      "settingLanguage": "Select Language",
+      "settingMode": "Select Mode",
+      "home": "Home",
+      "intro": "Introduction",
+      "news": "News",
+      "contact": "Contact",
+      "allProducts": "All Products"
+    }
+}
+  

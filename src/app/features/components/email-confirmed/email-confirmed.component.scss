@@ -1,0 +1,82 @@
+.email-confirmed-page {
+    user-select: none;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f9f9f9, #dfeeea, #cfe5e2);
+
+    .row-1-confirmed {
+        height: 100%;
+        .col-confirmed {
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .email-confirmed-box {
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+            height: 60%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .confirmed-wrapper {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            .email-confirmed__icon--success {
+                color: green;
+                font-size: 60px;
+            }
+
+            .email-confirmed__icon--failure {
+                color: #FF4C4C;
+                font-size: 60px;
+            }
+
+            .email-confirmed__icon--invalid {
+                color: #FFA500;
+                font-size: 60px;
+            }
+
+            .email-confirmed__icon--notFound {
+                color: #808080;
+                font-size: 60px;
+            }
+
+            .email-confirmed--success {
+                color: #28a745;
+            }
+
+            .email-confirmed--failure {
+                color: #FF4C4C;
+            }
+
+            .email-confirmed--invalid {
+                color: #FFA500;
+            }
+
+            .email-confirmed--notFound {
+                color: #808080;
+            }
+
+            .back-to-login-wrapper {
+                .back-to-login__icon {
+                    color: #000000;
+                    font-size: 30px;
+                    cursor: pointer;
+                }
+                .back-title {
+                    color: #6c757d;
+                }
+            }
+            
+        }
+    }
+
+    
+}

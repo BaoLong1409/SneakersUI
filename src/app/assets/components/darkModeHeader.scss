@@ -1,0 +1,27 @@
+.my-app-dark {
+    .app-header {
+        .p-menu {
+            .p-menu-item {
+              .p-menu-item-content {
+                > span {
+                  color: #ccc;
+                }
+                .languager-wrapper {
+                  p {
+                    color: #ccc;
+                    border-top: 1px solid #ccc;
+                  }
+                }
+                .mode-wrapper {
+                  p {
+                    color: #ccc;
+                    border-top: 1px solid #ccc;
+                  }
+                }
+                
+              }
+            }
+            
+          }
+    }
+}

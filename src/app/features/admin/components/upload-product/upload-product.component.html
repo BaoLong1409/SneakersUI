@@ -1,0 +1,47 @@
+<div class="container-fluid upload-page">
+    <div class="infor-product-wrapper">
+        <h1 class="upload-title">Upload Product</h1>
+        <div class="row">
+            <p-floatlabel>
+                <input pInputText id="over_label" autocomplete="off" />
+                <label for="over_label">Product Name</label>
+            </p-floatlabel>
+        </div>
+        <div class="row">
+            <p-floatlabel>
+                <textarea pTextarea id="over_label" [autoResize]="true" rows="5" cols="30" class="h-full"></textarea>
+                <label for="over_label">Product Description</label>
+            </p-floatlabel>
+        </div>
+        <div class="row">
+            <p-floatlabel>
+                <p-inputnumber inputId="currency-us" mode="currency" currency="VND" locale="vi-VN" />
+                <label for="over_label">Product Price (After sale)</label>
+            </p-floatlabel>
+        </div>
+        <div class="row">
+            <p-floatlabel>
+                <p-inputnumber inputId="currency-us" />
+                <label for="over_label">Sale (%)</label>
+            </p-floatlabel>
+        </div>
+
+        <div class="row">
+            <p-fileupload >
+                <ng-template #empty>
+                    <div>Drag and drop images to here to upload.</div>
+                </ng-template>
+                <ng-template #content>
+                    @if (imageFiles.length) {
+                        <ul>
+                        @for (file of imageFiles; track file) {
+                            <li>{{ file.name }} - {{ file.size }} bytes</li>
+                        }
+                        </ul>
+                    }
+                </ng-template>
+            </p-fileupload>
+        </div>
+
+    </div>
+</div>

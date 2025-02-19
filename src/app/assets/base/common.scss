@@ -1,0 +1,74 @@
+html {
+  font-size: 16px;
+  height: 100%;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100%;
+  font-family: "Poppins", "Segoe UI", "Roboto", "Helvetica Neue", Arial,
+    "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+  line-height: 1.5;
+  margin: 0;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+ul,
+li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.flex {
+  display: flex;
+}
+
+.grid {
+  display: grid;
+}
+
+@media (min-width: 1550px) and (max-width: 2000px) {
+  .offset-medium-6 {
+    margin-left: 50%;
+  }
+
+  .offset-medium-5 {
+    margin-left: 41.6667%;
+  }
+}
+
+@media (min-width: 900px) and (max-width: 1549px) {
+  .offset-small-1 {
+    margin-left: 8.33333%;
+  }
+
+  .offset-small-2 {
+    margin-left: 16.66667%;
+  }
+}

@@ -1,0 +1,38 @@
+<div class="container-fluid p-0 register-page">
+    <!-- <p-blockUI [blocked]="blockedUi">
+        <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
+    </p-blockUI> -->
+    <div class="register-header row">
+        <app-app-header></app-app-header>
+    </div>
+    <div class="row-1-register row h-100 justify-content-center align-items-center">
+        <div class="col-lg-6 col-sm-6 offset-lg-2">
+            <div class="register-box">
+                <h1 class="register-box-header" translate="register.title"></h1>
+                <p class="register-box-description">{{'register.subtitle' | translate}}</p>
+
+                <div class="register-form-container">
+                    <form (keydown.enter)="formGroupSubmitSubject.next()" class="form-group" [formGroup]="registerForm">
+                        <input class="email__input" pInputText required placeholder="{{'register.email' | translate}}" formControlName="email">
+                        <input class="email__input" pInputText required placeholder="{{'register.phoneNumber' | translate}}" formControlName="phoneNumber">
+                        <input class="first-name__input" pInputText required placeholder="{{'register.firstName' | translate}}" formControlName="firstName" />
+                        <input class="last-name__input" pInputText required placeholder="{{'register.lastName' | translate}}" formControlName="lastName" />
+
+                        <p-password class="password__input" placeholder="{{'register.password' | translate}}" formControlName="password" [toggleMask]="true" ></p-password>
+                        <p-password class="confirm-password__input" placeholder="{{'register.confirmPassword' | translate}}" formControlName="confirmPassword" [toggleMask]="true" ></p-password>
+                    </form>
+
+                    <p-toast></p-toast>
+                    <p-button (click)="formGroupSubmitSubject.next()" class="button-register" label="{{'register.registerButton' | translate}}" type="submit"></p-button>
+
+                    <div class="forward-sign-up-container">
+                        <p class="no-account-ques">{{'register.signinQues' | translate}} </p>
+                        <a class="forward-link" href="/Login">{{'register.signinLink' | translate}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

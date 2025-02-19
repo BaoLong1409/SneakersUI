@@ -1,0 +1,47 @@
+{
+    "login": {
+      "title": "ĐĂNG NHẬP",
+      "subtitle": "Vui lòng nhập email và mật khẩu của bạn!",
+      "email": "Email",
+      "password": "Mật khẩu",
+      "forgotPassword": "Quên mật khẩu?",
+      "loginButton": "Đăng nhập",
+      "signupQues": "Bạn chưa có tài khoản?",
+      "signupLink": "Đăng ký",
+      "confirmLink": "Xác thực",
+      "confirmSentence": "email của bạn nếu chưa thực hiện"
+    },
+    "register": {
+      "title": "ĐĂNG KÝ",
+      "subtitle": "Vui lòng nhập thông tin của bạn để tạo tài khoản!",
+      "email": "Email",
+      "phoneNumber": "Số điện thoại",
+      "firstName": "Tên",
+      "lastName": "Họ",
+      "password": "Mật khẩu",
+      "confirmPassword": "Nhập lại mật khẩu",
+      "registerButton": "Đăng ký",
+      "signinQues": "Bạn đã có tài khoản?",
+      "signinLink": "Đăng nhập"
+    },
+    "emailConfirmed": {
+      "success": "Email của bạn đã xác thực thành công",
+      "fail": "Email xác thực thất bại! Vui lòng thử lại",
+      "invalid": "Token hoặc email không chính xác!",
+      "notFound": "Không thể tìm thấy người dùng!",
+      "backToLogin": "Trở về trang đăng nhập"
+    },
+    "header": {
+      "login": "Đăng nhập",
+      "register": "Đăng ký",
+      "settingLabel": "Cài đặt",
+      "settingLanguage": "Chọn ngôn ngữ",
+      "settingMode": "Chọn chế độ",
+      "home": "Trang chủ",
+      "intro": "Giới thiệu",
+      "news": "Tin tức",
+      "contact": "Liên hệ",
+      "allProducts": "Tất cả sản phẩm"
+    }
+}
+  

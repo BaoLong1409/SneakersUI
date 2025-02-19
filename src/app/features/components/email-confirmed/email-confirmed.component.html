@@ -1,0 +1,33 @@
+<div class="container-fluid p-0 email-confirmed-page">
+    <div class="register-header row">
+        <app-app-header></app-app-header>
+    </div>
+    <div class="row-1-confirmed row h-100 justify-content-center align-items-center">
+        <div class="col-lg-6 col-sm-6 offset-lg-2 col-confirmed">
+            <div class="email-confirmed-box">
+                <div class="confirmed-wrapper">
+                    @if (status == "success"){
+                        <i class="fa-solid fa-circle-check email-confirmed__icon--success"></i>
+                        <h2 class="email-confirmed--success">{{'emailConfirmed.success' | translate}}</h2>
+                    } @else if (status == "fail") {
+                        <i class="fa-solid fa-circle-exclamation email-confirmed__icon--failure"></i>
+                        <h2 class="email-confirmed--failure">{{'emailConfirmed.fail' | translate}}</h2>
+                    } @else if (status == "invalid") {
+                        <i class="fa-solid fa-circle-xmark email-confirmed__icon email-confirmed__icon--invalid"></i>
+                        <h2 class="email-confirmed--invalid">{{'emailConfirmed.invalid' | translate}}</h2>
+                    } @else if (status == 'notFound') {
+                        <i class="fa-solid fa-ban email-confirmed__icon email-confirmed__icon--notFound"></i>
+                        <h2 class="email-confirmed--notFound">{{'emailConfirmed.notFound' | translate}}</h2>
+                    }
+                    
+                </div>
+                
+                <div class="back-to-login-wrapper">
+                    <i (click)="backToLogin()" class="fa-solid fa-circle-left back-to-login__icon"></i>
+                    <h5 class="back-title">{{'emailConfirmed.backToLogin' | translate}}</h5>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>

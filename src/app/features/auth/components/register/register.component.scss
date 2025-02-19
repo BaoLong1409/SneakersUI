@@ -1,0 +1,146 @@
+.register-page {
+    user-select: none;
+    width: 100%;
+    height: 100%;
+    // background: linear-gradient(135deg, #FF416C, #8A2387, #3F5EFB);
+    background: linear-gradient(135deg, #f9f9f9, #dfeeea, #cfe5e2);
+    .row-1-register {
+        height: 100%;
+    }
+
+    .register-box {
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        width: 100%;
+        max-width: 600px;
+        max-height: 100%;
+
+        .register-box-header {
+            color: #000000;
+            margin-bottom: 20px;
+            font-size: 3rem;
+        }
+
+        .register-box-description {
+            color: rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+
+        .register-form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .first-name__input,
+            .last-name__input,
+            .email__input {
+                font-size: 18px;
+                font-family: 'Poppins', sans-serif;
+                background-color: transparent;
+                border: 2px solid rgba(0, 0, 0, 0.5);
+                border-radius: 35px;
+                padding: 17px 20px;
+                margin-bottom: 20px;
+                width: 100%;
+                max-width: 350px;
+                color: rgb(0, 0, 0);
+                outline: none;
+
+                &::placeholder {
+                    font-size: 18px;
+                    text-align: center; /* Căn giữa placeholder */
+                    color: rgba(0, 0, 0, 0.5);
+                }
+            }
+
+            .password__input,
+            .confirm-password__input {
+                .p-password {
+                    width: 100%;
+                    max-width: 350px;
+                    text-align: center;
+                    margin-bottom: 16px;
+                }
+                input {
+                    font-size: 18px;
+                    width: 100%;
+                    max-width: 350px;
+                    background-color: transparent;
+                    border: 2px solid rgba(0, 0, 0, 0.5);
+                    border-radius: 30px;
+                    padding: 20px 20px;
+                    color: rgb(0, 0, 0);
+                }
+                input::placeholder {
+                    font-size: 18px;
+                    text-align: center;
+                    color: rgba(0, 0, 0, 0.5);
+                }
+
+                eyeslashicon {
+                    svg {
+                        height: 18px;
+                        width: 18px;
+                    }
+                }
+
+                eyeicon {
+                    svg {
+                        height: 18px;
+                        width: 18px;
+                    }
+                }
+            }
+
+            .forget-password-link {
+                color: rgba(0, 0, 0, 0.7);
+                text-decoration: none;
+                margin: 20px 0;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+
+            .button-register {
+                width: 30%;
+                .p-button {
+                    background-color: transparent;
+                    color: rgba(0, 0, 0, 0.7);
+                    border: 1px solid #00FF87;
+                    border-radius: 30px;
+                    width: 100%;
+                    max-width: 300px;
+                    cursor: pointer;
+                    font-size: 1rem;
+                    padding: 20px 0;
+                }
+            }
+
+            .forward-sign-up-container {
+                display: flex;
+                align-items: center;
+                .no-account-ques {
+                    color: rgba(0, 0, 0, 0.5);
+                    margin-right: 6px;
+                }
+
+                .forward-link {
+                    text-align: center;
+                    color: rgba(0, 0, 0, 0.7);
+
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+            }
+            
+        }
+    }
+}
+
+.invisible {
+    display: none;
+}

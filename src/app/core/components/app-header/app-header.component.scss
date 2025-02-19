@@ -1,0 +1,279 @@
+.app-header {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 100;
+    .p-select {
+        align-items: center;
+        margin-right: 36px;
+        max-width: 140px;
+        width: 140px;
+    }
+
+    // Toggle mode button
+    #checkbox-input {
+        display: none;
+      }
+      
+      .switch {
+        width: fit-content;
+        padding: 6px;
+        background-color: rgb(46, 46, 46);
+        border-radius: 50px;
+        z-index: 1;
+        cursor: pointer;
+        display: flex;
+        transition: all 0.7s;
+      }
+      
+      #checkbox-input:checked + .switch {
+        background-color: rgb(242, 250, 1);
+        box-shadow: 0px 0px 100px rgb(255, 196, 0);
+      }
+
+      .header-login {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      .header-register {
+        margin-left: 24px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      .setting__icon {
+        margin-left: 24px;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .p-menu {
+        .p-menu-item {
+          
+          .p-menu-item-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            > span {
+              font-size: 22px;
+              color: #000;
+              margin-bottom: 12px;
+            }
+            .languager-wrapper {
+              width: 80%;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              p {
+                width: 100%;
+                color: #000;
+                display: flex;
+                justify-content: center;
+                border-top: 1px solid #bbb;
+                padding-top: 12px;
+              }
+              .p-select {
+                margin-right: 0;
+                margin-bottom: 16px;
+              }
+            }
+
+            .mode-wrapper {
+              width: 80%;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+
+              p {
+                width: 100%;
+                color: #000;
+                display: flex;
+                justify-content: center;
+                border-top: 1px solid #bbb;
+                padding-top: 12px;
+              }
+            }
+            
+          }
+        }
+        
+      }
+
+      .information-wrapper {
+        width: fit-content;
+        font-size: 12px;
+      }
+
+      .navbar-wrapper {
+        background-color: transparent !important;
+        width: fit-content;
+        height: 80px;
+        line-height: 80px;
+        .navbar-nav {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          .nav-link {
+            color: black;
+            font-weight: 500;
+            font-size: 12px;
+            width: auto;
+            position: relative;
+            text-transform: uppercase;
+            word-spacing: -1px;
+      
+            &:hover {
+              cursor: pointer;
+      
+              .allProduct {
+                display: block;
+              }
+      
+              &::after {
+                width: 80%;
+                opacity: 1;
+              }
+            }
+      
+            &::after {
+              content: "";
+              height: 3px;
+              width: 0;
+              background-color: rgb(43, 39, 39);
+              position: absolute;
+              display: block;
+              top: calc(100% + 2px);
+              left: 50%;
+              transform: translateX(-50%);
+              opacity: 0;
+              transition: opacity .5s ease-in, width .5s;
+      
+              &.active {
+                display: block;
+              }
+            }
+      
+            &.active {
+              color: red !important;
+            }
+          }
+        }
+      }
+      
+}
+
+
+// .nav-link.nav-link-drop::before {
+//   content: "";
+//   display: block;
+//   width: 8px;
+//   height: 8px;
+//   border-width: 2px;
+//   border-style: solid;
+//   border-color: transparent transparent gray gray;
+//   transform: rotate(-45deg);
+//   position: absolute;
+//   top: 33%;
+//   left: 91%;
+// }
+
+// khong co dropdown
+
+// .dropdown-menu {
+//   display: none !important;
+//   border-radius: 0px !important;
+//   animation: showUp 0.2s ease-in;
+//   position: relative;
+//   transform: translateY(6px);
+//   width: 100px;
+// }
+
+// .dropdown-menu:after {
+//   content: "";
+//   position: absolute;
+//   top: -12px;
+//   right: 83%;
+//   border-width: 7px;
+//   border-style: solid;
+//   border-color: transparent transparent white transparent;
+// }
+
+// .nav-link:hover+.dropdown-menu {
+//   display: block !important;
+//   z-index: 2;
+// }
+
+// .nav-item:hover .dropdown-menu {
+//   display: block !important;
+//   z-index: 2;
+// }
+
+// .dropdown-menu li {
+//   position: relative;
+//   height: 40px;
+// }
+
+// .dropdown-menu li a {
+//   height: 100%;
+//   margin-bottom: 0;
+//   line-height: 30px;
+// }
+
+// .dropdown-item:hover {
+//   background-color: rgb(238, 238, 238) !important;
+//   color: rgb(166, 13, 13) !important;
+// }
+
+// .dropdown-menu li::after {
+//   content: "";
+//   display: block;
+//   width: 100%;
+//   height: 1px;
+//   background-color: rgb(239, 238, 238);
+//   position: absolute;
+//   top: calc(100% + 5px);
+//   left: 0;
+// }
+
+@keyframes showUp {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media only screen and (max-width: 575px) {
+}
+
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+}
+
+@media only screen and (min-width: 768px) and (max-width: 850px) {
+  nav {
+    margin-top: -20px;
+  }
+}
+
+@media only screen and (min-width: 851px) and (max-width: 1199px) {
+}
+
+@media only screen and (min-width: 1200px) and (max-width: 1400px) {
+}
+
+@media only screen and (min-width: 1401px) and (max-width: 1899px) {
+}

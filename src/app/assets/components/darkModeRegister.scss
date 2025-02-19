@@ -1,0 +1,80 @@
+.my-app-dark {
+    .register-page {
+        background: linear-gradient(135deg, #2E2E2E, #3B3B3B, #4A4A4A);
+        .register-box {
+            .register-box-header {
+                color: #ffffff;
+            }
+            .register-box-description {
+                color: rgba(255, 255, 255, 0.5);
+            }
+            .register-form-container {
+                .email__input {
+                    color: #ffffff;
+                    border: 2px solid rgba(255, 255, 255, 0.5);
+                    &::placeholder {
+                        color: rgba(255, 255, 255, 0.5);
+                    }
+                }
+                .password__input {
+                    input {
+                        color: #ffffff;
+                        border: 2px solid rgba(255, 255, 255, 0.5);
+                        &::placeholder {
+                            color: rgba(255, 255, 255, 0.5);
+                        }
+                    }
+    
+                }
+
+                .first-name__input,
+                .last-name__input {
+                    color: #ffffff;
+                    border: 2px solid rgba(255, 255, 255, 0.5);
+                    &::placeholder {
+                        color: rgba(255, 255, 255, 0.5);
+                    }
+                }
+                .confirm-password__input {
+                    input {
+                        color: #ffffff;
+                        border: 2px solid rgba(255, 255, 255, 0.5);
+                        &::placeholder {
+                            color: rgba(255, 255, 255, 0.5);
+                        }
+                    }
+                }
+
+                .forget-password-link {
+                    color: rgba(255, 255, 255, 0.7);
+                }
+
+                .button-login { 
+                    .p-button {
+                        border: 1px solid #ffffff7b;
+                        color: rgba(255, 255, 255, 0.5);
+                    }
+                }
+                
+                .forward-sign-up-container { 
+                    .no-account-ques {
+                        color: rgba(255, 255, 255, 0.5);
+                    }
+    
+                    .forward-link {
+                        text-align: center;
+                        color: rgba(255, 255, 255, 0.7);
+                    }
+                }
+                .send-confirmation-link {
+                    .link-to-confirm {
+                        color: rgba(255, 255, 255, 0.7);
+                    }
+                    .confirmation-text {
+                        color: rgba(255, 255, 255, 0.5);
+                    }
+                }
+            }
+        }
+    }
+}

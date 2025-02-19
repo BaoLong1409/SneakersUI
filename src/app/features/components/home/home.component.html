@@ -1,0 +1,60 @@
+<div  class="container-fluid home-wrapper">
+  <section [ngStyle]="homeStyle" class="feature-product-wrapper">
+    <i (click)="prevFeatureProduct()" class="home-arrow home-icon-arrow-left fa-solid fa-arrow-left"></i>
+    <!-- <i class="home-arrow home-icon-arrow-left pi pi-arrow-left"></i> -->
+    <div class="main-image">
+      @for (product of featureProducts; track $index) {
+      <div class="image-wrapper" 
+      [class.active]="$index === initIndex " 
+      [class.next]="$index === nextIndex" 
+      [class.prev]="$index === prevIndex"
+      [class.else]="$index !== initIndex && $index !== nextIndex && $index !== prevIndex"
+      >
+        <img class="image-item" [src]="product.imageUrl" alt="Image_nike" />
+        <h3 class="image-text">{{ product.name }}</h3>
+        <div class="product-information">
+          <h2 class="price">{{product.price}}$</h2>
+          <p-rating [(ngModel)]="product.rating" [readonly]="true" />
+      </div>
+      </div>
+      }
+      
+      <h1 class="buy__button">BUY NOW</h1>
+    </div>
+    <i
+      (click)="nextFeatureProduct()"
+      class="home-arrow home-icon-arrow-right fa-solid fa-arrow-right"
+    ></i>
+    <div class="wave wave1"></div>
+    <div class="wave wave2"></div>
+    <div class="wave wave3"></div>
+    <div class="wave wave4"></div>
+
+    
+  </section>
+
+  <section class="other-product-wrapper">
+      <h2 class="recommendation-product-title">RECOMMEND FOR YOU</h2>
+
+      <p-dataview [value]="recommendationProducts" [paginator]="false" [rows]="12">
+        <ng-template #list let-items>
+          <div class="grid">
+            @for (product of recommendationProducts; track product) {
+              <div class="product-item-wrapper">
+                <img class="product-item-image" [src]="product.thumbnailImage" alt="404">
+                <div class="product-information">
+                  <h3 class="product-item-name">{{product.name}}</h3>
+                  <p class="product-item-price">{{product.price}}$</p>
+                </div>
+              </div>
+            }
+            
+          </div>
+        </ng-template>
+        
+      </p-dataview>
+  </section>
+
+</div>
+
+

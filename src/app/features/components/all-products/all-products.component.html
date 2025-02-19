@@ -1,0 +1,50 @@
+<div class="container-fluid all-products">
+  <div class="row row-1">
+    <div class="col-lg-1 offset-lg-8 offset-8">
+      <p-dropdown
+        [options]="categoriesOptions"
+        placeholder="Danh mục"
+      ></p-dropdown>
+    </div>
+    <div class="col-lg-2 offset-lg-0 offset-0">
+      <p-dropdown
+        [options]="sortOptions"
+        placeholder="Sắp xếp theo giá"
+        (onChange)="onSortChange($event)"
+      ></p-dropdown>
+    </div>
+  </div>
+  <div class="row row-2">
+    <div class="col-lg-2 filter-col">
+        <p-slider [min]="1" [(ngModel)]="priceFilterValue" [range]="true" id="range1"></p-slider>
+        <h5 style="margin-top: 8px; text-align: end; font-size: 16px;" class="text-muted">Giá
+            <span style="font-size: 0.8rem;" class="fw-700 text-dark">{{priceFilterValue[0]*500000 | currency:'VND':'symbol':'1.0-0'}} -
+              {{priceFilterValue[1]*500000 | currency:'VND':'symbol':'1.0-0'}}
+            </span>
+          </h5>
+        <div class="filter__button-wrapper">
+            <button class="filter__button">Lọc</button>
+        </div>
+    </div>
+
+    <div class="col-lg-8 offset-1 all-product-col">
+      <p-dataview [value]="products" [paginator]="true" [rows]="12" [sortField]="sortField" [sortOrder]="sortOrder">
+        <ng-template #list let-items>
+          <div class="grid">
+            @for (product of products; track product) {
+              <div class="product-item-wrapper">
+                <img class="product-item-image" [src]="product.thumbnailImage" alt="404">
+                <div class="product-information">
+                  <h3 class="product-item-name">{{product.name}}</h3>
+                  <p class="product-item-price">{{product.price}}$</p>
+                </div>
+              </div>
+            }
+            
+          </div>
+        </ng-template>
+        
+      </p-dataview>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+<div class="container-fluid p-0 login-page">
+    <div class="login-header row">
+        <app-app-header></app-app-header>
+    </div>
+    <div class="row row-1-login h-100 justify-content-center align-items-center">
+        <div class="col-lg-4 col-sm-6 offset-lg-0">
+            <div class="login-box">
+                <h1 class="login-box-header">{{'login.title' | translate}}</h1>
+                <p class="login-box-description">{{'login.subtitle' | translate}}</p>
+
+                <div class="login-form-container">
+                    <form (keydown.enter)="formSubmitSubject.next()" [formGroup]="loginForm" class="form-group">
+                        <input class="email-input" pInputText required placeholder="{{'login.email' | translate}}" formControlName="email" />
+                        <p-password class="password-input" placeholder="{{'login.password' | translate}}" formControlName="password" [toggleMask]="true" [feedback]="false"></p-password>
+                    </form>
+
+                    <a class="forget-password-link" href="">{{'login.forgotPassword' | translate}}</a>
+                    <p-toast></p-toast>
+                    <p-button (click)="formSubmitSubject.next()" class="button-login" label="{{'login.loginButton' | translate}}"></p-button>
+
+                    <div class="forward-sign-up-container">
+                        <p class="no-account-ques">{{'login.signupQues' | translate}}</p>
+                        <a class="forward-link" href="/Register">{{'login.signupLink' | translate}}</a>
+                    </div>
+                    <div class="send-confirmation-link">
+                        <a class="link-to-confirm" href="/SendConfirmationLink">{{'login.confirmLink' | translate}}</a> 
+                        <p class="confirmation-text">&nbsp;{{'login.confirmSentence' | translate}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
