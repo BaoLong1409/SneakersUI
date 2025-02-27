@@ -6,6 +6,7 @@ import { EmailConfirmedComponent } from './features/components/email-confirmed/e
 import { HomeComponent } from './features/components/home/home.component';
 import { AllProductsComponent } from './features/components/all-products/all-products.component';
 import { UploadProductComponent } from './features/admin/components/upload-product/upload-product.component';
+import { DetailProductComponent } from './features/components/detail-product/detail-product.component';
 
 export const routes: Routes = [
     {
@@ -41,6 +42,10 @@ export const routes: Routes = [
             {
                 path: 'Admin/Upload',
                 component: UploadProductComponent
+            },
+            {
+                path: 'Detail/:id/:colorName',
+                component: DetailProductComponent
             }
         ]
     }

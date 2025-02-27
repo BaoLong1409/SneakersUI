@@ -10,6 +10,7 @@ import { ProductDto } from '../../../core/dtos/product.dto';
 import { ProductService } from '../../../core/services/product.service';
 import { tap } from 'rxjs';
 import { AllProductDto } from '../../../core/dtos/allProduct.dto';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -39,7 +40,8 @@ export class AllProductsComponent extends BaseComponent implements OnInit{
 
 
   constructor(
-    private productService: ProductService
+    private productService: ProductService,
+    private router: Router
   ) {
     super();
   }
@@ -64,5 +66,9 @@ export class AllProductsComponent extends BaseComponent implements OnInit{
       this.sortOrder = 1;
       this.sortField = value;
     }
+  }
+
+  public goToDetailProduct(productId: string) {
+    this.router.navigateByUrl(`Detail/${productId}`);
   }
 }

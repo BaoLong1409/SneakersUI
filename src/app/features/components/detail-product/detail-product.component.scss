@@ -1,0 +1,100 @@
+.detail-product-wrapper {
+  padding-top: 120px;
+  background-color: #dfdbdb;
+  min-height: 100vh;
+  .first-row {
+    display: flex;
+    .galleria-col {
+      position: sticky;
+      display: flex;
+      top: 0;
+      .p-galleria {
+        border: none;
+        .p-galleria-item {
+          justify-content: unset;
+          align-items: start;
+          margin-left: 0.5rem;
+          margin-top: 1rem;
+        }
+
+        .p-galleria-thumbnails-content {
+          background-color: transparent;
+        }
+        .p-galleria-thumbnails {
+          height: 100% !important;
+        }
+        .p-galleria-thumbnail {
+          .thumbnail-image {
+            height: 70px;
+            border-radius: 4px;
+          }
+        }
+        .p-galleria-items-container {
+          width: 90%;
+        }
+
+        .p-galleria-thumbnail-item {
+          flex: 1 0 12% !important;
+        }
+        p-galleriathumbnails {
+          width: 10%;
+        }
+
+        .p-galleria-thumbnails-viewport {
+          height: 100% !important;
+          overflow-y: auto;
+          &::-webkit-scrollbar {
+            display: none;
+          }
+        }
+      }
+    }
+
+    .product-infor {
+      width: 100%;
+      padding-top: 1.5rem;
+      .product-name {
+        font-weight: 500;
+      }
+      .product-price {
+        margin-top: 6px;
+      }
+      .product-color {
+        margin-top: 6px;
+        border-radius: 6px;
+        width: fit-content;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        cursor: pointer;
+        .product-color-image {
+          width: 5rem;
+          height: 7.1rem;
+          border-radius: 6px;
+        }
+        .product-color-image.selected {
+          border: 1px #000 solid;
+        }
+      }
+      .size-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        .select-size__button {
+          width: 5rem;
+          height: 2.6rem;
+          border: 1px #ccc solid;
+          border-radius: 6px;
+          cursor: pointer;
+          &:hover {
+            border: 1px #000 solid;
+          }
+        }
+        .select-size__button.selected {
+          border: 1px #000 solid;
+        }
+      }
+    }
+  }
+}

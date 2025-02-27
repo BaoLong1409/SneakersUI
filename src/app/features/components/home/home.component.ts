@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { BaseComponent } from 'primeng/basecomponent';
 import { FeatureProductDto } from '../../../core/dtos/featureProduct.dto';
 import { CommonModule } from '@angular/common';
@@ -22,7 +22,7 @@ import { DataViewModule } from 'primeng/dataview';
   styleUrl: './home.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class HomeComponent extends BaseComponent implements OnInit {
+export class HomeComponent extends BaseComponent implements OnInit, AfterViewInit {
   public homeStyle = {};
 
   public featureProducts: FeatureProductDto[] = [];
