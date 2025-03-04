@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment.development';
 import { AllProductDto } from '../dtos/allProduct.dto';
 import { DetailProductDto } from '../dtos/detailProduct.dto';
 import { ProductImageDto } from '../dtos/productImage.dto';
+import { ProductAvailableSizesDto } from '../dtos/productAvailableSizes.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -33,9 +34,15 @@ export class ProductService {
     });
   }
 
-  public getProductImageColors(productId: string) {
-    return this.httpClient.get<ProductImageDto[]>(`${this.apiUrl}product/getImageProductColors`, {
+  public getImageColorsProduct(productId: string) {
+    return this.httpClient.get<ProductImageDto[]>(`${this.apiUrl}product/getImageColorsProduct`, {
       params: {productId}
+    });
+  }
+
+  public getAvailableSizes(productId: string, productColor: string) {
+    return this.httpClient.get<ProductAvailableSizesDto[]>(`${this.apiUrl}product/getAvailableSizes`, {
+      params: { productId: productId, colorName: productColor }
     });
   }
 }

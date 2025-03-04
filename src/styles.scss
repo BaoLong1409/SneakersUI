@@ -2,6 +2,7 @@
 //Import components
 
 @use "./app/assets/base/common.scss";
+@use "./app/assets/base/grid-fix.scss";
 @use "./app/assets/components/darkModeLogin.scss";
 @use "./app/assets/components/darkModeRegister.scss";
 @use "./app/assets/components/darkModeEmailConfirmed.scss";

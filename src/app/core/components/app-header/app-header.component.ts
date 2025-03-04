@@ -6,12 +6,16 @@ import { TranslateService } from '@ngx-translate/core';
 import { ThemeService } from '../../services/theme.service';
 import { DomService } from '../../services/dom.service';
 import { UserDto } from '../../dtos/user.dto';
-import { Observable, tap } from 'rxjs';
+import { tap } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { Menu } from 'primeng/menu';
 import { TranslateModule } from '@ngx-translate/core';
+import { AvatarModule } from 'primeng/avatar';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
+import { ProductInCartDto } from '../../dtos/productInCart.dto';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-app-header',
@@ -21,7 +25,9 @@ import { TranslateModule } from '@ngx-translate/core';
     ButtonModule,
     RouterLink,
     Menu,
-    TranslateModule
+    TranslateModule,
+    AvatarModule,
+    OverlayBadgeModule
   ],
   templateUrl: './app-header.component.html',
   styleUrl: './app-header.component.scss',
@@ -33,17 +39,22 @@ export class AppHeaderComponent implements OnInit {
   public selectedLanguage!: LanguageSelect;
   public isChecked!: boolean;
   public items!: MenuItem[];
+  public badgeValue: number = 0;
+  public profileItems: MenuItem[] | undefined;
+  public productsInCart: ProductInCartDto[] = [];
   private theme!: string;
 
-  private userInfor!: UserDto;
+  public userInfor!: UserDto;
 
   constructor(
     private translate: TranslateService,
     private themeService: ThemeService,
-    private domService: DomService
+    private domService: DomService,
+    private router: Router,
+    private cartService: CartService
   ) {
     if (typeof(localStorage) !==  'undefined') {
-      const userInfor = localStorage.getItem("userSneakersInfor");
+      const userInfor = localStorage.getItem("userInfor");
       this.userInfor = userInfor ? JSON.parse(userInfor) : {} as UserDto;
     }
     if (typeof sessionStorage !== 'undefined') {
@@ -53,6 +64,35 @@ export class AppHeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.cartService.getProductsInCart(this.userInfor.id).pipe(
+      tap((productsInCart: ProductInCartDto[]) => {
+        this.productsInCart = productsInCart;
+        this.badgeValue = productsInCart.length;
+      })
+    ).subscribe();
+
+    this.profileItems = [
+      {
+          label: 'Options',
+          items: [
+              {
+                  label: 'Profile settings',
+                  icon: 'pi pi-user'
+              },
+              {
+                  label: 'Sign out',
+                  icon: 'pi pi-sign-out',
+                  command: () => {
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("userInfor");
+                    this.router.navigateByUrl("/Login");
+                  }
+              }
+          ]
+      }
+  ];
+
+
     this.themeService.themeIsChecked$.pipe(
       tap((value: boolean) => {
         this.isChecked = value;
@@ -117,4 +157,5 @@ export class AppHeaderComponent implements OnInit {
   public removeSpin() {
     this.settingIcon.nativeElement.classList.remove("pi-spin");
   }
+
 }

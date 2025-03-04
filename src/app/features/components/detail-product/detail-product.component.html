@@ -1,7 +1,8 @@
 <div class="container-fluid detail-product-wrapper">
+  <p-toast></p-toast>
   <div class="row first-row">
     <div
-      class="col col-7 col-lg-7 col-md-7 offset-2 offset-lg-2 offset-md-2 galleria-col"
+      class="col col-6 col-lg-6 col-md-6 offset-2 offset-lg-2 offset-md-2 galleria-col"
     >
       <p-galleria
         [value]="detailProduct.productImages"
@@ -26,15 +27,17 @@
           </div>
         </ng-template>
       </p-galleria>
+    </div>
 
+    <div class="col-3-5 col-lg-3-5 col-md-3-5">
       <div class="product-infor">
         <h2 class="product-name">{{ detailProduct.name }}</h2>
         <p class="product-price">{{ detailProduct.price }}$</p>
         <div class="product-color-picker">
-          @for(color of productColors; track $index) {
-          <div class="product-color">
+          @for(color of productImageColors; track $index) {
+          <div (click)="goToOtherColor(color.colorName)" class="product-color">
             <img
-              [class.selected]="color.productId == productId"
+              [class.selected]="color.colorName == productColor"
               class="product-color-image"
               [src]="color.imageUrl"
               alt="Sneaker"
@@ -42,10 +45,23 @@
           </div>
           }
         </div>
-        <p class="stock-quantity"></p>
+        <p class="stock-quantity">Product Quantity: {{ productQuantity }}</p>
+        @if(detailProduct.description) {
         <p-scrollpanel [style]="{ width: '100%', height: '150px' }">
           <p>{{ detailProduct.description }}</p>
         </p-scrollpanel>
+        }
+        <div class="quantity-picker-wrapper">
+          <p class="quantity-panel">Số lượng: </p>
+          <p-inputnumber [(ngModel)]="productQuantityAddToCart" [min]="1" [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" [inputStyle]="{ width: '4rem', height: '2rem' }">
+            <ng-template #incrementbuttonicon>
+                <span class="pi pi-plus"></span>
+            </ng-template>
+            <ng-template #decrementbuttonicon>
+                <span class="pi pi-minus"></span>
+            </ng-template>
+        </p-inputnumber>
+        </div>
         <div class="select-size">
           <h3>SELECT SIZE</h3>
           <ul class="size-list">
@@ -53,7 +69,8 @@
             <li class="size-item">
               <button
                 [class.selected]="selectedSize === size.sizeNumber"
-                (click)="selectSize(size.sizeNumber)"
+                [class.disabled]="!checkAvailableSizes(size.sizeNumber)"
+                (click)="selectSize(size)"
                 class="select-size__button"
               >
                 {{ size.sizeNumber }}
@@ -61,6 +78,42 @@
             </li>
             }
           </ul>
+        </div>
+      </div>
+
+      <div class="buy-wrapper">
+        <div class="add-to-cart">
+          <!-- From Uiverse.io by vinodjangid07 -->
+          <button (click)="addProductToCart()" class="cartBtn">
+            <svg
+              class="cart"
+              fill="white"
+              viewBox="0 0 576 512"
+              height="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"
+              ></path>
+            </svg>
+            ADD TO CART
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="1em"
+              viewBox="0 0 640 512"
+              class="product"
+            >
+              <path
+                d="M211.8 0c7.8 0 14.3 5.7 16.7 13.2C240.8 51.9 277.1 80 320 80s79.2-28.1 91.5-66.8C413.9 5.7 420.4 0 428.2 0h12.6c22.5 0 44.2 7.9 61.5 22.3L628.5 127.4c6.6 5.5 10.7 13.5 11.4 22.1s-2.1 17.1-7.8 23.6l-56 64c-11.4 13.1-31.2 14.6-44.6 3.5L480 197.7V448c0 35.3-28.7 64-64 64H224c-35.3 0-64-28.7-64-64V197.7l-51.5 42.9c-13.3 11.1-33.1 9.6-44.6-3.5l-56-64c-5.7-6.5-8.5-15-7.8-23.6s4.8-16.6 11.4-22.1L137.7 22.3C155 7.9 176.7 0 199.2 0h12.6z"
+              ></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="buy-now">
+          <button class="cartBtn">
+            BUY NOW
+          </button>
         </div>
       </div>
     </div>

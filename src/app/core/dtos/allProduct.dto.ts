@@ -2,8 +2,13 @@ export interface AllProductDto {
     id: string,
     name: string,
     thumbnailImage: string,
-    color: string,
     price: number,
     sale: number,
-    rating: number
+    rating: number,
+    colorsAImages: {
+        colorId: string,
+        colorName: string,
+        imageId: string,
+        thumbnailUrl: string
+    }[]
 }

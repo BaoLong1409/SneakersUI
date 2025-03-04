@@ -68,7 +68,7 @@ export class AllProductsComponent extends BaseComponent implements OnInit{
     }
   }
 
-  public goToDetailProduct(productId: string) {
-    this.router.navigateByUrl(`Detail/${productId}`);
+  public goToDetailProduct(productId: string, colorName: string) {
+    this.router.navigateByUrl(`Detail/${productId}/${colorName}`);
   }
 }
