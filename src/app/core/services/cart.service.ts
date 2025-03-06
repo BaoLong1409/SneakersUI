@@ -26,4 +26,10 @@ export class CartService {
         userId: userId
       }});
     }
+
+    public updateProductInCart(product: ManageProductInCartDto ,userId: string) {
+      return this.httpClient.put<ProductCartResponse>(`${this.apiUrl}cart/updateProduct`, product , {params: {
+        userId: userId
+      }});
+    }
 }

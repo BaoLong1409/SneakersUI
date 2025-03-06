@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { BaseComponent } from 'primeng/basecomponent';
 import { ProductService } from '../../../core/services/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { switchMap, tap } from 'rxjs';
+import { finalize, switchMap, tap } from 'rxjs';
 import { DetailProductDto } from '../../../core/dtos/detailProduct.dto';
 import { GalleriaModule } from 'primeng/galleria';
 import { FormsModule } from '@angular/forms';
@@ -20,6 +20,7 @@ import { UserDto } from '../../../core/dtos/user.dto';
 import { ProductCartResponse } from '../../../core/dtos/productCartRes.dto';
 import { EnumProductCart } from '../../../core/enum/enumProductCart';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { CommonService } from '../../../core/services/common.service';
 
 
 @Component({
@@ -58,7 +59,8 @@ export class DetailProductComponent extends BaseComponent implements OnInit{
     private route: ActivatedRoute,
     private router: Router,
     private toastService: ToastService,
-    private cartService: CartService
+    private cartService: CartService,
+    private commonService: CommonService
   ) {
     super();
     if (typeof localStorage != 'undefined') {
@@ -84,8 +86,8 @@ export class DetailProductComponent extends BaseComponent implements OnInit{
     ).subscribe();
 
     this.productService.getImageColorsProduct(this.productId).pipe(
-      tap((colors: ProductImageDto[]) => {
-        this.productImageColors = colors;
+      tap((productImageColors: ProductImageDto[]) => {
+        this.productImageColors = productImageColors;
       })
     ).subscribe();
 
@@ -124,7 +126,7 @@ export class DetailProductComponent extends BaseComponent implements OnInit{
       productId: this.productId,
       sizeId: this.productSizeId,
       cartId: null,
-      colorId: this.productImageColors[0].colorId,
+      colorId: this.productImageColors.find(x => x.colorName === this.productColor)?.colorId || "",
       quantity: this.productQuantityAddToCart
     }, this.userInfor.id).pipe(
       tap((res: ProductCartResponse) => {  
@@ -137,7 +139,10 @@ export class DetailProductComponent extends BaseComponent implements OnInit{
             break;
         }
       }
-      )
+      ),
+      finalize(() => {
+        this.commonService.immediateSubject.next(true);
+      })
     ).subscribe({
       error: (res: HttpErrorResponse) => {
         switch (res.error.status) {
