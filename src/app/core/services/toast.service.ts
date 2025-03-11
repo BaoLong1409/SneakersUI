@@ -17,4 +17,8 @@ export class ToastService {
   fail(content : string){
     this.messageService.add({ severity: 'error', summary: 'Thất bại', detail: content});
   }
+
+  info(content: string) {
+    this.messageService.add({ severity: 'info', summary: 'Thông tin', detail: content});
+  }
 }

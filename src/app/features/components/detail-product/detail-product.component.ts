@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { BaseComponent } from 'primeng/basecomponent';
 import { ProductService } from '../../../core/services/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { finalize, switchMap, tap } from 'rxjs';
+import { finalize, switchMap, takeUntil, tap } from 'rxjs';
 import { DetailProductDto } from '../../../core/dtos/detailProduct.dto';
 import { GalleriaModule } from 'primeng/galleria';
 import { FormsModule } from '@angular/forms';
@@ -21,6 +20,7 @@ import { ProductCartResponse } from '../../../core/dtos/productCartRes.dto';
 import { EnumProductCart } from '../../../core/enum/enumProductCart';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { CommonService } from '../../../core/services/common.service';
+import { BaseComponent } from '../../../core/commonComponent/base.component';
 
 
 @Component({
@@ -69,13 +69,14 @@ export class DetailProductComponent extends BaseComponent implements OnInit{
     }
   }
 
-  override ngOnInit(): void {
+   ngOnInit(): void {
     this.productId = this.route.snapshot.paramMap.get('id') ?? "";
     this.productColor = this.route.snapshot.paramMap.get('colorName') ?? "";
     this.productService.getDetailProduct(this.productId, this.productColor).pipe(
       tap((detailProduct: DetailProductDto) => {
         this.detailProduct = detailProduct;
-      })
+      }),
+      takeUntil(this.destroyed$)
     ).subscribe();
 
     this.sizeService.getAllSizes().pipe(
@@ -88,13 +89,15 @@ export class DetailProductComponent extends BaseComponent implements OnInit{
     this.productService.getImageColorsProduct(this.productId).pipe(
       tap((productImageColors: ProductImageDto[]) => {
         this.productImageColors = productImageColors;
-      })
+      }),
+      takeUntil(this.destroyed$)
     ).subscribe();
 
     this.productService.getAvailableSizes(this.productId, this.productColor).pipe(
       tap((availableSizes: ProductAvailableSizesDto[]) => {
         this.availableSizes = availableSizes;
-      })
+      }),
+      takeUntil(this.destroyed$)
     ).subscribe();
   }
 
@@ -106,6 +109,7 @@ export class DetailProductComponent extends BaseComponent implements OnInit{
       this.productSizeId = size.id;
       const sizeObj = this.availableSizes.find(s => s.sizeNumber === size.sizeNumber);
       this.productQuantity = sizeObj ? sizeObj.quantity : undefined;
+      this.productQuantityAddToCart = 1;
     }
   }
 
@@ -142,7 +146,8 @@ export class DetailProductComponent extends BaseComponent implements OnInit{
       ),
       finalize(() => {
         this.commonService.immediateSubject.next(true);
-      })
+      }),
+      takeUntil(this.destroyed$)
     ).subscribe({
       error: (res: HttpErrorResponse) => {
         switch (res.error.status) {

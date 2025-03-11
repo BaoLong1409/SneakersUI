@@ -16,7 +16,7 @@ import { UserDto } from '../../dtos/user.dto';
 import { catchError, debounceTime, EMPTY, Subject, switchMap, tap } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { Router, RouterLink } from '@angular/router';
-import { MenuItem } from 'primeng/api';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 import { Menu } from 'primeng/menu';
 import { TranslateModule } from '@ngx-translate/core';
 import { AvatarModule } from 'primeng/avatar';
@@ -31,6 +31,7 @@ import { ManageProductInCartDto } from '../../dtos/manageProductInCart.dto';
 import { EnumProductCart } from '../../enum/enumProductCart';
 import { ProductCartResponse } from '../../dtos/productCartRes.dto';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-app-header',
@@ -44,8 +45,13 @@ import { HttpErrorResponse } from '@angular/common/http';
     AvatarModule,
     OverlayBadgeModule,
     ToastModule,
+    ConfirmDialogModule
   ],
-  providers: [MessageService, ToastService],
+  providers: [
+    MessageService,
+    ToastService,
+    ConfirmationService
+  ],
   templateUrl: './app-header.component.html',
   styleUrl: './app-header.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -75,7 +81,8 @@ export class AppHeaderComponent implements OnInit, AfterViewInit {
     private router: Router,
     private cartService: CartService,
     private commonService: CommonService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private confirmationService: ConfirmationService
   ) {
     if (typeof localStorage !== 'undefined') {
       const userInfor = localStorage.getItem('userInfor');
@@ -270,5 +277,67 @@ export class AppHeaderComponent implements OnInit, AfterViewInit {
       });
       this.productsInCart[index].quantity--;
     }
+  }
+
+  public confirmDelete(event: Event, product: ProductInCartDto, index: number) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Do you want to delete this product?',
+      header: 'Delete Product',
+      icon: 'pi pi-info-circle',
+      rejectLabel: 'Cancel',
+      rejectButtonProps: {
+          label: 'Cancel',
+          severity: 'secondary',
+          outlined: true,
+      },
+      acceptButtonProps: {
+          label: 'Delete',
+          severity: 'danger',
+      },
+
+      accept: () => {
+        this.cartService.deleteProductInCart({
+          productId: product.productId,
+          cartId: null,
+          sizeId: product.sizeId,
+          colorId: product.colorId,
+          quantity: 0
+        }, this.commonService.userInfor.id).pipe(
+          tap((res: ProductCartResponse) => {
+            switch (res.status) {
+              case EnumProductCart.Success:
+                this.productsInCart.splice(index, 1);
+                this.commonService.immediateSubject.next(true);
+                this.toastService.success(`${res.message}`);
+                break;
+              default:
+                this.toastService.fail(`${res.message}`);
+                break;
+            }
+          }),
+          catchError((error: HttpErrorResponse) => {
+            switch (error.error.status) {
+              case EnumProductCart.CartNotFound:
+                this.toastService.fail(error.error.message);
+                break;
+              case EnumProductCart.ProductNotFound:
+                this.toastService.fail(error.error.message);
+                break;
+              case EnumProductCart.NotEnoughInStock:
+                this.toastService.fail(error.error.message);
+                break;
+              default:
+                this.toastService.fail(error.error.message);
+                break;
+            }
+            return EMPTY;
+          })
+        ).subscribe();
+      },
+      reject: () => {
+        this.toastService.info("You canceled delete product!");
+      },
+  });
   }
 }

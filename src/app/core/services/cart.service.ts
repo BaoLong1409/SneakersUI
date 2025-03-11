@@ -32,4 +32,13 @@ export class CartService {
         userId: userId
       }});
     }
+
+    public deleteProductInCart(product: ManageProductInCartDto ,userId: string) {
+      return this.httpClient.delete<ProductCartResponse>(`${this.apiUrl}cart/deleteProduct` , {
+        params: {
+        userId: userId
+      },
+      body: product
+    });
+    }
 }

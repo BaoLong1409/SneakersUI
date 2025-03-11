@@ -1,0 +1,119 @@
+<div class="container-fluid order-wrapper">
+    <div class="row row-header">
+        <h1 class="font-bold">Complete Your Order</h1>
+        <p>Please fill in your information to complete the purchase</p>
+    </div>
+    <div class="row order-main-section">
+        <form [formGroup]="orderForm">
+            <div class="col col-lg-5 col-md-5 offset-lg-1 offset-1 user-info">
+                <p-stepper [value]="1" [linear]="true">
+                    <p-step-list>
+                        <p-step [value]="1">Customer Information</p-step>
+                        <p-step [value]="2">Shipping & Payment</p-step>
+                    </p-step-list>
+                    <p-step-panels>
+                        <p-step-panel [value]="1">
+                            <ng-template #content let-activateCallback="activateCallback">
+                                <div class="user-info-wrapper">
+                                    <div class="field">
+                                        <p-floatlabel>
+                                            <input formControlName="fullName" pInputText id="over_label" autocomplete="off" />
+                                            <label for="over_label">Full Name</label>
+                                        </p-floatlabel>
+                                    </div>
+                                    <div class="field">
+                                        <p-floatlabel>
+                                            <input formControlName="phoneNumber" pInputText id="over_label" autocomplete="off" />
+                                            <label for="over_label">Phone Number</label>
+                                        </p-floatlabel>
+                                    </div>
+                                    <div class="field address-field">
+                                        <p-floatlabel variant="in">
+                                            <p-autocomplete [(ngModel)]="province" [ngModelOptions]="{standalone: true}" id="in_label" [suggestions]="provincesName" (completeMethod)="searchProvinces($event)"/>
+                                            <label for="in_label">Province</label>
+                                        </p-floatlabel>
+    
+                                        <p-floatlabel variant="in">
+                                            <p-autocomplete [(ngModel)]="district" [ngModelOptions]="{standalone: true}" id="in_label" [suggestions]="districtsName" (completeMethod)="searchDistricts($event)"/>
+                                            <label for="in_label">District</label>
+                                        </p-floatlabel>
+    
+                                        <p-floatlabel variant="in">
+                                            <p-autocomplete [(ngModel)]="ward" [ngModelOptions]="{standalone: true}" id="in_label" [suggestions]="wardsName" (completeMethod)="searchWards($event)"/>
+                                            <label for="in_label">Ward</label>
+                                        </p-floatlabel>
+                                    </div>
+                                    <div class="field">
+                                        <p-floatlabel variant="in">
+                                            <textarea pTextarea id="in_label" rows="5" cols="80" [autoResize]="true"></textarea>
+                                            <label for="in_label">Note for detail address</label>
+                                        </p-floatlabel>
+                                    </div>
+                                    <div class="field">
+                                        <p-floatlabel variant="in">
+                                            <textarea pTextarea id="in_label" rows="5" cols="80" [autoResize]="true"></textarea>
+                                            <label for="in_label">Note for order</label>
+                                        </p-floatlabel>
+                                    </div>
+                                    <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
+                                        <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="activateCallback(2)"></p-button>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </p-step-panel>
+                
+                        <p-step-panel [value]="2">
+                            <ng-template #content let-activateCallback="activateCallback">
+                                <div class="shipNPaySelection">
+                                    <h2>Shipping Method</h2>
+
+                                    <div class="field shipping-wrapper">
+                                        @for(shippingMethod of shippingMethods; track $index) {
+                                            <div class="card-container" [class.selected]="shippingSelected === shippingMethod.name" (click)="toggleShippingSelection(shippingMethod.name)">
+                                                <p-card>
+                                                    <ng-template #title> <h3>{{shippingMethod.name}}</h3> </ng-template>
+                                                    <div class="info shipping-info">
+                                                        <p>Price: {{shippingMethod.price}}$</p>
+                                                        @if (shippingMethod.minimumDeliverdTime > 0) {
+                                                            <p>Minumum delivered: {{shippingMethod.minimumDeliverdTime}} days</p>
+                                                        } @else {
+                                                            <p>Minumum delivered: {{-shippingMethod.minimumDeliverdTime}} hours</p>
+                                                        }
+                                                        @if (shippingMethod.maximumDeliverdTime > 0) {
+                                                            <p>Maximum delivered: {{shippingMethod.maximumDeliverdTime}} days</p>
+                                                        } @else {
+                                                            <p>Maximum delivered: {{-shippingMethod.maximumDeliverdTime}} hours</p>
+                                                        }
+                                                    </div>
+                                                </p-card>
+                                            </div>
+                                        }
+                                        
+                                    </div>
+                                    
+                                    <div class="field">
+                                        <h2>Payment Method</h2>
+                                        <div style="width: fit-content;" class="card-container" [class.selected]="paymentSelected" (click)="togglePaymentSelection()">
+                                            <p-card>
+                                                <ng-template #title> <h3>VnPay</h3> </ng-template>
+                                                <div class="info payment-info">
+                                                    <img class="payment-img" src="../../../../assets/images/VnPay/Icon-VNPAY-QR.jpg" alt="">
+                                                </div>
+                                            </p-card>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="button-wrapper">
+                                        <p-button label="Back" icon="pi pi-arrow-left" severity="secondary" (onClick)="activateCallback(1)"></p-button>
+                                        <p-button label="Confirm" severity="success"></p-button>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </p-step-panel>
+                    </p-step-panels>
+                </p-stepper>
+            </div>
+
+        </form>
+    </div>
+</div>

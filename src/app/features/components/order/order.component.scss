@@ -1,0 +1,67 @@
+.order-wrapper {
+  padding-top: 6rem;
+  min-height: 100vh;
+  .row-header {
+    text-align: center;
+  }
+
+  .order-main-section {
+    .user-info {
+      .user-info-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        .address-field {
+          display: flex;
+          gap: 12px;
+        }
+      }
+    }
+    .shipNPaySelection {
+      .shipping-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .card-container {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        
+        &.selected {
+          border: 2px solid #007ad9;
+          border-radius: 4px;
+          box-shadow: 0 0 8px rgba(0, 122, 217, 0.4);
+        }
+        
+        &:hover {
+          transform: translateY(-2px);
+        }
+      }
+
+
+      .info {
+        padding: 10px;
+        
+        p {
+          margin: 5px 0;
+          font-size: 14px;
+          font-weight: 500;
+        }
+      }
+
+      .payment-info {
+        .payment-img {
+          width: 4rem;
+        }
+      }
+      
+    }
+
+    .button-wrapper {
+      margin-top: 2rem;
+      display: flex;
+      gap: 1rem;
+    }
+  }
+}
