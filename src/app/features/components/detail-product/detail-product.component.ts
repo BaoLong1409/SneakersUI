@@ -21,7 +21,11 @@ import { EnumProductCart } from '../../../core/enum/enumProductCart';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { CommonService } from '../../../core/services/common.service';
 import { BaseComponent } from '../../../core/commonComponent/base.component';
-
+import { OrderService } from '../../../core/services/order.service';
+import { OrderAddReq } from '../../../core/dtos/Request/orderAddReq';
+import { OrderDetailDto } from '../../../core/dtos/orderDetail.dto';
+import { CreateOrderReq } from '../../../core/dtos/Request/createOrderReq';
+import { CreateOrderRes } from '../../../core/dtos/Response/createOrderRes';
 
 @Component({
   selector: 'app-detail-product',
@@ -30,23 +34,19 @@ import { BaseComponent } from '../../../core/commonComponent/base.component';
     FormsModule,
     ScrollPanelModule,
     InputNumberModule,
-    ToastModule
+    ToastModule,
   ],
-  providers: [
-    MessageService,
-    ToastService
-  ]
-  ,
+  providers: [MessageService, ToastService],
   templateUrl: './detail-product.component.html',
   styleUrl: './detail-product.component.scss',
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
-export class DetailProductComponent extends BaseComponent implements OnInit{
+export class DetailProductComponent extends BaseComponent implements OnInit {
   public productId!: string;
   public productColor!: string;
   public productQuantity!: number | undefined;
   public productQuantityAddToCart: number = 1;
-  public detailProduct !: DetailProductDto;
+  public detailProduct!: DetailProductDto;
   public sizeNumbers: SizeDto[] = [];
   public productImageColors: ProductImageDto[] = [];
   public availableSizes: ProductAvailableSizesDto[] = [];
@@ -54,60 +54,74 @@ export class DetailProductComponent extends BaseComponent implements OnInit{
   private productSizeId!: string;
   private userInfor!: UserDto;
   constructor(
-    private productService: ProductService,
-    private sizeService: SizeService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private toastService: ToastService,
-    private cartService: CartService,
-    private commonService: CommonService
+    private readonly productService: ProductService,
+    private readonly sizeService: SizeService,
+    private readonly orderService: OrderService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly toastService: ToastService,
+    private readonly cartService: CartService,
+    private readonly commonService: CommonService
   ) {
     super();
     if (typeof localStorage != 'undefined') {
-      const userInfor = localStorage.getItem("userInfor");
-      this.userInfor = userInfor ? JSON.parse(userInfor) : {} as UserDto;
+      const userInfor = localStorage.getItem('userInfor');
+      this.userInfor = userInfor ? JSON.parse(userInfor) : ({} as UserDto);
     }
   }
 
-   ngOnInit(): void {
-    this.productId = this.route.snapshot.paramMap.get('id') ?? "";
-    this.productColor = this.route.snapshot.paramMap.get('colorName') ?? "";
-    this.productService.getDetailProduct(this.productId, this.productColor).pipe(
-      tap((detailProduct: DetailProductDto) => {
-        this.detailProduct = detailProduct;
-      }),
-      takeUntil(this.destroyed$)
-    ).subscribe();
+  ngOnInit(): void {
+    this.productId = this.route.snapshot.paramMap.get('id') ?? '';
+    this.productColor = this.route.snapshot.paramMap.get('colorName') ?? '';
+    this.productService
+      .getDetailProduct(this.productId, this.productColor)
+      .pipe(
+        tap((detailProduct: DetailProductDto) => {
+          this.detailProduct = detailProduct;
+        }),
+        takeUntil(this.destroyed$)
+      )
+      .subscribe();
 
-    this.sizeService.getAllSizes().pipe(
-      tap((sizes: SizeDto[]) => {
-        this.sizeNumbers = sizes;
-        this.selectedSize = sizes[0].sizeNumber;
-      })
-    ).subscribe();
+    this.sizeService
+      .getAllSizes()
+      .pipe(
+        tap((sizes: SizeDto[]) => {
+          this.sizeNumbers = sizes;
+          this.selectedSize = sizes[0].sizeNumber;
+        })
+      )
+      .subscribe();
 
-    this.productService.getImageColorsProduct(this.productId).pipe(
-      tap((productImageColors: ProductImageDto[]) => {
-        this.productImageColors = productImageColors;
-      }),
-      takeUntil(this.destroyed$)
-    ).subscribe();
+    this.productService
+      .getImageColorsProduct(this.productId)
+      .pipe(
+        tap((productImageColors: ProductImageDto[]) => {
+          this.productImageColors = productImageColors;
+        }),
+        takeUntil(this.destroyed$)
+      )
+      .subscribe();
 
-    this.productService.getAvailableSizes(this.productId, this.productColor).pipe(
-      tap((availableSizes: ProductAvailableSizesDto[]) => {
-        this.availableSizes = availableSizes;
-      }),
-      takeUntil(this.destroyed$)
-    ).subscribe();
+    this.productService
+      .getAvailableSizes(this.productId, this.productColor)
+      .pipe(
+        tap((availableSizes: ProductAvailableSizesDto[]) => {
+          this.availableSizes = availableSizes;
+        }),
+        takeUntil(this.destroyed$)
+      )
+      .subscribe();
   }
 
   public selectSize(size: SizeDto) {
-    if (!this.availableSizes.find(s => s.sizeNumber === size.sizeNumber)) {
-
+    if (!this.availableSizes.find((s) => s.sizeNumber === size.sizeNumber)) {
     } else {
       this.selectedSize = size.sizeNumber;
       this.productSizeId = size.id;
-      const sizeObj = this.availableSizes.find(s => s.sizeNumber === size.sizeNumber);
+      const sizeObj = this.availableSizes.find(
+        (s) => s.sizeNumber === size.sizeNumber
+      );
       this.productQuantity = sizeObj ? sizeObj.quantity : undefined;
       this.productQuantityAddToCart = 1;
     }
@@ -115,56 +129,106 @@ export class DetailProductComponent extends BaseComponent implements OnInit{
 
   public goToOtherColor(colorName: string) {
     if (this.productColor == colorName) {
-
     } else {
       window.location.href = `/Detail/${this.productId}/${colorName}`;
     }
   }
 
-  public checkAvailableSizes(sizeNumber: number) : boolean {
-    return !!this.availableSizes.find(s => s.sizeNumber === sizeNumber) ;
+  public checkAvailableSizes(sizeNumber: number): boolean {
+    return !!this.availableSizes.find((s) => s.sizeNumber === sizeNumber);
   }
 
   public addProductToCart() {
-    this.cartService.addProductToCart({
-      productId: this.productId,
-      sizeId: this.productSizeId,
-      cartId: null,
-      colorId: this.productImageColors.find(x => x.colorName === this.productColor)?.colorId || "",
-      quantity: this.productQuantityAddToCart
-    }, this.userInfor.id).pipe(
-      tap((res: ProductCartResponse) => {  
-        switch (res.status) {
-          case EnumProductCart.Success:
-            this.toastService.success(`${res.message}`)
-            break;
-          default:
-            this.toastService.fail(`${res.message}`)
-            break;
-        }
+    this.cartService
+      .addProductToCart(
+        {
+          productId: this.productId,
+          sizeId: this.productSizeId,
+          cartId: null,
+          colorId:
+            this.productImageColors.find(
+              (x) => x.colorName === this.productColor
+            )?.colorId || '',
+          quantity: this.productQuantityAddToCart,
+        },
+        this.userInfor.id
+      )
+      .pipe(
+        tap((res: ProductCartResponse) => {
+          switch (res.status) {
+            case EnumProductCart.Success:
+              this.toastService.success(`${res.message}`);
+              break;
+            default:
+              this.toastService.fail(`${res.message}`);
+              break;
+          }
+        }),
+        finalize(() => {
+          this.commonService.immediateSubject.next(true);
+        }),
+        takeUntil(this.destroyed$)
+      )
+      .subscribe({
+        error: (res: HttpErrorResponse) => {
+          switch (res.error.status) {
+            case EnumProductCart.CartNotFound:
+              this.toastService.fail(res.error.message);
+              break;
+            case EnumProductCart.ProductNotFound:
+              this.toastService.fail(res.error.message);
+              break;
+            case EnumProductCart.NotEnoughInStock:
+              this.toastService.fail(res.error.message);
+              break;
+            default:
+              this.toastService.fail(res.error.message);
+              break;
+          }
+        },
+      });
+  }
+
+  public BuyProduct() {
+    const order: OrderAddReq = {
+      fullName: null,
+      phoneNumber: null,
+      shippingAddress: null,
+      orderDate: new Date(),
+      shippingDate: null,
+      totalMoney: this.detailProduct.price,
+      note: null,
+      userId: this.commonService.userInfor.id,
+      shippingId: null,
+      shippingInforId: null,
+      paymentId: null,
+    };
+    const orderDetails: OrderDetailDto[] = [
+      {
+        productId: this.productId,
+        priceAtOrder: this.detailProduct.price,
+        quantity: this.productQuantityAddToCart,
+        productName: null,
+        imageUrl: null,
+        colorId: this.productImageColors.find(
+          (x) => x.colorName === this.productColor
+        )?.colorId || '',
+        colorName: null,
+        sizeId: this.productSizeId,
+        sizeNumber: null,
       }
-      ),
-      finalize(() => {
-        this.commonService.immediateSubject.next(true);
+    ];
+
+    const createOrderReq: CreateOrderReq = {
+      order: order,
+      orderDetails: orderDetails
+    };
+    this.orderService.createOrder(createOrderReq).pipe(
+      tap((res: CreateOrderRes) => {
+        this.toastService.success(res.message);
+        this.router.navigateByUrl(`Order/${res.orderId}`);
       }),
       takeUntil(this.destroyed$)
-    ).subscribe({
-      error: (res: HttpErrorResponse) => {
-        switch (res.error.status) {
-          case EnumProductCart.CartNotFound:
-            this.toastService.fail(res.error.message)
-            break;
-          case EnumProductCart.ProductNotFound:
-            this.toastService.fail(res.error.message)
-            break;
-          case EnumProductCart.NotEnoughInStock:
-            this.toastService.fail(res.error.message)
-            break;
-          default:
-            this.toastService.fail(res.error.message)
-            break;
-        }
-      }
-    });
+    ).subscribe();
   }
 }

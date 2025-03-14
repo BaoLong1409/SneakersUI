@@ -8,6 +8,7 @@ import { AllProductsComponent } from './features/components/all-products/all-pro
 import { UploadProductComponent } from './features/admin/components/upload-product/upload-product.component';
 import { DetailProductComponent } from './features/components/detail-product/detail-product.component';
 import { OrderComponent } from './features/components/order/order.component';
+import { TransactionStatusComponent } from './features/components/transaction-status/transaction-status.component';
 
 export const routes: Routes = [
     {
@@ -49,8 +50,12 @@ export const routes: Routes = [
                 component: DetailProductComponent
             },
             {
-                path: 'Order',
+                path: 'Order/:id',
                 component: OrderComponent
+            },
+            {
+                path: 'Transaction',
+                component: TransactionStatusComponent
             }
         ]
     }

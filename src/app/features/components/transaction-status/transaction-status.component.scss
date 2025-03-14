@@ -1,0 +1,93 @@
+.transaction-status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    border-radius: 12px;
+    margin: 2rem auto;
+    max-width: 600px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    
+    &.success {
+      background-color: rgba(0, 200, 83, 0.1);
+      border: 2px solid #00c853;
+      
+      .success-icon {
+        color: #00c853;
+      }
+    }
+    
+    &.failure {
+      background-color: rgba(244, 67, 54, 0.1);
+      border: 2px solid #f44336;
+      
+      .failure-icon {
+        color: #f44336;
+      }
+    }
+    
+    .icon-container {
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .pi {
+      font-size: 5rem; // Much larger icon
+      margin-bottom: 1rem;
+    }
+    
+    .message {
+      font-size: 1.8rem; // Much larger text
+      font-weight: 500;
+      line-height: 1.4;
+      max-width: 90%;
+    }
+
+    .btn {
+        padding: 1.1em 2em;
+        background: none;
+        border: 2px solid #fff;
+        font-size: 15px;
+        color: #131313;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s;
+        border-radius: 12px;
+        background-color: #ecd448;
+        font-weight: bolder;
+        box-shadow: 0 2px 0 2px #000;
+        margin-top: 2rem;
+        &::before {
+          content: "";
+          position: absolute;
+          width: 100px;
+          height: 120%;
+          background-color: #ff6700;
+          top: 50%;
+          transform: skewX(30deg) translate(-150%, -50%);
+          transition: all 0.5s;
+        }
+      
+        &:hover {
+          background-color: #4cc9f0;
+          color: #fff;
+          box-shadow: 0 2px 0 2px #0d3b66;
+      
+          &::before {
+            transform: skewX(30deg) translate(150%, -50%);
+            transition-delay: 0.1s;
+          }
+        }
+      
+        &:active {
+          transform: scale(0.9);
+        }
+      }
+      
+  }

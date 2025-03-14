@@ -14,6 +14,6 @@ export class ShippingService {
   ) { }
 
   public getAllShippingMethods() {
-      return this.httpClient.get<ShippingMethodDto[]>(`${this.apiUrl}shipping/getAllMethods`);
+      return this.httpClient.get<ShippingMethodDto[]>(`${this.apiUrl}shipping/getAll`);
     }
 }

@@ -81,7 +81,7 @@
     <div
       class="col-lg-2 col-md-2 col-sm-3 col-1 offset-md-2 offset-lg-2 offset-xl-4 offset-sm-5 flex information-wrapper"
     >
-      @if (!userInfor) {
+      @if (!userInfor.id) {
       <h3 [routerLink]="['/Login']" class="header-login">
         {{ "header.login" | translate }}
       </h3>
@@ -100,9 +100,11 @@
       <p-menu #profileMenu [model]="profileItems" [popup]="true" />
       }
 
-      <p-overlaybadge [value]="badgeValue" severity="danger">
-        <i (click)="toggleCart()" class="pi pi-shopping-cart" style="font-size: 1.6rem"></i>
-      </p-overlaybadge>
+      @if (userInfor.id) {
+        <p-overlaybadge [value]="badgeValue" severity="danger">
+          <i (click)="toggleCart()" class="pi pi-shopping-cart" style="font-size: 1.6rem"></i>
+        </p-overlaybadge>
+      }
       <!-- Cart Menu -->
       <div class="cart-container">
         

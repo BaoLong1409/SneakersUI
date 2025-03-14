@@ -1,11 +1,12 @@
 <div class="container-fluid order-wrapper">
+    <p-toast></p-toast>
     <div class="row row-header">
         <h1 class="font-bold">Complete Your Order</h1>
         <p>Please fill in your information to complete the purchase</p>
     </div>
-    <div class="row order-main-section">
-        <form [formGroup]="orderForm">
-            <div class="col col-lg-5 col-md-5 offset-lg-1 offset-1 user-info">
+    <form [formGroup]="orderForm">
+    <div class="row order-main-section flex">
+            <div class="col col-lg-5 col-md-5 col-sm-3 offset-lg-1 offset-1 user-info">
                 <p-stepper [value]="1" [linear]="true">
                     <p-step-list>
                         <p-step [value]="1">Customer Information</p-step>
@@ -29,7 +30,7 @@
                                     </div>
                                     <div class="field address-field">
                                         <p-floatlabel variant="in">
-                                            <p-autocomplete [(ngModel)]="province" [ngModelOptions]="{standalone: true}" id="in_label" [suggestions]="provincesName" (completeMethod)="searchProvinces($event)"/>
+                                            <p-autocomplete [(ngModel)]="province" [ngModelOptions]="{standalone: true}" id="in_label" [suggestions]="provincesName" (completeMethod)="searchProvinces($event)" (keydown.enter)="onEnter($event)"/>
                                             <label for="in_label">Province</label>
                                         </p-floatlabel>
     
@@ -45,13 +46,13 @@
                                     </div>
                                     <div class="field">
                                         <p-floatlabel variant="in">
-                                            <textarea pTextarea id="in_label" rows="5" cols="80" [autoResize]="true"></textarea>
+                                            <textarea formControlName="noteAddress" pTextarea id="in_label" rows="5" cols="80" [autoResize]="true"></textarea>
                                             <label for="in_label">Note for detail address</label>
                                         </p-floatlabel>
                                     </div>
                                     <div class="field">
                                         <p-floatlabel variant="in">
-                                            <textarea pTextarea id="in_label" rows="5" cols="80" [autoResize]="true"></textarea>
+                                            <textarea formControlName="noteOrder" pTextarea id="in_label" rows="5" cols="80" [autoResize]="true"></textarea>
                                             <label for="in_label">Note for order</label>
                                         </p-floatlabel>
                                     </div>
@@ -66,10 +67,9 @@
                             <ng-template #content let-activateCallback="activateCallback">
                                 <div class="shipNPaySelection">
                                     <h2>Shipping Method</h2>
-
                                     <div class="field shipping-wrapper">
                                         @for(shippingMethod of shippingMethods; track $index) {
-                                            <div class="card-container" [class.selected]="shippingSelected === shippingMethod.name" (click)="toggleShippingSelection(shippingMethod.name)">
+                                            <div class="card-container" [class.selected]="shippingSelected === shippingMethod" (click)="toggleShippingSelection(shippingMethod)">
                                                 <p-card>
                                                     <ng-template #title> <h3>{{shippingMethod.name}}</h3> </ng-template>
                                                     <div class="info shipping-info">
@@ -91,21 +91,26 @@
                                         
                                     </div>
                                     
-                                    <div class="field">
-                                        <h2>Payment Method</h2>
-                                        <div style="width: fit-content;" class="card-container" [class.selected]="paymentSelected" (click)="togglePaymentSelection()">
-                                            <p-card>
-                                                <ng-template #title> <h3>VnPay</h3> </ng-template>
-                                                <div class="info payment-info">
-                                                    <img class="payment-img" src="../../../../assets/images/VnPay/Icon-VNPAY-QR.jpg" alt="">
-                                                </div>
-                                            </p-card>
-                                        </div>
+                                    <h2>Payment Method</h2>
+                                    <div class="field payment-wrapper">
+                                        @for (payment of paymentMethods; track $index) {
+                                            <div style="width: fit-content; min-width: 12rem; max-width: 13rem;" class="card-container" [class.selected]="paymentSelected === payment" (click)="togglePaymentSelection(payment)">
+                                                <p-card>
+                                                    <ng-template #title> <h3>{{payment.name}}</h3> </ng-template>
+                                                    @if (payment.name == "VNPay") {
+                                                        <div class="info payment-info">
+                                                            <img class="payment-img" src="../../../../assets/images/VnPay/Icon-VNPAY-QR.jpg" alt="">
+                                                        </div>
+                                                    }
+                                                </p-card>
+                                            </div>
+                                        }
+
                                     </div>
                                     
                                     <div class="button-wrapper">
                                         <p-button label="Back" icon="pi pi-arrow-left" severity="secondary" (onClick)="activateCallback(1)"></p-button>
-                                        <p-button label="Confirm" severity="success"></p-button>
+                                        <p-button (onClick)="ConfirmOrder()" label="Confirm" severity="success"></p-button>
                                     </div>
                                 </div>
                             </ng-template>
@@ -114,6 +119,32 @@
                 </p-stepper>
             </div>
 
-        </form>
+            <div class="col col-lg-5 col-md-5 col-sm-5 offset-1 offset-lg-1 products-wrapper">
+                <div class="card-container">
+                  <p-card>
+                    <ng-template #title> <h3>Products</h3> </ng-template>
+                    @for (product of orderDetails; track $index) {
+                      <div class="product-item">
+                        <div class="product-image">
+                          <img [src]="product.imageUrl" [alt]="product.productName" class="thumbnail" />
+                        </div>
+                        <div class="product-details">
+                          <h4 class="product-name">{{product.productName}}</h4>
+                          <div class="product-specs">
+                            <span class="color">Color: {{product.colorName}}</span>
+                            <span class="size">Size: {{product.sizeNumber}}</span>
+                          </div>
+                          <div class="product-price-info">
+                            <span class="quantity">Quantity: {{product.quantity}}</span>
+                            <span class="price">{{product.priceAtOrder}}$</span>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                    <p>Total Money: <span class="total-money">{{totalOrderMoney}}$</span></p>
+                  </p-card>
+                </div>
+              </div>
     </div>
+</form>
 </div>

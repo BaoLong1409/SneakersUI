@@ -1,0 +1,16 @@
+<div style="padding-top: 6rem;">
+    <div
+    [class.success]="transRes.status === 0"
+    [class.failure]="transRes.status === 9"
+     class="transaction-status">
+      <div class="icon-container">
+        @if (transRes && transRes.status === 0) {
+          <i class="pi pi-check-circle success-icon"></i>
+        } @else {
+          <i class="pi pi-times-circle failure-icon"></i>
+        }
+      </div>
+      <div class="message">{{ transRes.message }}</div>
+      <button (click)="goToAllProducts()" class="btn"> Back To Shopping </button>
+    </div>
+  </div>
