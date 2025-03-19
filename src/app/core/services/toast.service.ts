@@ -11,14 +11,14 @@ export class ToastService {
   ) { }
 
   success(content: string) {
-    this.messageService.add({severity: 'success', summary: 'Thành công', detail: content})
+    this.messageService.add({severity: 'success', summary: 'Success', detail: content})
   }
 
   fail(content : string){
-    this.messageService.add({ severity: 'error', summary: 'Thất bại', detail: content});
+    this.messageService.add({ severity: 'error', summary: 'Fail', detail: content});
   }
 
   info(content: string) {
-    this.messageService.add({ severity: 'info', summary: 'Thông tin', detail: content});
+    this.messageService.add({ severity: 'info', summary: 'Infomation', detail: content});
   }
 }

@@ -9,6 +9,9 @@ import { UploadProductComponent } from './features/admin/components/upload-produ
 import { DetailProductComponent } from './features/components/detail-product/detail-product.component';
 import { OrderComponent } from './features/components/order/order.component';
 import { TransactionStatusComponent } from './features/components/transaction-status/transaction-status.component';
+import { OrderDetailComponent } from './features/components/order-detail/order-detail.component';
+import { AllOrderComponent } from './features/components/all-order/all-order.component';
+import { ProfileSettingComponent } from './features/components/profile-setting/profile-setting.component';
 
 export const routes: Routes = [
     {
@@ -54,8 +57,20 @@ export const routes: Routes = [
                 component: OrderComponent
             },
             {
+                path: 'OrderDetail/:orderId',
+                component: OrderDetailComponent
+            },
+            {
+                path: 'AllOrder',
+                component: AllOrderComponent
+            },
+            {
                 path: 'Transaction',
                 component: TransactionStatusComponent
+            },
+            {
+                path: 'Profile/Setting',
+                component: ProfileSettingComponent
             }
         ]
     }

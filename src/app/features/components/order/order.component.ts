@@ -17,7 +17,7 @@ import { ProvinceApi } from '../../../core/dtos/AddressApiType/provinceApi';
 import { DistrictApi } from '../../../core/dtos/AddressApiType/DistrictApi';
 import { WardApi } from '../../../core/dtos/AddressApiType/WardApi';
 import { PublicAddressService } from '../../../core/services/public-address.service';
-import { takeUntil, tap } from 'rxjs';
+import { catchError, EMPTY, takeUntil, tap } from 'rxjs';
 import { ProvinceType } from '../../../core/dtos/AddressApiType/Province';
 import { ShippingService } from '../../../core/services/shipping.service';
 import { ShippingMethodDto } from '../../../core/dtos/shippingMethod.dto';
@@ -64,15 +64,16 @@ export class OrderComponent extends BaseComponent implements OnInit, AfterViewIn
   public district: string = "";
   public ward: string = "";
 
-  public shippingSelected!: ShippingMethodDto;
   public paymentSelected!: PaymentDto;
   public provincesName: string[] = [];
   public districtsName: string[] = [];
   public wardsName: string[] = [];
   public shippingMethods: ShippingMethodDto[] = [];
+  public shippingSelected!: ShippingMethodDto;
   public paymentMethods: PaymentDto[] = [];
   public orderDetails: OrderDetailDto[] = [];
   public totalOrderMoney: number = 0;
+  public shippingPrice: number = 0;
 
   private provinces!: ProvinceApi;
   private districts!: DistrictApi;
@@ -141,6 +142,7 @@ export class OrderComponent extends BaseComponent implements OnInit, AfterViewIn
 
   public toggleShippingSelection(shipping: ShippingMethodDto): void {
     this.shippingSelected = shipping;
+    this.shippingPrice = shipping.price;
   }
 
   public togglePaymentSelection(payment: PaymentDto): void {
@@ -187,25 +189,10 @@ export class OrderComponent extends BaseComponent implements OnInit, AfterViewIn
   }
 
   public ConfirmOrder() {
-    if (this.orderForm.valid && this.paymentSelected.name == "COD") {
-      this.updateOrderInfo();
-    } else if (this.orderForm.valid && this.paymentSelected.name == "VNPay") {
-      this.updateOrderInfo();
-      
-      this.orderSerivce.payVnpay(this.orderId).pipe(
-        tap((vnPayLink: { url: string }) => {
-          window.location.href = vnPayLink.url
-        }),
-        takeUntil(this.destroyed$)
-      ).subscribe();
-    }
-  }
-
-  private updateOrderInfo() {
     this.orderForm.patchValue ({
       shippingAddress: `${this.ward} - ${this.district} - ${this.province} - ${this.orderForm.value.noteAddress}`,
       shippingDate: new Date(),
-      totalMoney: this.totalOrderMoney,
+      totalMoney: this.totalOrderMoney + this.shippingPrice,
       shippingId: this.shippingSelected.id,
       paymentId: this.paymentSelected.id
     });
@@ -217,11 +204,31 @@ export class OrderComponent extends BaseComponent implements OnInit, AfterViewIn
       note: this.orderForm.value.noteOrder || null
     });
 
-    this.orderSerivce.updateOrder(updateOrderReq).pipe(
-      tap((res: CommonRes) => {
-        // this.toastService.success(res.message);
-      }),
-      takeUntil(this.destroyed$)
-    ).subscribe();
+    if (this.orderForm.valid && this.paymentSelected.name == "COD") {
+      this.orderSerivce.updateOrder(updateOrderReq).pipe(
+        tap((res: CommonRes) => {
+          this.toastService.success(res.message);
+        }),
+        takeUntil(this.destroyed$)
+      ).subscribe();
+    } else if (this.orderForm.valid && this.paymentSelected.name == "VNPay") {
+      this.orderSerivce.updateOrder(updateOrderReq).pipe(
+        tap((res: CommonRes) => {
+          // this.toastService.success(res.message);
+        }),
+        takeUntil(this.destroyed$)
+      ).subscribe();
+      
+      this.orderSerivce.payVnpay(this.orderId).pipe(
+        tap((vnPayLink: { url: string }) => {
+          window.location.href = vnPayLink.url;
+        }),
+        catchError((err) => {
+          console.log(err);
+          return EMPTY;
+        }),
+        takeUntil(this.destroyed$)
+      ).subscribe();
+    }
   }
 }

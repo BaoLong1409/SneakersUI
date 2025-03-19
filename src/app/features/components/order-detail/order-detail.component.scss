@@ -1,0 +1,101 @@
+.order-detail-container {
+    padding-top: 6rem;
+    .order-info-container {
+        padding: 0 4rem;
+        .order-infor-header {
+            justify-content: space-between;
+            span.success {
+                color: rgb(18, 228, 18);
+            }
+            span.progress {
+                color: rgb(226, 219, 20);
+            }
+        }
+        .copy-icon-wrapper {
+            margin-left: 12px;
+            cursor: pointer;
+            position: relative;
+            .copied-text {
+                position: absolute;
+                top: -25px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #000;
+                color: #fff;
+                padding: 4px 8px;
+                border-radius: 4px;
+                font-size: 12px;
+                opacity: 1;
+                transition: opacity 0.3s ease-in-out;
+              }
+            
+        }
+        .order-progress-container {
+            gap: 1rem;
+            flex-wrap: wrap;
+            .card {
+                flex: 1 0 40%;
+                min-height: 130px;
+            }
+            .p-card {
+                height: 100%;
+                .p-timeline {
+                    .p-timeline-left .p-timeline-event-opposite {
+                        text-align: left;
+                    }
+                    .p-timeline-event-opposite {
+                        flex: unset;
+                    }
+
+                    .date-text {
+                        opacity: 0.4;
+                    }
+
+                    .status-note {
+                        opacity: 0.5;
+                    }
+
+                    .date-text.nearestDate {
+                        opacity: .9;
+                    }
+
+                    .status-note.nearestDate {
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+        
+        .order-item-container {
+            .order-list {
+                .order-item {
+                    flex: 1 0 40%;
+                    .order-item-img {
+                        width: 92px;
+                        height: 120px;
+                    }
+                    .order-item-info {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        margin-left: 1rem;
+                        .product-quantity {
+                            font-size: 12px;
+                            margin-left: 4px;
+                            opacity: 0.8;
+                        }
+                    }
+                }
+            }
+        }
+
+        .order-summary {
+            .order-summary-list {
+                .order-summary-item {
+                    display: flex;
+                    justify-content: space-between;
+                }
+            }
+        }
+    }
+}

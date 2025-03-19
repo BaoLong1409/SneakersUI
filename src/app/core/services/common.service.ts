@@ -15,5 +15,11 @@ export class CommonService {
       const userInfor = localStorage.getItem("userInfor");
       this.userInfor = userInfor ? JSON.parse(userInfor) : {} as UserDto;
     }
+    console.log(this.userInfor);
+    
+  }
+
+  public setUserInfo(userInfo: UserDto) {
+    localStorage.setItem("userInfor", JSON.stringify(userInfo));
   }
 }

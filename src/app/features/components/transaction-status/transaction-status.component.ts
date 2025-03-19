@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { BaseComponent } from '../../../core/commonComponent/base.component';
 import { OrderService } from '../../../core/services/order.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { takeUntil, tap } from 'rxjs';
+import { catchError, EMPTY, takeUntil, tap } from 'rxjs';
 import { CommonRes } from '../../../core/dtos/Response/commonRes';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-transaction-status',
@@ -45,6 +46,10 @@ export class TransactionStatusComponent extends BaseComponent implements OnInit{
         console.log(res);
         
         this.transRes = res;
+      }),
+      catchError((res: HttpErrorResponse) => {
+        this.transRes = res.error;
+        return EMPTY;
       }),
       takeUntil(this.destroyed$)
     ).subscribe();

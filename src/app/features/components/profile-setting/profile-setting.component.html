@@ -1,0 +1,186 @@
+<div class="profile-settings-container">
+  <p-toast></p-toast>
+  <p-confirmdialog />
+  <p-card>
+    <ng-template #title> Address Setting </ng-template>
+    <button (click)="showAddAddress()" class="add-address__button">
+      Add More Address
+    </button>
+    <form action="" [formGroup]="shippingInfoForm">
+      <p-dialog
+        header="Add Address"
+        [resizable]="true"
+        [draggable]="false"
+        [modal]="true"
+        [(visible)]="visible"
+        [style]="{ width: '40rem' }"
+      >
+        <span class="">Add more shipping address.</span>
+        <div class="flex input-wrapper">
+          <label for="username" class="font-semibold w-6rem"
+            >Name Receiver <span style="color: red">*</span></label
+          >
+          <input
+            pInputText
+            id="username"
+            formControlName="fullName"
+            autocomplete="off"
+          />
+        </div>
+        <div class="flex input-wrapper">
+          <label for="email" class="font-semibold w-6rem">Email</label>
+          <input
+            pInputText
+            id="email"
+            formControlName="email"
+            autocomplete="off"
+          />
+        </div>
+        <div class="flex input-wrapper">
+          <label for="phone" class="font-semibold w-6rem"
+            >Phone Number <span style="color: red">*</span></label
+          >
+          <input
+            pInputText
+            id="phone"
+            formControlName="phoneNumber"
+            autocomplete="off"
+          />
+        </div>
+        <div class="flex input-wrapper">
+          <label for="Address" class="font-semibold w-6rem"
+            >Address <span style="color: red">*</span></label
+          >
+          <textarea
+            formControlName="address"
+            rows="3"
+            cols="50"
+            pTextarea
+          ></textarea>
+        </div>
+        <div class="flex input-wrapper">
+          <label for="Note" class="font-semibold w-6rem">Note</label>
+          <textarea
+            formControlName="note"
+            rows="3"
+            cols="50"
+            pTextarea
+          ></textarea>
+        </div>
+        <div class="flex">
+          <p>Is Main Address?</p>
+          <p-checkbox
+            formControlName="isMainAddress"
+            [style]="{ 'margin-left': '2rem' }"
+            [binary]="true"
+          />
+        </div>
+        <div class="flex input-wrapper">
+          <p-button
+            label="Cancel"
+            severity="secondary"
+            (onClick)="visible = false"
+          />
+          <p-button label="Save" (onClick)="addAndUpdateAddress()" />
+        </div>
+      </p-dialog>
+    </form>
+
+    @for (item of shippingInfoList$ | async; track $index){
+    <p-card class="address-card">
+      @if (item.isMainAddress == 1) {
+      <ng-template #subtitle> Main Address </ng-template>
+      }
+      <div class="user-address-container">
+        <p>
+          Name receiver:
+          <span style="font-weight: 500">{{ item.fullName }}</span>
+        </p>
+        <p>
+          Phone Number:
+          <span style="font-weight: 500">{{ item.phoneNumber }}</span>
+        </p>
+        <p>
+          Address: <span style="font-weight: 500">{{ item.address }}</span>
+        </p>
+        @if (item.email){
+        <p>
+          Email: <span style="font-weight: 500">{{ item.email }}</span>
+        </p>
+        } @if (item.note) {
+        <p>
+          Note: <span style="font-weight: 500">{{ item.note }}</span>
+        </p>
+        }
+      </div>
+      <div class="flex update-delete__button-container">
+        <button (click)="openUpdateDialog(item)" class="update__button button">
+          Update Address
+        </button>
+        <button
+          (click)="confirmDelete($event, item.id)"
+          class="delete__button button"
+        >
+          Delete Address
+        </button>
+      </div>
+    </p-card>
+    }
+  </p-card>
+
+  <p-card>
+    <ng-template #title> Profile Setting </ng-template>
+
+    <div class="profile-info-container flex">
+      <div (click)="changeAvatar()" class="avatar-setting-container">
+        <img [src]="userInfo.avatarUrl" alt="Avatar" class="avatar" />
+        <div class="overlay">
+          <i class="pi pi-camera camera-icon"></i>
+        </div>
+        <input
+          type="file"
+          #fileInput
+          (change)="onFileSelected($event)"
+          hidden
+        />
+      </div>
+      <form action="" [formGroup]="userInfoForm">
+        <div class="user-info-container flex">
+          <div class="user-fullName flex gap-4">
+            <p-floatlabel variant="on">
+              <input
+                formControlName="firstName"
+                pInputText
+                id="first_name"
+                autocomplete="off"
+              />
+              <label for="first_name">First Name</label>
+            </p-floatlabel>
+
+            <p-floatlabel variant="on">
+              <input
+                formControlName="lastName"
+                pInputText
+                id="last_name"
+                autocomplete="off"
+              />
+              <label for="last_name">Last Name</label>
+            </p-floatlabel>
+          </div>
+
+          <p-floatlabel variant="on">
+            <input
+              formControlName="phoneNumber"
+              pInputText
+              id="phone"
+              autocomplete="off"
+            />
+            <label for="phone">Phone Number</label>
+          </p-floatlabel>
+
+          <p-button (onClick)="updateUserInfo()" label="Save" severity="success" />
+        </div>
+      </form>
+    </div>
+  </p-card>
+</div>

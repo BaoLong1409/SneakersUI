@@ -6,6 +6,8 @@ import { UpdateOrderReq } from '../dtos/Request/updateOrderReq';
 import { CommonRes } from '../dtos/Response/commonRes';
 import { CreateOrderRes } from '../dtos/Response/createOrderRes';
 import { CreateOrderReq } from '../dtos/Request/createOrderReq';
+import { OrderInfoDto } from '../dtos/orderInfo.dto';
+import { AllOrdersDto } from '../dtos/allOrders.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +25,18 @@ export class OrderService {
     public getOrderDetails(orderId: string) {
       return this.httpClient.get<OrderDetailDto[]>(`${this.apiUrl}order/getOrderDetails`, {params: {
         orderId: orderId
+      }});
+    }
+
+    public getOrderInfo(orderId: string) {
+      return this.httpClient.get<OrderInfoDto>(`${this.apiUrl}order/getOrderInfo`, {params: {
+        orderId: orderId
+      }});
+    }
+
+    public getAllOrders(userId: string) {
+      return this.httpClient.get<AllOrdersDto[]>(`${this.apiUrl}order/getAll`, {params: {
+        userId: userId
       }});
     }
 

@@ -9,7 +9,6 @@ import { RouterOutlet } from '@angular/router';
   imports: [
     AppHeaderComponent,
     AppFooterComponent,
-    AppNavbarComponent,
     RouterOutlet
   ],
   templateUrl: './app-layout.component.html',

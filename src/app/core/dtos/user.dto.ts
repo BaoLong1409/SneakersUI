@@ -6,5 +6,6 @@ export interface UserDto {
     avatarUrl: string,
     lastName: string,
     languageCode: string,
+    phoneNumber: string,
     theme: string
 }

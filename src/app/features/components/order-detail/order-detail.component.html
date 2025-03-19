@@ -1,0 +1,127 @@
+<div class="order-detail-container">
+    <h2 style="margin: 0 5rem">Order Detail</h2>
+    <div class="order-info-container">
+        <p-card>
+            <ng-template #subtitle>
+                <div class="flex order-infor-header">
+                    <span>OrderId</span>
+                    <span
+                     [class.success]="orderNewestStatus.status === 'Success'"
+                     [class.progress]="orderNewestStatus.status !== 'Success'"
+                     >{{orderNewestStatus.statusNote}}</span>
+                </div>
+            </ng-template>
+            <span>{{orderId}}</span> 
+            <span (click)="copyText()" class="copy-icon-wrapper">
+                <i class="pi pi-copy"></i>
+                @if(isCopied) {
+                    <span class="copied-text">Copied</span>
+                }
+            </span>
+            <div class="order-progress-container flex">
+                <p-card class="card">
+                    <ng-template #title>
+                        <i class="fa-solid fa-truck-fast"></i>
+                    </ng-template>
+                    <p>Be patient, package on deliver!</p>
+                </p-card>
+                <p-card class="card">
+                    <ng-template #title>
+                        <i class="pi pi-clock"></i>
+                    </ng-template>
+                    <ng-template #subtitle>
+                        Estimated Arrival
+                    </ng-template>
+                    @if (orderInfo.minimumDeliveredTime > 0) {
+                        <p>{{orderInfo.shippingDate | addDays: orderInfo.minimumDeliveredTime | date: 'd MMMM y'}} <span style="opacity: 0.7;">TO</span> {{orderInfo.shippingDate | addDays: orderInfo.maximumDeliveredTime | date: 'd MMMM y'}}</p>
+                    } @else {
+                        <p>{{orderInfo.shippingDate | date: 'd MMMM y'}} <span style="opacity: 0.7;">TO</span> {{orderInfo.shippingDate | date: 'd MMMM y'}}</p>
+                    }
+                </p-card>
+
+                <p-card class="card">
+                    <ng-template #subtitle>
+                        Timeline
+                    </ng-template>
+                    <p-timeline [value]="orderInfo.statusHistories">
+                        <ng-template #opposite let-event>
+                           <small
+                            [class.nearestDate]="checkNearestDate(event.updatedAt)"
+                            class="date-text">{{ event.updatedAt | date: 'dd/MM/y hh:mm' }}</small>
+                       </ng-template>
+                       <ng-template #content let-event>
+                           <p class="status-note" [class.nearestDate]="checkNearestDate(event.updatedAt)">{{ event.statusNote }}</p>
+                       </ng-template>
+                   </p-timeline>
+                </p-card>
+
+                <p-card class="card">
+                    <ng-template #subtitle>
+                        Shipment
+                    </ng-template>
+                    <p>{{orderInfo.shippingName}}</p>
+                </p-card>
+                <p-card class="card">
+                    <ng-template #subtitle>
+                        User information
+                    </ng-template>
+                    <div class="user-info">
+                        <p><span>Name: </span> <span style="font-weight: 500;">{{orderInfo.fullName}}</span></p>
+                        <p><span>Phone Number: </span> <span style="font-weight: 500;">{{orderInfo.phoneNumber}}</span></p>
+                        <p><span>Address: </span> <span style="font-weight: 500;">{{orderInfo.shippingAddress}}</span></p>
+                    </div>
+                </p-card>
+            </div>
+
+            <div class="order-item-container">
+                <p-card>
+                    <ng-template #title>
+                        Items
+                    </ng-template>
+                    <ul class="order-list flex">
+                        @for(item of orderDetails; track $index) {
+                            <li class="order-item flex">
+                                <img class="order-item-img" [src]="item.imageUrl" alt="Shoe Image">
+                                <div class="order-item-info">
+                                    <div class="product-name">
+                                        <h3>{{item.productName}}</h3>
+                                    </div>
+                                    <div>
+                                        <span>Price: </span>
+                                        <span style="font-weight: 500;">{{item.priceAtOrder}}$</span>
+                                        <span class="product-quantity">x {{item.quantity}}</span>
+                                    </div>
+                                    <div>
+                                        <span>Size: </span>
+                                        <span style="font-weight: 500;">{{item.sizeNumber}}</span>
+                                    </div>
+                                    
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </p-card>
+
+                <div class="order-summary">
+                    <h3>Order Summary</h3>
+                    <ul class="order-summary-list">
+                        @for (item of orderDetails; track $index) {
+                            <li class="order-summary-item">
+                                <p><span>{{item.productName}}</span> <span style="opacity: 0.8; font-size: 12px; margin-left: 12px;">x {{item.quantity}}</span></p>
+                                <span style="font-weight: 500;">{{item.priceAtOrder * item.quantity}}$</span>
+                            </li>
+                        }
+                        <li class="order-summary-item">
+                            <p style="font-weight: 500;">Shipping</p>
+                            <span>{{orderInfo.shippingPrice}}$</span>
+                        </li>
+                        <li class="order-summary-item">
+                            <p style="font-weight: 500;">Total</p>
+                            <span>{{orderInfo.totalMoney}}$</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </p-card>
+    </div>
+</div>

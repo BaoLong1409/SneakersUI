@@ -1,0 +1,135 @@
+<div class="all-order-container">
+  <p-stepper [value]="1" class="basis-[50rem]">
+    <p-step-list>
+      <p-step [value]="1">Pending</p-step>
+      <p-step [value]="2">Order Successful</p-step>
+      <p-step [value]="3">Delivering</p-step>
+      <p-step [value]="4">Delivered</p-step>
+    </p-step-list>
+    <p-step-panels>
+      <p-step-panel [value]="1">
+        <ng-template #content let-activateCallback="activateCallback">
+          <div class="flex">
+            <div class="pending-order-container order-container">
+              <p-card>
+                @for(order of allOrders$ | async; track $index) {
+                @if (order.orderStatus === 'Pending') {
+                    <p-card>
+                      <div class="flex order-item">
+                        <img class="order-item-img" [src]="order.imageUrl" alt="" />
+                        <div class="flex order-info">
+                          <p>{{ order.firstProductName }}</p>
+                          <p>{{ order.totalMoney }}$</p>
+                          <p
+                          class="order-info-status"
+                          >{{ order.orderStatus }}</p>
+                        </div>
+                      </div>
+    
+                      <button (click)="goToOrderDetail(order.orderId)" class="order-detail__button">Detail</button>
+                    </p-card>
+                } @else {
+                    <h3>You have no order is pending</h3>
+                }
+                }
+              </p-card>
+            </div>
+          </div>
+        </ng-template>
+      </p-step-panel>
+
+      <p-step-panel [value]="2">
+        <ng-template #content let-activateCallback="activateCallback">
+          <div class="flex">
+            <div class="order-container">
+                <p-card>
+                  @for(order of allOrders$ | async; track $index) {
+                  @if (order.orderStatus === 'Success') {
+                      <p-card>
+                        <div class="flex order-item">
+                          <img class="order-item-img" [src]="order.imageUrl" alt="" />
+                          <div class="flex order-info">
+                            <p>{{ order.firstProductName }}</p>
+                            <p>{{ order.totalMoney }}$</p>
+                            <p
+                            class="order-info-status success"
+                            >{{ order.orderStatus }}</p>
+                          </div>
+                        </div>
+      
+                        <button (click)="goToOrderDetail(order.orderId)" class="order-detail__button">Detail</button>
+                      </p-card>
+                  } @else {
+                      <h3>You have no order is ordered successfully</h3>
+                  }
+                  }
+                </p-card>
+              </div>
+          </div>
+        </ng-template>
+      </p-step-panel>
+
+      <p-step-panel [value]="3">
+        <ng-template #content let-activateCallback="activateCallback">
+          <div class="flex">
+            <div class="order-container">
+                <p-card>
+                  @for(order of allOrders$ | async; track $index) {
+                  @if (order.orderStatus === 'Delivering') {
+                      <p-card>
+                        <div class="flex order-item">
+                          <img class="order-item-img" [src]="order.imageUrl" alt="" />
+                          <div class="flex order-info">
+                            <p>{{ order.firstProductName }}</p>
+                            <p>{{ order.totalMoney }}$</p>
+                            <p
+                            class="order-info-status success"
+                            >{{ order.orderStatus }}</p>
+                          </div>
+                        </div>
+      
+                        <button (click)="goToOrderDetail(order.orderId)" class="order-detail__button">Detail</button>
+                      </p-card>
+                  } @else {
+                      <h3>You have no order is delivering</h3>
+                  }
+                  }
+                </p-card>
+              </div>
+          </div>
+        </ng-template>
+      </p-step-panel>
+
+      <p-step-panel [value]="4">
+        <ng-template #content let-activateCallback="activateCallback">
+          <div class="flex">
+            <div class="order-container">
+                <p-card>
+                  @for(order of allOrders$ | async; track $index) {
+                  @if (order.orderStatus === 'Delivered') {
+                      <p-card>
+                        <div class="flex order-item">
+                          <img class="order-item-img" [src]="order.imageUrl" alt="" />
+                          <div class="flex order-info">
+                            <p>{{ order.firstProductName }}</p>
+                            <p>{{ order.totalMoney }}$</p>
+                            <p
+                            class="order-info-status success"
+                            >{{ order.orderStatus }}</p>
+                          </div>
+                        </div>
+      
+                        <button (click)="goToOrderDetail(order.orderId)" class="order-detail__button">Detail</button>
+                      </p-card>
+                  } @else {
+                      <h3>You have no order is delivered</h3>
+                  }
+                  }
+                </p-card>
+              </div>
+          </div>
+        </ng-template>
+      </p-step-panel>
+    </p-step-panels>
+  </p-stepper>
+</div>

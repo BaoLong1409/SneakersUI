@@ -74,15 +74,15 @@
                                                     <ng-template #title> <h3>{{shippingMethod.name}}</h3> </ng-template>
                                                     <div class="info shipping-info">
                                                         <p>Price: {{shippingMethod.price}}$</p>
-                                                        @if (shippingMethod.minimumDeliverdTime > 0) {
-                                                            <p>Minumum delivered: {{shippingMethod.minimumDeliverdTime}} days</p>
+                                                        @if (shippingMethod.minimumDeliveredTime > 0) {
+                                                            <p>Minumum delivered: {{shippingMethod.minimumDeliveredTime}} days</p>
                                                         } @else {
-                                                            <p>Minumum delivered: {{-shippingMethod.minimumDeliverdTime}} hours</p>
+                                                            <p>Minumum delivered: {{-shippingMethod.minimumDeliveredTime}} hours</p>
                                                         }
-                                                        @if (shippingMethod.maximumDeliverdTime > 0) {
-                                                            <p>Maximum delivered: {{shippingMethod.maximumDeliverdTime}} days</p>
+                                                        @if (shippingMethod.maximumDeliveredTime > 0) {
+                                                            <p>Maximum delivered: {{shippingMethod.maximumDeliveredTime}} days</p>
                                                         } @else {
-                                                            <p>Maximum delivered: {{-shippingMethod.maximumDeliverdTime}} hours</p>
+                                                            <p>Maximum delivered: {{-shippingMethod.maximumDeliveredTime}} hours</p>
                                                         }
                                                     </div>
                                                 </p-card>
@@ -141,7 +141,7 @@
                         </div>
                       </div>
                     }
-                    <p>Total Money: <span class="total-money">{{totalOrderMoney}}$</span></p>
+                    <p>Total Money: <span class="total-money">{{totalOrderMoney + shippingPrice}}$</span></p>
                   </p-card>
                 </div>
               </div>

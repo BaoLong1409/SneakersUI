@@ -100,8 +100,18 @@ export class AppHeaderComponent implements OnInit, AfterViewInit {
         label: 'Options',
         items: [
           {
+            label: 'All Your Order',
+            icon: 'fa-solid fa-truck-fast',
+            command: () => {
+              this.router.navigateByUrl("AllOrder");
+            }
+          },
+          {
             label: 'Profile settings',
             icon: 'pi pi-user',
+            command: () => {
+              this.router.navigateByUrl("Profile/Setting");
+            }
           },
           {
             label: 'Sign out',

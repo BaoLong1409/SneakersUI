@@ -6,6 +6,8 @@ import { loginReq } from '../requestTypes/loginReq';
 import { loginDetailDto } from '../dtos/loginDetail.dto';
 import { UserDto } from '../dtos/user.dto';
 import { ResponseMessageDto } from '../dtos/responseMessage.dto';
+import { UpdateUserInfoRequest } from '../dtos/Request/updateUserReq';
+import { MessageAndDataRes } from '../dtos/Response/messageAndDataRes';
 
 @Injectable({
   providedIn: 'root'
@@ -59,5 +61,9 @@ export class UserService {
 
   public sendConfirmationLink(email: string) {
     return this.httpClient.get<ResponseMessageDto>(`${this.apiUrl}user/sendConfirmLink`, { params: { email }});
+  }
+
+  public updateUserInfo (userInfo: UpdateUserInfoRequest) {
+    return this.httpClient.put<MessageAndDataRes<UserDto>>(`${this.apiUrl}user/updateInfo`, userInfo);
   }
 }
