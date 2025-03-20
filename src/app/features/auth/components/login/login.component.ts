@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, NgZone, OnInit, ViewEncapsulation } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
@@ -6,7 +6,7 @@ import { BaseComponent } from '../../../../core/commonComponent/base.component';
 import { ToastService } from '../../../../core/services/toast.service';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
-import { catchError, delay, filter, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { catchError, delay, EMPTY, filter, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { BlockUIModule } from 'primeng/blockui';
@@ -30,7 +30,7 @@ import { AppHeaderComponent } from '../../../../core/components/app-header/app-h
     ButtonModule,
     FormsModule,
     TranslateModule,
-    AppHeaderComponent
+    AppHeaderComponent,
   ],
   providers: [
     MessageService,
@@ -58,7 +58,8 @@ export class LoginComponent extends BaseComponent implements AfterViewInit {
     private toastService: ToastService,
     private userService: UserService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private ngZone: NgZone
   ) {
     super();
     this.loginForm = this.fb.group({
@@ -68,6 +69,38 @@ export class LoginComponent extends BaseComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    (window as any).handleCredentialResponse = (response: any) => {
+      this.ngZone.run(() => {
+        console.log("Google Token:", response.credential);
+
+        this.userService.googleLogin(response.credential).pipe(
+          tap((loginVal: loginDetailDto) => {
+            this.toastService.success(loginVal.message);
+            localStorage.setItem("token",loginVal.token);
+            this.token = loginVal.token;
+            this.blockUi();
+          }),
+          switchMap(() => {
+            return this.userService.getInforUser(this.token).pipe(
+              tap((userInfor: UserDto) => {
+                userInfor.id = userInfor.id.toUpperCase(); // Tạm thời
+                
+                localStorage.setItem("userInfor", JSON.stringify(userInfor));
+              })
+            );
+          }),
+          tap(() => {
+            window.location.href = '/Home';
+          }),
+          catchError((error) => {
+            this.toastService.fail(error.error.message);
+            return of();
+          }),
+          takeUntil(this.destroyed$)
+        ).subscribe();
+      });
+    };
+
     this.formSubmit$.pipe(
       filter(() => {
         if (this.loginForm.invalid) {
@@ -116,6 +149,5 @@ export class LoginComponent extends BaseComponent implements AfterViewInit {
         this.blockedUi = false;
     }, 1000);
   }
-
 
 }

@@ -1,15 +1,29 @@
 <div class="container-fluid all-products">
   <div class="row row-1">
-    <div class="col-lg-1 offset-lg-8 offset-8">
+    <div class="col-lg-1 offset-lg-6 offset-6">
+      <p-dropdown
+        [options]="brandOptions"
+        [(ngModel)]="selectedBrand"
+        (ngModelChange)="filterProducts($event)"
+        [showClear]="true"
+        placeholder="Brand"
+        optionLabel="brand"
+      ></p-dropdown>
+    </div>
+    <div class="col-lg-1 offset-lg-0 offset-0">
       <p-dropdown
         [options]="categoriesOptions"
-        placeholder="Danh mục"
+        [(ngModel)]="selectedCategory"
+        [showClear]="true"
+        (ngModelChange)="filterProducts($event)"
+        placeholder="Category"
+        optionLabel="name"
       ></p-dropdown>
     </div>
     <div class="col-lg-2 offset-lg-0 offset-0">
       <p-dropdown
         [options]="sortOptions"
-        placeholder="Sắp xếp theo giá"
+        placeholder="Sort By Price"
         (onChange)="onSortChange($event)"
       ></p-dropdown>
     </div>
@@ -18,12 +32,12 @@
     <div class="col-lg-2 filter-col">
         <p-slider [min]="1" [(ngModel)]="priceFilterValue" [range]="true" id="range1"></p-slider>
         <h5 style="margin-top: 8px; text-align: end; font-size: 16px;" class="text-muted">Giá
-            <span style="font-size: 0.8rem;" class="fw-700 text-dark">{{priceFilterValue[0]*500000 | currency:'VND':'symbol':'1.0-0'}} -
-              {{priceFilterValue[1]*500000 | currency:'VND':'symbol':'1.0-0'}}
+            <span style="font-size: 0.8rem;" class="fw-700 text-dark">{{priceFilterValue[0]*50 | currency:'USD':'symbol':'1.0-0'}} -
+              {{priceFilterValue[1]*50 | currency:'USD':'symbol':'1.0-0'}}
             </span>
           </h5>
         <div class="filter__button-wrapper">
-            <button class="filter__button">Lọc</button>
+            <button (click)="filterAllProducts()" class="filter__button">Filter</button>
         </div>
     </div>
 

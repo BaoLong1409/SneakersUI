@@ -31,6 +31,10 @@ export class UserService {
     return this.httpClient.post<loginDetailDto>(`${this.apiUrl}user/login`, loginInfor);
   }
 
+  public googleLogin(googleToken: string) {
+    return this.httpClient.post<loginDetailDto>(`${this.apiUrl}user/googleLogin`, {googleToken});
+  }
+
   public getInforUser(token: string){
     return this.httpClient.get<UserDto>(`${this.apiUrl}user/getInfor`,{ params: { token }});
   }

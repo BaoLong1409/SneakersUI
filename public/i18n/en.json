@@ -6,6 +6,7 @@
       "password": "Password",
       "forgotPassword": "Forgot password?",
       "loginButton": "Login",
+      "googleLogin": "Log in with Google",
       "signupQues": "Don't have an account yet?",
       "signupLink": "Sign up",
       "confirmLink": "Confirm",
