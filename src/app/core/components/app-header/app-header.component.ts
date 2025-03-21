@@ -114,6 +114,13 @@ export class AppHeaderComponent implements OnInit, AfterViewInit {
             }
           },
           {
+            label: 'Change Password',
+            icon: 'pi pi-lock',
+            command: () => {
+              this.router.navigateByUrl("Password/Change");
+            }
+          },
+          {
             label: 'Sign out',
             icon: 'pi pi-sign-out',
             command: () => {

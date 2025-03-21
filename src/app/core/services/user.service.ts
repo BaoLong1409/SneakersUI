@@ -8,6 +8,7 @@ import { UserDto } from '../dtos/user.dto';
 import { ResponseMessageDto } from '../dtos/responseMessage.dto';
 import { UpdateUserInfoRequest } from '../dtos/Request/updateUserReq';
 import { MessageAndDataRes } from '../dtos/Response/messageAndDataRes';
+import { ChangePasswordRequest } from '../dtos/Request/changePasswordReq';
 
 @Injectable({
   providedIn: 'root'
@@ -35,13 +36,23 @@ export class UserService {
     return this.httpClient.post<loginDetailDto>(`${this.apiUrl}user/googleLogin`, {googleToken});
   }
 
+  public changePassword(passwordValues: ChangePasswordRequest) {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.token}`
+    })
+
+    return this.httpClient.post<ResponseMessageDto>(`${this.apiUrl}user/changePassword`, passwordValues, {
+      headers: headers,
+    });
+  }
+
   public getInforUser(token: string){
     return this.httpClient.get<UserDto>(`${this.apiUrl}user/getInfor`,{ params: { token }});
   }
 
   public getUserByName(name: string) {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.token}`,
+      'Authorization': `Bearer ${this.token}`
     });
     const param = {searchContent: name};
 

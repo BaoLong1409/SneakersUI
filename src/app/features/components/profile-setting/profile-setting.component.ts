@@ -2,7 +2,7 @@ import { Component, ElementRef, Inject, OnInit, PLATFORM_ID, Renderer2, ViewChil
 import { CardModule } from 'primeng/card';
 import { BaseComponent } from '../../../core/commonComponent/base.component';
 import { ShippingService } from '../../../core/services/shipping.service';
-import { BehaviorSubject, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, catchError, EMPTY, takeUntil, tap } from 'rxjs';
 import { ShippingInfoDto } from '../../../core/dtos/shippingInfo.dto';
 import { CommonService } from '../../../core/services/common.service';
 import { AsyncPipe, isPlatformBrowser } from '@angular/common';
@@ -22,6 +22,7 @@ import { FloatLabel } from 'primeng/floatlabel';
 import { UserService } from '../../../core/services/user.service';
 import { ResponseMessageDto } from '../../../core/dtos/responseMessage.dto';
 import { MessageAndDataRes } from '../../../core/dtos/Response/messageAndDataRes';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-profile-setting',
@@ -209,6 +210,10 @@ export class ProfileSettingComponent extends BaseComponent implements OnInit {
       tap((res: MessageAndDataRes<UserDto>) => {
         this.toastService.success(res.message);
         this.commonService.setUserInfo(res.data as UserDto);
+      }),
+      catchError((err: HttpErrorResponse) => {
+        this.toastService.fail(err.error.errors.PhoneNumber);
+        return EMPTY;
       }),
       takeUntil(this.destroyed$)
     ).subscribe();

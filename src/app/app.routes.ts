@@ -12,6 +12,7 @@ import { TransactionStatusComponent } from './features/components/transaction-st
 import { OrderDetailComponent } from './features/components/order-detail/order-detail.component';
 import { AllOrderComponent } from './features/components/all-order/all-order.component';
 import { ProfileSettingComponent } from './features/components/profile-setting/profile-setting.component';
+import { ChangePasswordComponent } from './features/components/change-password/change-password.component';
 
 export const routes: Routes = [
     {
@@ -71,6 +72,10 @@ export const routes: Routes = [
             {
                 path: 'Profile/Setting',
                 component: ProfileSettingComponent
+            },
+            {
+                path: 'Password/Change',
+                component: ChangePasswordComponent
             }
         ]
     }
