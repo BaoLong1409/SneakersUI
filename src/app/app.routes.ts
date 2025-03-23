@@ -13,6 +13,8 @@ import { OrderDetailComponent } from './features/components/order-detail/order-d
 import { AllOrderComponent } from './features/components/all-order/all-order.component';
 import { ProfileSettingComponent } from './features/components/profile-setting/profile-setting.component';
 import { ChangePasswordComponent } from './features/components/change-password/change-password.component';
+import { ForgetPasswordComponent } from './features/components/forget-password/forget-password.component';
+import { PasswordCanActivateTeam } from './core/routeGuard/passwordCanActivateTeam';
 
 export const routes: Routes = [
     {
@@ -75,7 +77,12 @@ export const routes: Routes = [
             },
             {
                 path: 'Password/Change',
-                component: ChangePasswordComponent
+                component: ChangePasswordComponent,
+                canActivate: [PasswordCanActivateTeam]
+            },
+            {
+                path: 'Password/Forget',
+                component: ForgetPasswordComponent
             }
         ]
     }

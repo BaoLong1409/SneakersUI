@@ -98,7 +98,6 @@ export class AllProductsComponent extends BaseComponent implements OnInit {
   }
 
   public filterProducts(event: Event) {
-
     this.productService.getProductsByCategory({categoryName: this.selectedCategory?.name ?? null, brandName: this.selectedBrand?.brand ?? null}).pipe(
       tap((products: AllProductDto[]) => {
         this.products = products;

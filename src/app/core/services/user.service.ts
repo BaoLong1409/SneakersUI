@@ -9,19 +9,25 @@ import { ResponseMessageDto } from '../dtos/responseMessage.dto';
 import { UpdateUserInfoRequest } from '../dtos/Request/updateUserReq';
 import { MessageAndDataRes } from '../dtos/Response/messageAndDataRes';
 import { ChangePasswordRequest } from '../dtos/Request/changePasswordReq';
+import { ValidateOTPRequest } from '../dtos/Request/validateOTPReq';
+import { MessageAndSessionTokenRes } from '../dtos/Response/messageAndSessionTokenRes';
+import { CommonService } from './common.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   private readonly token!: string | null; 
+  private readonly sessionToken!: string | null; 
   private readonly apiUrl: string = environment.apiUrl
   constructor(
-    private readonly httpClient: HttpClient
+    private readonly httpClient: HttpClient,
+    private readonly commonService: CommonService
   ) {
     if (typeof(localStorage) !==  'undefined') {
       this.token = localStorage.getItem("token");
     }
+    this.sessionToken = this.commonService.sessionToken;
   }
 
   public register(registerInfor: registerReq){
@@ -44,6 +50,24 @@ export class UserService {
     return this.httpClient.post<ResponseMessageDto>(`${this.apiUrl}user/changePassword`, passwordValues, {
       headers: headers,
     });
+  }
+
+  public resetPassword(newPassword: string) {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.sessionToken}`
+    })
+
+    return this.httpClient.post<ResponseMessageDto>(`${this.apiUrl}user/resetPassword`, {newPassword}, {
+      headers: headers,
+    });
+  }
+
+  public getOTP(email: string) {
+    return this.httpClient.get<ResponseMessageDto>(`${this.apiUrl}user/forgetPassword/getOTP`, {params: {email}});
+  }
+
+  public validateOTP(validateOtpReq: ValidateOTPRequest) {
+    return this.httpClient.post<MessageAndSessionTokenRes>(`${this.apiUrl}user/forgetPassword/validateOTP`, validateOtpReq);
   }
 
   public getInforUser(token: string){

@@ -9,9 +9,10 @@ import { ToastModule } from 'primeng/toast';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../core/services/user.service';
-import { catchError, EMPTY, takeUntil, tap } from 'rxjs';
+import { catchError, debounceTime, delay, EMPTY, takeUntil, tap } from 'rxjs';
 import { ResponseMessageDto } from '../../../core/dtos/responseMessage.dto';
 import { HttpErrorResponse } from '@angular/common/http';
+import { CommonService } from '../../../core/services/common.service';
 
 @Component({
   selector: 'app-change-password',
@@ -32,10 +33,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class ChangePasswordComponent extends BaseComponent implements AfterViewInit {
   public passwordChangeForm: FormGroup;
+  public resetPasswordForm: FormGroup;
+  public sessionToken!: string | null;
 
   constructor(
     private toastService: ToastService,
     private userService: UserService,
+    private commonService: CommonService,
     private fb: FormBuilder
   ) {
     super();
@@ -43,6 +47,12 @@ export class ChangePasswordComponent extends BaseComponent implements AfterViewI
       oldPassword: ['', Validators.required],
       newPassword: ['', Validators.required],
     })
+
+    this.resetPasswordForm = this.fb.group({
+      newPassword: ['', Validators.required],
+    })
+
+    this.sessionToken = this.commonService.sessionToken;
   }
 
   ngAfterViewInit(): void {
@@ -50,8 +60,6 @@ export class ChangePasswordComponent extends BaseComponent implements AfterViewI
   }
 
   public submitChangePassword() {
-    console.log(this.passwordChangeForm.valid);
-    
     if (!this.passwordChangeForm.valid) {
       this.toastService.info("Please fill in two password forms")
     } else {
@@ -59,6 +67,28 @@ export class ChangePasswordComponent extends BaseComponent implements AfterViewI
         tap((res: ResponseMessageDto) => {
           this.toastService.success(res.message);
           this.passwordChangeForm.reset();
+        }),
+        catchError((err: HttpErrorResponse) => {
+          this.toastService.fail(err.error.message);
+          return EMPTY;
+        }),
+        takeUntil(this.destroyed$)
+      ).subscribe();
+    }
+  }
+
+  public submitResetPassword() {
+    if (!this.resetPasswordForm.valid) {
+      this.toastService.info("Please fill in new password")
+    } else {
+      this.userService.resetPassword(this.resetPasswordForm.value.newPassword).pipe(
+        tap((res: ResponseMessageDto) => {
+          this.toastService.success(res.message);
+          this.resetPasswordForm.reset();
+        }),
+        delay(2000),
+        tap(() => {
+          window.location.href = "/Login"
         }),
         catchError((err: HttpErrorResponse) => {
           this.toastService.fail(err.error.message);
