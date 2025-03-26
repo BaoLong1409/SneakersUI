@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ProductService } from '../../../core/services/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { finalize, switchMap, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, catchError, EMPTY, finalize, switchMap, takeUntil, tap } from 'rxjs';
 import { DetailProductDto } from '../../../core/dtos/detailProduct.dto';
 import { GalleriaModule } from 'primeng/galleria';
 import { FormsModule } from '@angular/forms';
@@ -26,6 +26,11 @@ import { OrderAddReq } from '../../../core/dtos/Request/orderAddReq';
 import { OrderDetailDto } from '../../../core/dtos/orderDetail.dto';
 import { CreateOrderReq } from '../../../core/dtos/Request/createOrderReq';
 import { CreateOrderRes } from '../../../core/dtos/Response/createOrderRes';
+import { CardModule } from 'primeng/card';
+import { ReviewService } from '../../../core/services/review.service';
+import { ProductReviewDto } from '../../../core/dtos/productReview.dto';
+import { RatingModule } from 'primeng/rating';
+import { ImageModule } from 'primeng/image';
 
 @Component({
   selector: 'app-detail-product',
@@ -35,6 +40,9 @@ import { CreateOrderRes } from '../../../core/dtos/Response/createOrderRes';
     ScrollPanelModule,
     InputNumberModule,
     ToastModule,
+    CardModule,
+    RatingModule,
+    ImageModule
   ],
   providers: [MessageService, ToastService],
   templateUrl: './detail-product.component.html',
@@ -42,6 +50,9 @@ import { CreateOrderRes } from '../../../core/dtos/Response/createOrderRes';
   encapsulation: ViewEncapsulation.None,
 })
 export class DetailProductComponent extends BaseComponent implements OnInit {
+  public commentsSubject = new BehaviorSubject<ProductReviewDto[]>([]);
+  public comments$ = this.commentsSubject.asObservable();
+
   public productId!: string;
   public productColor!: string;
   public productQuantity!: number | undefined;
@@ -55,6 +66,7 @@ export class DetailProductComponent extends BaseComponent implements OnInit {
   private userInfor!: UserDto;
   constructor(
     private readonly productService: ProductService,
+    private readonly reviewService: ReviewService,
     private readonly sizeService: SizeService,
     private readonly orderService: OrderService,
     private readonly route: ActivatedRoute,
@@ -112,6 +124,19 @@ export class DetailProductComponent extends BaseComponent implements OnInit {
         takeUntil(this.destroyed$)
       )
       .subscribe();
+
+      this.reviewService.getCommentsOfProduct({productId: this.productId, colorName: this.productColor}).pipe(
+        tap((comments: ProductReviewDto[]) => {
+          this.commentsSubject.next(comments);
+          console.log(comments);
+          
+        }),
+        catchError((err: HttpErrorResponse) => {
+          this.toastService.fail(err.error.message);
+          return EMPTY;
+        }),
+        takeUntil(this.destroyed$)
+      ).subscribe();
   }
 
   public selectSize(size: SizeDto) {

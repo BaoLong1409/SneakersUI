@@ -60,4 +60,12 @@ export class ProductService {
       params: { productId: productId, colorName: productColor }
     });
   }
+
+  public searchProducts(searchTerm: string) {
+    console.log(searchTerm);
+    
+    return this.httpClient.get<AllProductDto[]>(`${this.apiUrl}product/searchAllProducts`, {
+      params: { keyword: searchTerm }
+    });
+  }
 }

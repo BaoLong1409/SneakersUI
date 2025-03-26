@@ -214,4 +214,17 @@
       }
       }
     }
+
+    .comment-row {
+      .comment-card {
+        .p-card-content {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          .review-image-container {
+            gap: 2rem;
+          }
+        }
+      }
+    }
 }

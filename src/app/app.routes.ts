@@ -15,6 +15,7 @@ import { ProfileSettingComponent } from './features/components/profile-setting/p
 import { ChangePasswordComponent } from './features/components/change-password/change-password.component';
 import { ForgetPasswordComponent } from './features/components/forget-password/forget-password.component';
 import { PasswordCanActivateTeam } from './core/routeGuard/passwordCanActivateTeam';
+import { ReviewComponent } from './features/components/review/review.component';
 
 export const routes: Routes = [
     {
@@ -83,6 +84,10 @@ export const routes: Routes = [
             {
                 path: 'Password/Forget',
                 component: ForgetPasswordComponent
+            },
+            {
+                path: 'Review',
+                component: ReviewComponent
             }
         ]
     }

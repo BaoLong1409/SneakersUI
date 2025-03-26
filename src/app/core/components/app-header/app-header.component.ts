@@ -8,12 +8,24 @@ import {
 } from '@angular/core';
 import { LanguageSelect } from '../../dtos/languageSelect.dto';
 import { Select } from 'primeng/select';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { ThemeService } from '../../services/theme.service';
 import { DomService } from '../../services/dom.service';
 import { UserDto } from '../../dtos/user.dto';
-import { catchError, debounceTime, EMPTY, Subject, switchMap, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  debounce,
+  debounceTime,
+  EMPTY,
+  finalize,
+  of,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { Router, RouterLink } from '@angular/router';
 import { ConfirmationService, MenuItem } from 'primeng/api';
@@ -32,12 +44,18 @@ import { EnumProductCart } from '../../enum/enumProductCart';
 import { ProductCartResponse } from '../../dtos/productCartRes.dto';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { ProductService } from '../../services/product.service';
+import { AllProductDto } from '../../dtos/allProduct.dto';
+import { BaseComponent } from '../../commonComponent/base.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-app-header',
   imports: [
     Select,
     FormsModule,
+    ReactiveFormsModule,
     ButtonModule,
     RouterLink,
     Menu,
@@ -45,22 +63,28 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     AvatarModule,
     OverlayBadgeModule,
     ToastModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    InputTextModule,
+    AsyncPipe,
   ],
-  providers: [
-    MessageService,
-    ToastService,
-    ConfirmationService
-  ],
+  providers: [MessageService, ToastService, ConfirmationService],
   templateUrl: './app-header.component.html',
   styleUrl: './app-header.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class AppHeaderComponent implements OnInit, AfterViewInit {
+export class AppHeaderComponent
+  extends BaseComponent
+  implements OnInit, AfterViewInit
+{
   @ViewChild('settingIcon') settingIcon!: ElementRef;
 
   private updateQuantitySubject = new Subject<ManageProductInCartDto>();
   private updateQuantity$ = this.updateQuantitySubject.asObservable();
+  private resultProductsSubject = new Subject<AllProductDto[]>();
+  public resultProducts$ = this.resultProductsSubject.asObservable();
+  public searchingSubject = new BehaviorSubject<boolean>(false);
+  public searching$ = this.searchingSubject.asObservable();
+  private theme!: string;
 
   public languages!: LanguageSelect[];
   public selectedLanguage!: LanguageSelect;
@@ -70,9 +94,11 @@ export class AppHeaderComponent implements OnInit, AfterViewInit {
   public profileItems: MenuItem[] | undefined;
   public productsInCart: ProductInCartDto[] = [];
   public isCartOpen: boolean = false;
-  private theme!: string;
-
   public userInfor!: UserDto;
+  public isSearchOpen: boolean = false;
+
+  private searchSubject = new Subject<string>();
+  public searchTerm: string = '';
 
   constructor(
     private translate: TranslateService,
@@ -82,8 +108,10 @@ export class AppHeaderComponent implements OnInit, AfterViewInit {
     private cartService: CartService,
     private commonService: CommonService,
     private toastService: ToastService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private readonly productService: ProductService
   ) {
+    super();
     if (typeof localStorage !== 'undefined') {
       const userInfor = localStorage.getItem('userInfor');
       this.userInfor = userInfor ? JSON.parse(userInfor) : ({} as UserDto);
@@ -103,22 +131,29 @@ export class AppHeaderComponent implements OnInit, AfterViewInit {
             label: 'All Your Order',
             icon: 'fa-solid fa-truck-fast',
             command: () => {
-              this.router.navigateByUrl("AllOrder");
-            }
+              this.router.navigateByUrl('AllOrder');
+            },
+          },
+          {
+            label: 'Review order you bought',
+            icon: 'fa-solid fa-star',
+            command: () => {
+              this.router.navigateByUrl('Review');
+            },
           },
           {
             label: 'Profile settings',
             icon: 'pi pi-user',
             command: () => {
-              this.router.navigateByUrl("Profile/Setting");
-            }
+              this.router.navigateByUrl('Profile/Setting');
+            },
           },
           {
             label: 'Change Password',
             icon: 'pi pi-lock',
             command: () => {
-              this.router.navigateByUrl("Password/Change");
-            }
+              this.router.navigateByUrl('Password/Change');
+            },
           },
           {
             label: 'Sign out',
@@ -165,6 +200,24 @@ export class AppHeaderComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    // Search Products
+    this.searchSubject
+      .pipe(
+        tap(() =>  {
+          this.resultProductsSubject.next([]);
+          this.searchingSubject.next(true)
+        }),
+        debounceTime(500),
+        switchMap((term) => {
+          return this.productService.searchProducts(term);
+        }),
+        takeUntil(this.destroyed$),
+      )
+      .subscribe((result: AllProductDto[]) => {
+        this.resultProductsSubject.next(result.slice(0,4));
+        this.searchingSubject.next(false)
+      });
+
     this.commonService.stateImmediate$
       .pipe(
         switchMap(() => {
@@ -304,57 +357,83 @@ export class AppHeaderComponent implements OnInit, AfterViewInit {
       icon: 'pi pi-info-circle',
       rejectLabel: 'Cancel',
       rejectButtonProps: {
-          label: 'Cancel',
-          severity: 'secondary',
-          outlined: true,
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true,
       },
       acceptButtonProps: {
-          label: 'Delete',
-          severity: 'danger',
+        label: 'Delete',
+        severity: 'danger',
       },
 
       accept: () => {
-        this.cartService.deleteProductInCart({
-          productId: product.productId,
-          cartId: null,
-          sizeId: product.sizeId,
-          colorId: product.colorId,
-          quantity: 0
-        }, this.commonService.userInfor.id).pipe(
-          tap((res: ProductCartResponse) => {
-            switch (res.status) {
-              case EnumProductCart.Success:
-                this.productsInCart.splice(index, 1);
-                this.commonService.immediateSubject.next(true);
-                this.toastService.success(`${res.message}`);
-                break;
-              default:
-                this.toastService.fail(`${res.message}`);
-                break;
-            }
-          }),
-          catchError((error: HttpErrorResponse) => {
-            switch (error.error.status) {
-              case EnumProductCart.CartNotFound:
-                this.toastService.fail(error.error.message);
-                break;
-              case EnumProductCart.ProductNotFound:
-                this.toastService.fail(error.error.message);
-                break;
-              case EnumProductCart.NotEnoughInStock:
-                this.toastService.fail(error.error.message);
-                break;
-              default:
-                this.toastService.fail(error.error.message);
-                break;
-            }
-            return EMPTY;
-          })
-        ).subscribe();
+        this.cartService
+          .deleteProductInCart(
+            {
+              productId: product.productId,
+              cartId: null,
+              sizeId: product.sizeId,
+              colorId: product.colorId,
+              quantity: 0,
+            },
+            this.commonService.userInfor.id
+          )
+          .pipe(
+            tap((res: ProductCartResponse) => {
+              switch (res.status) {
+                case EnumProductCart.Success:
+                  this.productsInCart.splice(index, 1);
+                  this.commonService.immediateSubject.next(true);
+                  this.toastService.success(`${res.message}`);
+                  break;
+                default:
+                  this.toastService.fail(`${res.message}`);
+                  break;
+              }
+            }),
+            catchError((error: HttpErrorResponse) => {
+              switch (error.error.status) {
+                case EnumProductCart.CartNotFound:
+                  this.toastService.fail(error.error.message);
+                  break;
+                case EnumProductCart.ProductNotFound:
+                  this.toastService.fail(error.error.message);
+                  break;
+                case EnumProductCart.NotEnoughInStock:
+                  this.toastService.fail(error.error.message);
+                  break;
+                default:
+                  this.toastService.fail(error.error.message);
+                  break;
+              }
+              return EMPTY;
+            })
+          )
+          .subscribe();
       },
       reject: () => {
-        this.toastService.info("You canceled delete product!");
+        this.toastService.info('You canceled delete product!');
       },
-  });
+    });
+  }
+
+  public toggleSearch(): void {
+    this.isSearchOpen = !this.isSearchOpen;
+
+    // Prevent scrolling when search panel is open
+    if (this.isSearchOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }
+
+  public searchProducts() {
+    this.searchSubject.next(this.searchTerm);
+  }
+
+  public searchAllProducts() {
+    this.isSearchOpen = false;
+    window.location.href = `/All?search=${this.searchTerm}`;
   }
 }

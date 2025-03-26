@@ -118,4 +118,32 @@
       </div>
     </div>
   </div>
+
+  <div class="row comment-row">
+    <div class="comment-col col-lg-10 col-md-10 col-sm-10 offset-lg-1 offset-md-1 offset-sm-1">
+      <p-card>
+        <ng-template #title>
+          <h3>COMMENT</h3>
+      </ng-template>
+      @for(comment of comments$ | async; track $index) {
+        <p-card class="comment-card">
+          <ng-template #title>
+            {{comment.lastName}} {{comment.firstName}}
+          </ng-template>
+          <p-rating [disabled]="true" [ngModel]="comment.quality" />
+          @if (comment.imageUrl.length > 0) {
+            <div class="review-image-container flex">
+              @for (image of comment.imageUrl; track $index) {
+                <p-image [src]="image" alt="Review Image" width="200" height="220" [preview]="true" />
+              }
+            </div>
+          }
+          @if (comment.commentContent) {
+            <p>{{comment.commentContent}}</p>
+          }
+        </p-card>
+      }
+      </p-card>
+    </div>
+  </div>
 </div>

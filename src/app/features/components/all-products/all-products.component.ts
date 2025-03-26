@@ -1,4 +1,9 @@
-import { AfterViewInit, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
@@ -7,9 +12,9 @@ import { CurrencyPipe } from '@angular/common';
 import { DataViewModule } from 'primeng/dataview';
 import { ProductDto } from '../../../core/dtos/product.dto';
 import { ProductService } from '../../../core/services/product.service';
-import { Subject, takeUntil, tap } from 'rxjs';
+import { Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { AllProductDto } from '../../../core/dtos/allProduct.dto';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent } from '../../../core/commonComponent/base.component';
 import { CategoryService } from '../../../core/services/category.service';
 import { CategoryDto } from '../../../core/dtos/category.dto';
@@ -27,11 +32,14 @@ import { CategoryDto } from '../../../core/dtos/category.dto';
   styleUrl: './all-products.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class AllProductsComponent extends BaseComponent implements OnInit {
+export class AllProductsComponent
+  extends BaseComponent
+  implements OnInit, AfterViewInit
+{
   public categoriesOptions: MenuItem[] = [];
   public brandOptions: MenuItem[] = [];
-  public selectedCategory : {name: string} | null = null;
-  public selectedBrand : {brand: string} | null = null;
+  public selectedCategory: { name: string } | null = null;
+  public selectedBrand: { brand: string } | null = null;
   public sortOptions: MenuItem[] = [
     { label: 'Giá từ thấp đến cao', value: 'price' },
     { label: 'Giá từ cao đến thấp', value: '!price' },
@@ -43,30 +51,56 @@ export class AllProductsComponent extends BaseComponent implements OnInit {
   public sortField!: string;
 
   constructor(
-    private productService: ProductService, 
+    private productService: ProductService,
     private readonly categoryService: CategoryService,
-    private router: Router
+    private router: Router,
+    private readonly activateRoute: ActivatedRoute
   ) {
     super();
   }
 
   ngOnInit(): void {
-    this.productService
-      .getAllProducts()
-      .pipe(
-        tap((allProducts: AllProductDto[]) => {
-          this.products = allProducts;
-        })
-      )
-      .subscribe();
 
-      this.categoryService.getAllCategories().pipe(
+    this.categoryService
+      .getAllCategories()
+      .pipe(
         tap((res: CategoryDto[]) => {
-          this.categoriesOptions = [...new Set(res.map(p => p.name))].map(name => ({name}));
-          this.brandOptions = [...new Set(res.map(p => p.brand))].map(brand => ({brand}))
+          this.categoriesOptions = [...new Set(res.map((p) => p.name))].map(
+            (name) => ({ name })
+          );
+          this.brandOptions = [...new Set(res.map((p) => p.brand))].map(
+            (brand) => ({ brand })
+          );
         }),
         takeUntil(this.destroyed$)
-      ).subscribe();
+      )
+      .subscribe();
+  }
+
+  ngAfterViewInit(): void {
+    this.activateRoute.queryParamMap
+      .pipe(
+        switchMap((params) => {
+          const searchTerm = params.get('search');
+          if (searchTerm) {
+            return this.productService.searchProducts(searchTerm ?? '').pipe(
+              tap((products: AllProductDto[]) => {
+                this.products = products;
+              })
+            );
+          }
+          return this.productService
+          .getAllProducts()
+          .pipe(
+            tap((allProducts: AllProductDto[]) => {
+              this.products = allProducts;
+            })
+          )
+          
+        }),
+        takeUntil(this.destroyed$)
+      )
+      .subscribe();
   }
 
   public onSortChange(event: any) {
@@ -98,11 +132,17 @@ export class AllProductsComponent extends BaseComponent implements OnInit {
   }
 
   public filterProducts(event: Event) {
-    this.productService.getProductsByCategory({categoryName: this.selectedCategory?.name ?? null, brandName: this.selectedBrand?.brand ?? null}).pipe(
-      tap((products: AllProductDto[]) => {
-        this.products = products;
-      }),
-      takeUntil(this.destroyed$)
-    ).subscribe();
+    this.productService
+      .getProductsByCategory({
+        categoryName: this.selectedCategory?.name ?? null,
+        brandName: this.selectedBrand?.brand ?? null,
+      })
+      .pipe(
+        tap((products: AllProductDto[]) => {
+          this.products = products;
+        }),
+        takeUntil(this.destroyed$)
+      )
+      .subscribe();
   }
 }

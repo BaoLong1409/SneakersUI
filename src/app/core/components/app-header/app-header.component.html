@@ -34,7 +34,7 @@
           </li>
 
           <li class="nav-item mx-3">
-            <a class="nav-link" href="" [routerLink]="['/All']">{{
+            <a class="nav-link" href="/All">{{
               "header.allProducts" | translate
             }}</a>
           </li>
@@ -81,6 +81,67 @@
     <div
       class="col-lg-2 col-md-2 col-sm-3 col-1 offset-md-2 offset-lg-2 offset-xl-4 offset-sm-5 flex information-wrapper"
     >
+      <div class="search-container">
+        <i class="pi pi-search search-icon" (click)="toggleSearch()"></i>
+
+        <!-- Search Overlay -->
+        <div
+          class="search-overlay"
+          [class.active]="isSearchOpen"
+          (click)="toggleSearch()"
+        ></div>
+
+        <div class="search-panel" [class.active]="isSearchOpen">
+          <div class="search-panel-header">
+            <h3>Search</h3>
+            <button class="close-btn" (click)="toggleSearch()">
+              <i class="pi pi-times"></i>
+            </button>
+          </div>
+
+          <div class="search-panel-body">
+            <div class="search-input-container">
+              <span class="p-input-icon-left p-input-icon-right w-100">
+                <i class="pi pi-search"></i>
+                <input
+                  type="text"
+                  pInputText
+                  placeholder="Search products..."
+                  class="w-100"
+                  [(ngModel)]="searchTerm"
+                  (ngModelChange)="searchProducts()"
+                  (keydown.enter)="searchAllProducts()"
+                />
+              </span>
+            </div>
+
+            <div class="search-results-container">
+              @if (searching$ | async) {
+                <div class="loading-container">
+                  <i class="pi pi-spin pi-spinner"></i>
+                </div>
+              }
+
+              @for(product of resultProducts$ | async; track $index) {
+              <div class="search-results-item">
+                <div class="result-image">
+                  <img
+                    [src]="product.colorsAImages[0].thumbnailUrl"
+                    [alt]="product.name"
+                  />
+                </div>
+                <div class="result-details">
+                  <h4>{{ product.name }}</h4>
+                  <p class="result-category">{{ product.categoryName }}</p>
+                  <p class="result-price">${{ product.price.toFixed(2) }}</p>
+                </div>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
       @if (!userInfor.id) {
       <h3 [routerLink]="['/Login']" class="header-login">
         {{ "header.login" | translate }}
@@ -98,16 +159,17 @@
       />
 
       <p-menu #profileMenu [model]="profileItems" [popup]="true" />
-      }
-
-      @if (userInfor.id) {
-        <p-overlaybadge [value]="badgeValue" severity="danger">
-          <i (click)="toggleCart()" class="pi pi-shopping-cart" style="font-size: 1.6rem"></i>
-        </p-overlaybadge>
+      } @if (userInfor.id) {
+      <p-overlaybadge [value]="badgeValue" severity="danger">
+        <i
+          (click)="toggleCart()"
+          class="pi pi-shopping-cart"
+          style="font-size: 1.6rem"
+        ></i>
+      </p-overlaybadge>
       }
       <!-- Cart Menu -->
       <div class="cart-container">
-        
         <div class="cart-menu" [class.active]="isCartOpen">
           <div class="cart-header">
             <h3>Your Cart</h3>
@@ -115,74 +177,81 @@
               <i class="pi pi-times"></i>
             </button>
           </div>
-          
-          @if (productsInCart.length > 0) {
-            <div class="cart-body">
-              @for (product of productsInCart; track $index) {
-                <div class="cart-item">
-                  <div class="item-image">
-                    <img [src]="product.imageUrl" [alt]="product.name">
-                  </div>
-                  <div class="item-details">
-                    <h4>{{ product.name }}</h4>
-                    <p class="item-color">Color: {{ product.colorName }}</p>
-                    <p class="item-size">Size: {{ product.sizeNumber }}</p>
-                    <div class="item-quantity">
-                      <button (click)="decreaseQuantity($index, product)" [disabled]="product.quantity <= 1">
-                        <i class="pi pi-minus"></i>
-                      </button>
-                      <span>{{ product.quantity }}</span>
-                      <button (click)="increaseQuantity($index, product)">
-                        <i class="pi pi-plus"></i>
-                      </button>
-                    </div>
-                  </div>
-                  <div class="item-price">
-                    <p>${{ product.price.toFixed(2) }}</p>
 
-                    <p-button (click)="confirmDelete($event, product, $index)" icon="pi pi-trash" severity="danger" [outlined]="true" />
-                    <!-- <button class="remove-btn">
+          @if (productsInCart.length > 0) {
+          <div class="cart-body">
+            @for (product of productsInCart; track $index) {
+            <div class="cart-item">
+              <div class="item-image">
+                <img [src]="product.imageUrl" [alt]="product.name" />
+              </div>
+              <div class="item-details">
+                <h4>{{ product.name }}</h4>
+                <p class="item-color">Color: {{ product.colorName }}</p>
+                <p class="item-size">Size: {{ product.sizeNumber }}</p>
+                <div class="item-quantity">
+                  <button
+                    (click)="decreaseQuantity($index, product)"
+                    [disabled]="product.quantity <= 1"
+                  >
+                    <i class="pi pi-minus"></i>
+                  </button>
+                  <span>{{ product.quantity }}</span>
+                  <button (click)="increaseQuantity($index, product)">
+                    <i class="pi pi-plus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="item-price">
+                <p>${{ product.price.toFixed(2) }}</p>
+
+                <p-button
+                  (click)="confirmDelete($event, product, $index)"
+                  icon="pi pi-trash"
+                  severity="danger"
+                  [outlined]="true"
+                />
+                <!-- <button class="remove-btn">
                       <i class="pi pi-trash"></i>
                     </button> -->
-                  </div>
-                  <div class="item-checkout-btn-wrapper">
-                    <button class="item-checkout-btn">
-                      <i class="pi pi-check-circle"></i>
-                      Checkout
-                    </button>
-                  </div>
-                  
-                </div>
-              }
-
-            </div>
-          }
-          @if (productsInCart.length === 0) {
-            <div class="empty-cart">
-              <i class="pi pi-shopping-cart" style="font-size: 3rem"></i>
-              <p>Your cart is empty</p>
-              <button class="continue-btn">Continue Shopping</button>
-            </div>
-          }
-          
-          @if (productsInCart.length > 0) {
-            <div class="cart-footer">
-              <div class="cart-total">
-                <span>Total:</span>
-                <span>${{ calculateTotal().toFixed(2) }}</span>
               </div>
-              <div class="cart-actions">
-                <button class="checkout-btn">Checkout</button>
-                <button (click)="toggleCart()" class="continue-btn">Continue Shopping</button>
+              <div class="item-checkout-btn-wrapper">
+                <button class="item-checkout-btn">
+                  <i class="pi pi-check-circle"></i>
+                  Checkout
+                </button>
               </div>
             </div>
+            }
+          </div>
+          } @if (productsInCart.length === 0) {
+          <div class="empty-cart">
+            <i class="pi pi-shopping-cart" style="font-size: 3rem"></i>
+            <p>Your cart is empty</p>
+            <button class="continue-btn">Continue Shopping</button>
+          </div>
+          } @if (productsInCart.length > 0) {
+          <div class="cart-footer">
+            <div class="cart-total">
+              <span>Total:</span>
+              <span>${{ calculateTotal().toFixed(2) }}</span>
+            </div>
+            <div class="cart-actions">
+              <button class="checkout-btn">Checkout</button>
+              <button (click)="toggleCart()" class="continue-btn">
+                Continue Shopping
+              </button>
+            </div>
+          </div>
           }
-          
         </div>
-        
-        <div class="cart-overlay" [class.active]="isCartOpen" (click)="toggleCart()"></div>
-      </div>
 
+        <div
+          class="cart-overlay"
+          [class.active]="isCartOpen"
+          (click)="toggleCart()"
+        ></div>
+      </div>
 
       <p-menu #menu [model]="items" [popup]="true">
         <ng-template let-item pTemplate="item">
@@ -238,7 +307,6 @@
           </ng-container>
         </ng-template>
       </p-menu>
-
 
       <i
         #settingIcon

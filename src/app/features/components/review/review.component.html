@@ -1,0 +1,91 @@
+<div class="review-container">
+  <p-toast></p-toast>
+  <p-dialog
+    header="Edit Profile"
+    [modal]="true"
+    [(visible)]="dialogVisible"
+    [style]="{ width: '60%', height: '80%' }"
+  >
+    <form [formGroup]="reviewForm">
+      <span class="p-text-secondary">Review this product.</span>
+      <div class="rating">
+        <p-rating formControlName="quality" />
+      </div>
+      <div class="file-upload-container"  style="margin-top: 12px;">
+        <div class="file-input-wrapper">
+          <input
+            #fileInput
+            type="file"
+            (change)="onFileSelect($event)"
+            multiple
+            accept="image/*"
+            class="file-input"
+          />
+          <button class="file-input-button">
+            <span class="upload-icon">📁</span>
+            Choose Images
+          </button>
+        </div>
+      </div>
+      
+      <div class="preview-container">
+        @for (image of imageFiles; track image) {
+        <div class="preview-item">
+          <img [src]="image.url" class="preview-img" />
+          <button (click)="removeImage(image)" class="remove-button">❌</button>
+        </div>
+        }
+      </div>
+      
+      <div style="margin-top: 12px" class="flex">
+        <p-iftalabel style="width: 100%; height: 100%">
+          <textarea
+            formControlName="commentContent"
+            pTextarea
+            id="description"
+            rows="12"
+            style="resize: none; width: 100%"
+          ></textarea>
+          <label for="description">Description</label>
+        </p-iftalabel>
+      </div>
+      <div class="flex button-container">
+        <p-button
+          label="Cancel"
+          severity="secondary"
+          (click)="dialogVisible = false"
+        />
+        <p-button label="Review" (click)="reviewProduct()" />
+      </div>
+    </form>
+  </p-dialog>
+  <p-card>
+    <ng-template #title>
+      <h3>Your oreders are waiting for review</h3>
+    </ng-template>
+    @for(product of productsWaitingReview$ | async; track $index) {
+    <p-card class="product-card">
+      <ng-template #subtitle>
+        {{ product.productName }}
+      </ng-template>
+      <div class="product-info flex">
+        <img class="product-image" [src]="product.imageUrl" alt="Product" />
+        <div>
+          <p style="color: rgb(20, 214, 20)">{{ product.status }}</p>
+          <p>{{ product.priceAtOrder }}$</p>
+          <p>
+            <span style="margin-right: 6px; opacity: 0.6">x</span
+            >{{ product.quantity }}
+          </p>
+        </div>
+      </div>
+      <p-button
+        (click)="dialogVisible = true; orderDetailSelectedId = product.id"
+        label="Review"
+        [raised]="true"
+        severity="contrast"
+      />
+    </p-card>
+    }
+  </p-card>
+</div>

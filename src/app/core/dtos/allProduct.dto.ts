@@ -2,6 +2,8 @@ export interface AllProductDto {
     id: string,
     name: string,
     thumbnailImage: string,
+    categoryName: string,
+    brand: string,
     price: number,
     sale: number,
     rating: number,

@@ -1,0 +1,267 @@
+.review-container {
+  padding: 6rem;
+  .p-dialog {
+    .button-container {
+      gap: 1rem;
+      float: right;
+    }
+    .rating {
+      border: 1px solid #cccccc85;
+      border-radius: 8px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      .p-rating-option-active .p-rating-icon {
+        color: rgb(231, 231, 63);
+        font-size: 24px;
+      }
+    }
+
+    // Custom file input styling
+    .file-upload-container {
+      margin-bottom: 1.5rem;
+
+      .file-input-wrapper {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+
+        .file-input {
+          position: absolute;
+          left: 0;
+          top: 0;
+          opacity: 0;
+          width: 100%;
+          height: 100%;
+          cursor: pointer;
+          z-index: 2;
+        }
+
+        .file-input-button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          padding: 0.75rem 1.5rem;
+          background: linear-gradient(135deg, #6366f1, #4f46e5);
+          color: white;
+          border: none;
+          border-radius: 8px;
+          font-weight: 500;
+          transition: all 0.2s;
+          width: 100%;
+          box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+
+          &:hover {
+            background: linear-gradient(135deg, #4f46e5, #4338ca);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+          }
+
+          .upload-icon {
+            font-size: 1.25rem;
+          }
+        }
+      }
+    }
+
+    // Preview container styling
+    .preview-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin: 1.5rem 0;
+
+      .preview-item {
+        position: relative;
+        display: inline-block;
+        transition: transform 0.2s, box-shadow 0.2s;
+        border-radius: 10px;
+        overflow: hidden;
+
+        &:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+
+          .preview-img {
+            transform: scale(1.05);
+          }
+
+          .remove-button {
+            opacity: 1;
+          }
+        }
+
+        .preview-img {
+          width: 120px;
+          height: 120px;
+          object-fit: cover;
+          border-radius: 10px;
+          border: 2px solid #f1f5f9;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+          transition: transform 0.3s ease;
+        }
+
+        .remove-button {
+          position: absolute;
+          top: 8px;
+          right: 8px;
+          background: rgba(255, 255, 255, 0.9);
+          color: #ef4444;
+          border: none;
+          border-radius: 50%;
+          width: 28px;
+          height: 28px;
+          cursor: pointer;
+          font-size: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s;
+          opacity: 0.8;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+          &:hover {
+            background: white;
+            color: #b91c1c;
+            transform: scale(1.1);
+          }
+        }
+      }
+    }
+  }
+
+  .product-card {
+    margin-bottom: 1.5rem;
+
+    .p-card {
+      margin: 2rem 0;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+      overflow: hidden;
+
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+      }
+
+      .p-card-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .p-card-subtitle {
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin-bottom: 0.75rem;
+        color: #444;
+      }
+
+      .p-card-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+
+        .product-info {
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+
+          .product-image {
+            width: 100px;
+            height: 120px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          }
+
+          div {
+            p {
+              margin: 0.5rem 0;
+              font-size: 1rem;
+
+              &:first-child {
+                color: rgb(20, 214, 20);
+                font-weight: 500;
+                position: relative;
+                display: inline-block;
+                padding: 0.25rem 0.75rem;
+                background-color: rgba(20, 214, 20, 0.1);
+                border-radius: 4px;
+                margin-bottom: 0.75rem;
+              }
+
+              &:nth-child(2) {
+                font-weight: 600;
+                font-size: 1.1rem;
+              }
+
+              span {
+                margin-right: 6px;
+                opacity: 0.6;
+              }
+            }
+          }
+        }
+
+        ::ng-deep .p-button {
+          background: linear-gradient(135deg, #6366f1, #4f46e5);
+          border: none;
+          border-radius: 8px;
+          padding: 0.75rem 1.5rem;
+          font-weight: 500;
+          transition: all 0.2s;
+          box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+
+          &:hover {
+            background: linear-gradient(135deg, #4f46e5, #4338ca);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+          }
+
+          &:active {
+            transform: translateY(0);
+          }
+        }
+      }
+    }
+  }
+
+  > .p-card {
+    > .p-card-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .review-container {
+    padding: 1rem;
+
+    .product-card {
+      .p-card {
+        .p-card-content {
+          flex-direction: column;
+          align-items: flex-start;
+
+          .product-info {
+            margin-bottom: 1rem;
+            width: 100%;
+          }
+
+          ::ng-deep .p-button {
+            align-self: flex-end;
+          }
+        }
+      }
+    }
+  }
+}
