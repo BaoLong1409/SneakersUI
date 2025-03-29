@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FeatureProductDto } from '../dtos/featureProduct.dto';
 import { environment } from '../../environments/environment.development';
@@ -7,6 +7,9 @@ import { DetailProductDto } from '../dtos/detailProduct.dto';
 import { ProductImageDto } from '../dtos/productImage.dto';
 import { ProductAvailableSizesDto } from '../dtos/productAvailableSizes.dto';
 import { GetProductsByCategory } from '../dtos/Request/getProductsByCategoryReq';
+import { ResponseMessageDto } from '../dtos/responseMessage.dto';
+import { CommonService } from './common.service';
+import { UploadNewProductRequest } from '../dtos/Request/uploadNewProductReq';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +17,8 @@ import { GetProductsByCategory } from '../dtos/Request/getProductsByCategoryReq'
 export class ProductService {
   private readonly apiUrl: string = environment.apiUrl
   constructor(
-    private readonly httpClient: HttpClient
+    private readonly httpClient: HttpClient,
+    private readonly commonService: CommonService
   ) { }
 
   public getAllFeatureProducts() {
@@ -62,10 +66,15 @@ export class ProductService {
   }
 
   public searchProducts(searchTerm: string) {
-    console.log(searchTerm);
-    
     return this.httpClient.get<AllProductDto[]>(`${this.apiUrl}product/searchAllProducts`, {
       params: { keyword: searchTerm }
     });
+  }
+
+  public uploadNewProduct(request: UploadNewProductRequest) {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.commonService.token}`
+    })
+    return this.httpClient.post<ResponseMessageDto>(`${this.apiUrl}product/uploadNewProduct`, request, {headers: headers});
   }
 }

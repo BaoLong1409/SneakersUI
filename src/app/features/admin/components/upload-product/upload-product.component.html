@@ -1,47 +1,112 @@
+<form [formGroup]="uploadNewProductForm">
+    <p-toast></p-toast>
 <div class="container-fluid upload-page">
+        
     <div class="infor-product-wrapper">
         <h1 class="upload-title">Upload Product</h1>
         <div class="row">
             <p-floatlabel>
-                <input pInputText id="over_label" autocomplete="off" />
+                <input formControlName="productName" style="font-size: 1rem;" pInputText id="over_label" autocomplete="off" />
                 <label for="over_label">Product Name</label>
             </p-floatlabel>
         </div>
         <div class="row">
             <p-floatlabel>
-                <textarea pTextarea id="over_label" [autoResize]="true" rows="5" cols="30" class="h-full"></textarea>
+                <textarea formControlName="productDescription" style="font-size: 1rem;" pTextarea id="over_label" [autoResize]="true" rows="5" cols="30" class="h-full"></textarea>
                 <label for="over_label">Product Description</label>
             </p-floatlabel>
         </div>
         <div class="row">
             <p-floatlabel>
-                <p-inputnumber inputId="currency-us" mode="currency" currency="VND" locale="vi-VN" />
+                <p-inputnumber formControlName="price" inputId="currency-us" mode="currency" currency="USD" locale="en-US" />
                 <label for="over_label">Product Price (After sale)</label>
             </p-floatlabel>
         </div>
         <div class="row">
             <p-floatlabel>
-                <p-inputnumber inputId="currency-us" />
+                <p-inputnumber formControlName="sale"/>
                 <label for="over_label">Sale (%)</label>
             </p-floatlabel>
         </div>
 
         <div class="row">
-            <p-fileupload>
-                <ng-template #empty>
-                    <div>Drag and drop images to here to upload.</div>
-                </ng-template>
-                <ng-template #content>
-                    @if (imageFiles.length) {
-                        <ul>
-                        @for (file of imageFiles; track file) {
-                            <li>{{ file.name }} - {{ file.size }} bytes</li>
-                        }
-                        </ul>
-                    }
-                </ng-template>
-            </p-fileupload>
+            <p-floatlabel class="brand-options">
+                <p-autocomplete formControlName="color" field="name" [dropdown]="true" [suggestions]="filterColors" (completeMethod)="searchColors($event)" inputId="over_label" />
+                <label for="over_label">Color</label>
+            </p-floatlabel>
         </div>
 
+        <div class="row">
+            <p-floatlabel>
+                <p-autocomplete formControlName="categoryName" [suggestions]="filterCategories" multiple (completeMethod)="searchCategories($event)" inputId="over_label" />
+                <label for="over_label">Category</label>
+            </p-floatlabel>
+        </div>
+
+        <div class="row">
+            <p-floatlabel class="brand-options">
+                <p-autocomplete formControlName="brand" [dropdown]="true" [suggestions]="filterBrands" (completeMethod)="searchBrands($event)" inputId="over_label" />
+                <label for="over_label">Brand</label>
+            </p-floatlabel>
+        </div>
+
+        
+        <div class="row">
+            <p-table [value]="uploadSizeRequest" [scrollable]="true" scrollHeight="400px">
+                <ng-template #header>
+                    <tr>
+                        <th>Size</th>
+                        <th>Quantity</th>
+                    </tr>
+                </ng-template>
+                <ng-template #body let-size let-editing="editing">
+                    <tr>
+                        <td>{{size.sizeNumber}}</td>
+                        <td [pEditableColumn]="size.quantity" pEditableColumnField="quantity">
+                            <p-cellEditor>
+                                <ng-template #input>
+                                    <p-inputnumber [(ngModel)]="size.quantity" [ngModelOptions]="{standalone: true}" [min]="0" />
+                                </ng-template>
+                                <ng-template #output>
+                                    {{size.quantity}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <div class="row flex">
+            <div class="file-upload-container"  style="margin-top: 12px;">
+                <div class="file-input-wrapper">
+                  <input
+                    #fileInput
+                    type="file"
+                    (change)="onFileSelect($event)"
+                    multiple
+                    accept="image/*"
+                    class="file-input"
+                  />
+                  <button class="file-input-button">
+                    <span class="upload-icon">📁</span>
+                    Choose Images
+                  </button>
+                </div>
+              </div>
+              @if (imageFiles.length > 0) {
+                <div class="preview-container">
+                    @for (image of imageFiles; track image) {
+                    <div class="preview-item">
+                      <img [src]="image.url" class="preview-img" />
+                      <button (click)="removeImage(image)" class="remove-button">❌</button>
+                    </div>
+                    }
+                  </div>
+              }
+        </div>
+
+        <p-button (onClick)="uploadProduct()" [style]="{float: 'right'}" label="Upload Product" severity="contrast"></p-button>
     </div>
 </div>
+</form>

@@ -48,7 +48,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ProductService } from '../../services/product.service';
 import { AllProductDto } from '../../dtos/allProduct.dto';
 import { BaseComponent } from '../../commonComponent/base.component';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-app-header',
@@ -66,16 +66,14 @@ import { AsyncPipe } from '@angular/common';
     ConfirmDialogModule,
     InputTextModule,
     AsyncPipe,
+    CommonModule
   ],
   providers: [MessageService, ToastService, ConfirmationService],
   templateUrl: './app-header.component.html',
   styleUrl: './app-header.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class AppHeaderComponent
-  extends BaseComponent
-  implements OnInit, AfterViewInit
-{
+export class AppHeaderComponent extends BaseComponent implements OnInit, AfterViewInit {
   @ViewChild('settingIcon') settingIcon!: ElementRef;
 
   private updateQuantitySubject = new Subject<ManageProductInCartDto>();
@@ -435,5 +433,15 @@ export class AppHeaderComponent
   public searchAllProducts() {
     this.isSearchOpen = false;
     window.location.href = `/All?search=${this.searchTerm}`;
+  }
+
+  public checkRole(): number {
+    if (Object.keys(this.userInfor).length > 0) {
+      if (this.userInfor.rolesName.includes("User")) {
+        return 1;
+      }
+      return 2;
+    }
+    return 1;
   }
 }

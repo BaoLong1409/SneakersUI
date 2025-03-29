@@ -7,12 +7,15 @@ import { ThemeService } from './core/services/theme.service';
 import { Observable, of, switchMap, tap } from 'rxjs';
 import { LoadingService } from './core/services/loading.service';
 import { AsyncPipe } from '@angular/common';
-
+import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
     AsyncPipe
+  ],
+  providers: [
+    MessageService
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

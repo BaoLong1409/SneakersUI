@@ -94,10 +94,6 @@ export class ReviewComponent extends BaseComponent implements OnInit {
       };
       reader.readAsDataURL(file);
     }
-
-    console.log(this.imageFiles);
-    
-
     this.fileInput.nativeElement.value = '';
   }
 

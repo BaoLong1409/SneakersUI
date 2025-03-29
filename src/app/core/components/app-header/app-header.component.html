@@ -8,7 +8,7 @@
         id="navbarNavAltMarkup"
       >
         <ul class="navbar-nav">
-          <!-- @if(roleId == 1 || !roleId){ -->
+          @if( checkRole() == 1 ){
           <li class="nav-item mx-3">
             <a class="nav-link" aria-current="true" href="#">{{
               "header.home" | translate
@@ -38,48 +38,48 @@
               "header.allProducts" | translate
             }}</a>
           </li>
-          <!-- } -->
-          <!-- @else if (roleId == 2) {
-        <li class="nav-item mx-3">
-          <a class="nav-link" aria-current="true" href="#">Trang chủ</a>
-        </li>
+          } @else if (checkRole() == 2) {
+            <li class="nav-item mx-3">
+              <a class="nav-link" aria-current="true" href="#">Trang chủ</a>
+            </li>
 
-        <li class="nav-item mx-3">
-          <a class="nav-link" href="" [routerLink]="['/userManage']"
-            >Quản lý người dùng</a
-          >
-        </li>
-
-        <li class="nav-item mx-3">
-          <a class="nav-link" href="" [routerLink]="['/orderManage']"
-            >Quản lý đơn hàng</a
-          >
-        </li>
-
-        <li class="nav-item mx-3">
-          <a class="nav-link" href="" [routerLink]="['/uploadProduct']"
-            >Thêm sản phẩm</a
-          >
-        </li>
-
-        <li class="nav-item mx-3">
-          <a class="nav-link" href="" [routerLink]="['/categoryManage']"
-            >Quản lý danh mục</a
-          >
-        </li>
-
-        <li class="nav-item mx-3">
-          <a class="nav-link" href="" [routerLink]="['/allProduct']"
-            >Tất cả sản phẩm</a
-          >
-        </li>
-        } @else {} -->
+            <li class="nav-item mx-3">
+              <a class="nav-link" href="" [routerLink]="['/User/Manage']"
+                >Quản lý người dùng</a
+              >
+            </li>
+    
+            <li class="nav-item mx-3">
+              <a class="nav-link" href="" [routerLink]="['/Order/Manage']"
+                >Quản lý đơn hàng</a
+              >
+            </li>
+    
+            <li class="nav-item mx-3">
+              <a class="nav-link" href="" [routerLink]="['/Admin/Upload']"
+                >Thêm sản phẩm</a
+              >
+            </li>
+    
+            <li class="nav-item mx-3">
+              <a class="nav-link" href="" [routerLink]="['/Category/Manage']"
+                >Quản lý danh mục</a
+              >
+            </li>
+    
+            <li class="nav-item mx-3">
+              <a class="nav-link" href="" [routerLink]="['/All']"
+                >Tất cả sản phẩm</a
+              >
+            </li>
+          }
         </ul>
       </div>
     </div>
 
     <div
-      class="col-lg-2 col-md-2 col-sm-3 col-1 offset-md-2 offset-lg-2 offset-xl-4 offset-sm-5 flex information-wrapper"
+    [ngClass]="{'offset-lg-2 offset-md-2 offset-xl-4 offset-sm-5': checkRole() == 1}"
+      class="col-lg-2 col-md-2 col-sm-3 col-1 offset-md-2 offset-lg-2 offset-xl-2 flex information-wrapper"
     >
       <div class="search-container">
         <i class="pi pi-search search-icon" (click)="toggleSearch()"></i>
@@ -159,7 +159,7 @@
       />
 
       <p-menu #profileMenu [model]="profileItems" [popup]="true" />
-      } @if (userInfor.id) {
+      } @if (userInfor.id && checkRole() == 1) {
       <p-overlaybadge [value]="badgeValue" severity="danger">
         <i
           (click)="toggleCart()"
@@ -167,7 +167,6 @@
           style="font-size: 1.6rem"
         ></i>
       </p-overlaybadge>
-      }
       <!-- Cart Menu -->
       <div class="cart-container">
         <div class="cart-menu" [class.active]="isCartOpen">
@@ -252,6 +251,8 @@
           (click)="toggleCart()"
         ></div>
       </div>
+    }
+
 
       <p-menu #menu [model]="items" [popup]="true">
         <ng-template let-item pTemplate="item">
