@@ -18,6 +18,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent } from '../../../core/commonComponent/base.component';
 import { CategoryService } from '../../../core/services/category.service';
 import { CategoryDto } from '../../../core/dtos/category.dto';
+import { CommonService } from '../../../core/services/common.service';
 
 @Component({
   selector: 'app-all-products',
@@ -53,6 +54,7 @@ export class AllProductsComponent
   constructor(
     private productService: ProductService,
     private readonly categoryService: CategoryService,
+    private readonly commonService: CommonService,
     private router: Router,
     private readonly activateRoute: ActivatedRoute
   ) {
@@ -65,7 +67,7 @@ export class AllProductsComponent
       .getAllCategories()
       .pipe(
         tap((res: CategoryDto[]) => {
-          this.categoriesOptions = [...new Set(res.map((p) => p.name))].map(
+          this.categoriesOptions = [...new Set(res.map((p) => p.categoryName))].map(
             (name) => ({ name })
           );
           this.brandOptions = [...new Set(res.map((p) => p.brand))].map(
@@ -115,7 +117,17 @@ export class AllProductsComponent
   }
 
   public goToDetailProduct(productId: string, colorName: string) {
-    this.router.navigateByUrl(`Detail/${productId}/${colorName}`);
+    console.log(Object.keys(this.commonService.userInfor).length);
+    if (Object.keys(this.commonService.userInfor).length > 0) {
+      if (this.commonService.userInfor.rolesName.includes("Admin")) {
+        this.router.navigateByUrl(`Admin/Update/${productId}/${colorName}`);
+      } else{
+        this.router.navigateByUrl(`Detail/${productId}/${colorName}`);
+      }
+    } else {
+      this.router.navigateByUrl(`Detail/${productId}/${colorName}`);
+    }
+    
   }
 
   public filterAllProducts() {

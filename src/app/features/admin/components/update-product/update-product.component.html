@@ -1,12 +1,12 @@
-<form [formGroup]="uploadNewProductForm">
+<form [formGroup]="updateProductForm">
     <p-toast></p-toast>
+    <p-confirmdialog />
     <p-blockUI [blocked]="loading">
         <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
     </p-blockUI>
 <div class="container-fluid upload-page">
-        
     <div class="infor-product-wrapper">
-        <h1 class="upload-title">Upload Product</h1>
+        <h1 class="upload-title">Update Product</h1>
         <div class="row">
             <p-floatlabel>
                 <input formControlName="productName" style="font-size: 1rem;" pInputText id="over_label" autocomplete="off" />
@@ -53,9 +53,8 @@
             </p-floatlabel>
         </div>
 
-        
         <div class="row">
-            <p-table [value]="uploadSizeRequest" [scrollable]="true" scrollHeight="400px">
+            <p-table [value]="updateSizeRequest" [scrollable]="true" scrollHeight="400px">
                 <ng-template #header>
                     <tr>
                         <th>Size</th>
@@ -97,12 +96,12 @@
                   </button>
                 </div>
               </div>
-              @if (imageFiles.length > 0) {
               <p-message severity="warn">Remember choose thumbnail image, if you don't default is first image</p-message>
+              @if (updateProductForm.value.productImages) {
                 <div class="preview-container">
-                    @for (image of imageFiles; track $index) {
+                    @for (image of updateProductForm.value.productImages; track $index) {
                     <div class="preview-item">
-                      <img (click)="changeThumbnailImg($index)" [src]="image.url" class="preview-img" [class.active]="$index==uploadNewProductForm.value.ordinalImageThumbnail"/>
+                      <img (click)="changeThumbnailImg($index)" [src]="image.base64Data" class="preview-img" [class.active]="$index==updateProductForm.value.ordinalImageThumbnail"/>
                       <button (click)="removeImage(image)" class="remove-button">❌</button>
                     </div>
                     }
@@ -110,7 +109,10 @@
               }
         </div>
 
-        <p-button (onClick)="uploadProduct()" [style]="{float: 'right'}" label="Upload Product" severity="contrast"></p-button>
+        <div class="button-wrapper flex gap-4" style="float:right">
+            <p-button (onClick)="confirmDeleteDialog($event)" label="Delete Product" severity="danger"></p-button>
+            <p-button (onClick)="updateProduct()" label="Update Product" severity="contrast"></p-button>
+        </div>
     </div>
 </div>
 </form>

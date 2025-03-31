@@ -1,5 +1,5 @@
 export interface CategoryDto {
-    id: string,
-    name: string,
+    categoryId: string,
+    categoryName: string,
     brand: string
 }

@@ -3,7 +3,6 @@ p-progressspinner {
   left: 45%;
   top: 45%;
 }
-
 .upload-page {
   padding-top: 120px;
   background-color: #dfdbdb;
@@ -15,30 +14,30 @@ p-progressspinner {
   .infor-product-wrapper {
     width: 45%;
     .upload-title {
-        margin-bottom: 24px;
+      margin-bottom: 24px;
     }
     .row {
-        margin: 24px 0;
-        .p-floatlabel {
-            padding: 0;
-            .p-inputtext {
-                width: 100%;
-                padding-top: 16px;
-                padding-bottom: 16px;
-                font-size: 20px;
-            }
-            .p-textarea {
-                width: 100%;
-                font-size: 20px;
-            }
-            .p-inputnumber {
-                width: 100%;
-                font-size: 20px;
-            }
+      margin: 24px 0;
+      .p-floatlabel {
+        padding: 0;
+        .p-inputtext {
+          width: 100%;
+          padding-top: 16px;
+          padding-bottom: 16px;
+          font-size: 20px;
         }
-        p-table {
-          padding: 0;
+        .p-textarea {
+          width: 100%;
+          font-size: 20px;
         }
+        .p-inputnumber {
+          width: 100%;
+          font-size: 20px;
+        }
+      }
+      p-table {
+        padding: 0;
+      }
     }
 
     .brand-options {

@@ -31,7 +31,7 @@
 
     <div class="col-3-5 col-lg-3-5 col-md-3-5">
       <div class="product-infor">
-        <h2 class="product-name">{{ detailProduct.name }}</h2>
+        <h2 class="product-name">{{ detailProduct.productName }}</h2>
         <p class="product-price">{{ detailProduct.price }}$</p>
         <div class="product-color-picker">
           @for(color of productImageColors; track $index) {
@@ -46,11 +46,11 @@
           }
         </div>
         <p class="stock-quantity">Product Quantity: {{ productQuantity }}</p>
-        @if(detailProduct.description) {
+        <!-- @if(detailProduct.description) {
         <p-scrollpanel [style]="{ width: '100%', height: '150px' }">
           <p>{{ detailProduct.description }}</p>
         </p-scrollpanel>
-        }
+        } -->
         <div class="quantity-picker-wrapper">
           <p class="quantity-panel">Số lượng: </p>
           <p-inputnumber [(ngModel)]="productQuantityAddToCart" [min]="1" [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" [inputStyle]="{ width: '4rem', height: '2rem' }">

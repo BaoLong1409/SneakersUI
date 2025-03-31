@@ -11,7 +11,7 @@
       [class.else]="$index !== initIndex && $index !== nextIndex && $index !== prevIndex"
       >
         <img class="image-item" [src]="product.imageUrl" alt="Image_nike" />
-        <h3 class="image-text">{{ product.name }}</h3>
+        <h3 class="image-text">{{ product.productName }}</h3>
         <div class="product-information">
           <h2 class="price">{{product.price}}$</h2>
           <p-rating [(ngModel)]="product.rating" [readonly]="true" />
@@ -43,7 +43,7 @@
               <div class="product-item-wrapper">
                 <img class="product-item-image" [src]="product.thumbnailImage" alt="404">
                 <div class="product-information">
-                  <h3 class="product-item-name">{{product.name}}</h3>
+                  <h3 class="product-item-name">{{product.productName}}</h3>
                   <p class="product-item-price">{{product.price}}$</p>
                 </div>
               </div>

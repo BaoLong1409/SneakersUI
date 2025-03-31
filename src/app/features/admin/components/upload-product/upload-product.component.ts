@@ -17,7 +17,7 @@ import {
 } from 'primeng/autocomplete';
 import { CategoryService } from '../../../../core/services/category.service';
 import { BaseComponent } from '../../../../core/commonComponent/base.component';
-import { BehaviorSubject, catchError, delay, EMPTY, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, catchError, delay, EMPTY, finalize, takeUntil, tap } from 'rxjs';
 import { CategoryDto } from '../../../../core/dtos/category.dto';
 import { ColorService } from '../../../../core/services/color.service';
 import { ColorDto } from '../../../../core/dtos/color.dto';
@@ -31,21 +31,12 @@ import { ResponseMessageDto } from '../../../../core/dtos/responseMessage.dto';
 import { ToastService } from '../../../../core/services/toast.service';
 import { ToastModule } from 'primeng/toast';
 import { HttpErrorResponse } from '@angular/common/http';
+import { SharedModule } from '../../../../core/commonComponent/SharedModule/SharedModule';
 
 @Component({
   selector: 'app-upload-product',
   imports: [
-    InputTextModule,
-    FloatLabel,
-    TextareaModule,
-    InputNumberModule,
-    ButtonModule,
-    ChipModule,
-    AutoCompleteModule,
-    TableModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ToastModule
+    SharedModule,
   ],
   providers:[
     ToastService,
@@ -60,12 +51,13 @@ export class UploadProductComponent extends BaseComponent implements OnInit {
   public imageFiles: any[] = [];
   public filterCategories: string[] = [];
   public filterBrands: string[] = [];
-  public filterColors: {id: string, name: string}[] = [];
+  public filterColors: {id: string, colorName: string}[] = [];
   public uploadSizeRequest: UploadSizeRequest[] = [];
+  public loading: boolean = false;
 
   private categoryOptions: string[] = [];
   private brandOptions: string[] = [];
-  private colorOptions: {id: string, name: string}[] = [];
+  private colorOptions: {id: string, colorName: string}[] = [];
 
   public uploadNewProductForm: FormGroup;
 
@@ -89,7 +81,7 @@ export class UploadProductComponent extends BaseComponent implements OnInit {
       brand: [, Validators.required],
       productImages: [, Validators.required],
       ordinalImageThumbnail: [0, Validators.required],
-      sizesQuantity: [, Validators.required],
+      sizesQuantity: [, Validators.required]
     });
   }
 
@@ -98,7 +90,7 @@ export class UploadProductComponent extends BaseComponent implements OnInit {
       .getAllCategories()
       .pipe(
         tap((categories: CategoryDto[]) => {
-          this.categoryOptions = [...new Set(categories.map((c) => c.name))];
+          this.categoryOptions = [...new Set(categories.map((c) => c.categoryName))];
           this.filterCategories = this.categoryOptions;
           this.brandOptions = [...new Set(categories.map((c) => c.brand))];
         }),
@@ -141,7 +133,14 @@ export class UploadProductComponent extends BaseComponent implements OnInit {
     this.imageFiles = this.imageFiles.filter((img) => img !== image);
   }
 
+  public changeThumbnailImg(ordinal: number) {
+    this.uploadNewProductForm.patchValue({
+      ordinalImageThumbnail: ordinal
+    });
+  }
+
   public uploadProduct() {
+    this.loading = true;
     this.uploadNewProductForm.patchValue({
       productImages: this.imageFiles.map(file => ({
         fileName: file.file.name,
@@ -164,6 +163,7 @@ export class UploadProductComponent extends BaseComponent implements OnInit {
         this.toastService.fail(err.error.message);
         return EMPTY;
       }),
+      finalize(() => this.loading = false),
       takeUntil(this.destroyed$)
     ).subscribe();
     
@@ -183,7 +183,7 @@ export class UploadProductComponent extends BaseComponent implements OnInit {
 
   public searchColors(event: AutoCompleteCompleteEvent) {
     this.filterColors = this.colorOptions.filter((item) =>
-      item.name.toLowerCase().includes(event.query.toLowerCase())
+      item.colorName.toLowerCase().includes(event.query.toLowerCase())
     );
   }
 }

@@ -16,6 +16,9 @@ import { ChangePasswordComponent } from './features/components/change-password/c
 import { ForgetPasswordComponent } from './features/components/forget-password/forget-password.component';
 import { PasswordCanActivateTeam } from './core/routeGuard/passwordCanActivateTeam';
 import { ReviewComponent } from './features/components/review/review.component';
+import { UpdateProductComponent } from './features/admin/components/update-product/update-product.component';
+import { AdminCanActiveTeam } from './core/routeGuard/adminCanActiveTeam';
+import { NotFoundComponent } from './features/components/not-found/not-found.component';
 
 export const routes: Routes = [
     {
@@ -50,7 +53,13 @@ export const routes: Routes = [
             },
             {
                 path: 'Admin/Upload',
-                component: UploadProductComponent
+                component: UploadProductComponent,
+                canActivate: [AdminCanActiveTeam]
+            },
+            {
+                path: 'Admin/Update/:id/:colorName',
+                component: UpdateProductComponent,
+                canActivate: [AdminCanActiveTeam]
             },
             {
                 path: 'Detail/:id/:colorName',
@@ -90,5 +99,9 @@ export const routes: Routes = [
                 component: ReviewComponent
             }
         ]
+    },
+    {
+        path: '**',
+        component: NotFoundComponent
     }
 ];

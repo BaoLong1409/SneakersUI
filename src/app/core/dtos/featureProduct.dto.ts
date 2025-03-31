@@ -1,6 +1,6 @@
 export interface FeatureProductDto {
     imageUrl: string,
-    name: string,
+    productName: string,
     price: number,
     rating?: number,
     leftColor: string,

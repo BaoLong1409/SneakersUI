@@ -44,13 +44,13 @@
             </li>
 
             <li class="nav-item mx-3">
-              <a class="nav-link" href="" [routerLink]="['/User/Manage']"
+              <a class="nav-link" href="" [routerLink]="['Admin/User/Manage']"
                 >Quản lý người dùng</a
               >
             </li>
     
             <li class="nav-item mx-3">
-              <a class="nav-link" href="" [routerLink]="['/Order/Manage']"
+              <a class="nav-link" href="" [routerLink]="['Admin/Order/Manage']"
                 >Quản lý đơn hàng</a
               >
             </li>
@@ -62,7 +62,7 @@
             </li>
     
             <li class="nav-item mx-3">
-              <a class="nav-link" href="" [routerLink]="['/Category/Manage']"
+              <a class="nav-link" href="" [routerLink]="['Admin/Category/Manage']"
                 >Quản lý danh mục</a
               >
             </li>
@@ -127,11 +127,11 @@
                 <div class="result-image">
                   <img
                     [src]="product.colorsAImages[0].thumbnailUrl"
-                    [alt]="product.name"
+                    [alt]="product.productName"
                   />
                 </div>
                 <div class="result-details">
-                  <h4>{{ product.name }}</h4>
+                  <h4>{{ product.productName }}</h4>
                   <p class="result-category">{{ product.categoryName }}</p>
                   <p class="result-price">${{ product.price.toFixed(2) }}</p>
                 </div>
@@ -182,10 +182,10 @@
             @for (product of productsInCart; track $index) {
             <div class="cart-item">
               <div class="item-image">
-                <img [src]="product.imageUrl" [alt]="product.name" />
+                <img [src]="product.imageUrl" [alt]="product.productName" />
               </div>
               <div class="item-details">
-                <h4>{{ product.name }}</h4>
+                <h4>{{ product.productName }}</h4>
                 <p class="item-color">Color: {{ product.colorName }}</p>
                 <p class="item-size">Size: {{ product.sizeNumber }}</p>
                 <div class="item-quantity">

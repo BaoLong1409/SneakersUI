@@ -46,10 +46,10 @@
         <ng-template #list let-items>
           <div class="grid">
             @for (product of products; track $index) {
-              <div class="product-item-wrapper" (click)="goToDetailProduct(product.id, product.colorsAImages[0].colorName)">
+              <div class="product-item-wrapper" (click)="goToDetailProduct(product.productId, product.colorsAImages[0].colorName)">
                 <img class="product-item-image" [src]="product.colorsAImages[0].thumbnailUrl" alt="404">
                 <div class="product-information">
-                  <h3 class="product-item-name">{{product.name}}</h3>
+                  <h3 class="product-item-name">{{product.productName}}</h3>
                   <p class="product-item-price">{{product.price}}$</p>
                 </div>
               </div>

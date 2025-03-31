@@ -204,14 +204,14 @@ export class OrderComponent extends BaseComponent implements OnInit, AfterViewIn
       note: this.orderForm.value.noteOrder || null
     });
 
-    if (this.orderForm.valid && this.paymentSelected.name == "COD") {
+    if (this.orderForm.valid && this.paymentSelected.paymentName == "COD") {
       this.orderSerivce.updateOrder(updateOrderReq).pipe(
         tap((res: CommonRes) => {
           this.toastService.success(res.message);
         }),
         takeUntil(this.destroyed$)
       ).subscribe();
-    } else if (this.orderForm.valid && this.paymentSelected.name == "VNPay") {
+    } else if (this.orderForm.valid && this.paymentSelected.paymentName == "VNPay") {
       this.orderSerivce.updateOrder(updateOrderReq).pipe(
         tap((res: CommonRes) => {
           // this.toastService.success(res.message);

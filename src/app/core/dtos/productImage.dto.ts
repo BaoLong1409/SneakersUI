@@ -1,7 +1,6 @@
 export interface ProductImageDto {
-    id: string,
+    productImageId: string,
     imageUrl: string,
-    productId: string,
     colorId: string,
     colorName: string
     isThumbnail: number,

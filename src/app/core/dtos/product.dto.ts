@@ -1,6 +1,6 @@
 export interface ProductDto {
-    id: string,
-    name: string,
+    productId: string,
+    productName: string,
     imageUrl: string,
     description: string,
     color: string,

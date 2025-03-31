@@ -10,6 +10,7 @@ import { GetProductsByCategory } from '../dtos/Request/getProductsByCategoryReq'
 import { ResponseMessageDto } from '../dtos/responseMessage.dto';
 import { CommonService } from './common.service';
 import { UploadNewProductRequest } from '../dtos/Request/uploadNewProductReq';
+import { UpdateProductRequest } from '../dtos/Request/updateProductReq';
 
 @Injectable({
   providedIn: 'root'
@@ -76,5 +77,19 @@ export class ProductService {
       Authorization: `Bearer ${this.commonService.token}`
     })
     return this.httpClient.post<ResponseMessageDto>(`${this.apiUrl}product/uploadNewProduct`, request, {headers: headers});
+  }
+
+  public updateProduct(request: UpdateProductRequest) {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.commonService.token}`
+    })
+    return this.httpClient.post<ResponseMessageDto>(`${this.apiUrl}product/updateProduct`, request, {headers: headers});
+  }
+
+  public deleteProduct(productId: string) {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.commonService.token}`
+    })
+    return this.httpClient.delete<ResponseMessageDto>(`${this.apiUrl}product/updateProduct?productId=${productId}`, {headers: headers});
   }
 }

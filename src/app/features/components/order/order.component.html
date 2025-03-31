@@ -71,7 +71,7 @@
                                         @for(shippingMethod of shippingMethods; track $index) {
                                             <div class="card-container" [class.selected]="shippingSelected === shippingMethod" (click)="toggleShippingSelection(shippingMethod)">
                                                 <p-card>
-                                                    <ng-template #title> <h3>{{shippingMethod.name}}</h3> </ng-template>
+                                                    <ng-template #title> <h3>{{shippingMethod.shippingName}}</h3> </ng-template>
                                                     <div class="info shipping-info">
                                                         <p>Price: {{shippingMethod.price}}$</p>
                                                         @if (shippingMethod.minimumDeliveredTime > 0) {
@@ -96,8 +96,8 @@
                                         @for (payment of paymentMethods; track $index) {
                                             <div style="width: fit-content; min-width: 12rem; max-width: 13rem;" class="card-container" [class.selected]="paymentSelected === payment" (click)="togglePaymentSelection(payment)">
                                                 <p-card>
-                                                    <ng-template #title> <h3>{{payment.name}}</h3> </ng-template>
-                                                    @if (payment.name == "VNPay") {
+                                                    <ng-template #title> <h3>{{payment.paymentName}}</h3> </ng-template>
+                                                    @if (payment.paymentName == "VNPay") {
                                                         <div class="info payment-info">
                                                             <img class="payment-img" src="../../../../assets/images/VnPay/Icon-VNPAY-QR.jpg" alt="">
                                                         </div>

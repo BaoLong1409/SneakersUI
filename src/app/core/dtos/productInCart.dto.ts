@@ -1,6 +1,6 @@
 export interface ProductInCartDto {
     productId: string,
-    name: string,
+    productName: string,
     price: number,
     imageUrl: string,
     colorId: string,

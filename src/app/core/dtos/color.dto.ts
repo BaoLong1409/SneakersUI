@@ -1,4 +1,4 @@
 export interface ColorDto {
     id: string,
-    name: string
+    colorName: string
 }

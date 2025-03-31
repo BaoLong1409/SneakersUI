@@ -1,6 +1,6 @@
 export interface ShippingMethodDto {
     id: string,
-    name: string,
+    shippingName: string,
     price: number,
     minimumDeliveredTime: number,
     maximumDeliveredTime: number
