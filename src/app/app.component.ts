@@ -8,6 +8,7 @@ import { Observable, of, switchMap, tap } from 'rxjs';
 import { LoadingService } from './core/services/loading.service';
 import { AsyncPipe } from '@angular/common';
 import { MessageService } from 'primeng/api';
+import { ToastService } from './core/services/toast.service';
 @Component({
   selector: 'app-root',
   imports: [
@@ -15,7 +16,8 @@ import { MessageService } from 'primeng/api';
     AsyncPipe
   ],
   providers: [
-    MessageService
+    MessageService,
+    ToastService
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

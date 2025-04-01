@@ -19,6 +19,7 @@ import { ReviewComponent } from './features/components/review/review.component';
 import { UpdateProductComponent } from './features/admin/components/update-product/update-product.component';
 import { AdminCanActiveTeam } from './core/routeGuard/adminCanActiveTeam';
 import { NotFoundComponent } from './features/components/not-found/not-found.component';
+import { OrderManageComponent } from './features/admin/components/order-manage/order-manage.component';
 
 export const routes: Routes = [
     {
@@ -76,6 +77,10 @@ export const routes: Routes = [
             {
                 path: 'AllOrder',
                 component: AllOrderComponent
+            },
+            {
+                path: 'Admin/Order/Manage/:status',
+                component: OrderManageComponent
             },
             {
                 path: 'Transaction',

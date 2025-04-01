@@ -14,6 +14,11 @@ import { MessageModule } from 'primeng/message';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { BlockUIModule } from 'primeng/blockui';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { StepperModule } from 'primeng/stepper';
+import { CardModule } from 'primeng/card';
+import { SelectModule } from 'primeng/select';
+import { DatePickerModule } from 'primeng/datepicker';
+ 
 
 @NgModule({
   imports: [
@@ -32,7 +37,11 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     MessageModule,
     ConfirmDialogModule,
     BlockUIModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    StepperModule,
+    CardModule,
+    SelectModule,
+    DatePickerModule
   ],
   exports: [
     ToastModule,
@@ -49,7 +58,11 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     MessageModule,
     ConfirmDialogModule,
     BlockUIModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    StepperModule,
+    CardModule,
+    SelectModule,
+    DatePickerModule
   ]
 })
 export class SharedModule { }
