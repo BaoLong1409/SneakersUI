@@ -2,7 +2,7 @@
   <p-toast></p-toast>
   <p-confirmdialog />
   <div class="row">
-    <div class="col-lg-10 col-md-10 col-sm-8 col-8 offset-1 navbar-wrapper">
+    <div class="col-lg-10 col-md-10 col-8 offset-md-0 offset-1 navbar-wrapper">
       <div
         class="collapse navbar-collapse justify-content-center"
         id="navbarNavAltMarkup"
@@ -39,47 +39,52 @@
             }}</a>
           </li>
           } @else if (checkRole() == 2) {
-            <li class="nav-item mx-3">
-              <a class="nav-link" aria-current="true" href="#">Trang chủ</a>
-            </li>
+          <li class="nav-item mx-3">
+            <a class="nav-link" aria-current="true" href="#">Trang chủ</a>
+          </li>
 
-            <li class="nav-item mx-3">
-              <a class="nav-link" href="" [routerLink]="['Admin/User/Manage']"
-                >Quản lý người dùng</a
-              >
-            </li>
-    
-            <li class="nav-item mx-3">
-              <a class="nav-link" href="" [routerLink]="['Admin/Order/Manage/Pending']"
-                >Quản lý đơn hàng</a
-              >
-            </li>
-    
-            <li class="nav-item mx-3">
-              <a class="nav-link" href="" [routerLink]="['/Admin/Upload']"
-                >Thêm sản phẩm</a
-              >
-            </li>
-    
-            <li class="nav-item mx-3">
-              <a class="nav-link" href="" [routerLink]="['Admin/Category/Manage']"
-                >Quản lý danh mục</a
-              >
-            </li>
-    
-            <li class="nav-item mx-3">
-              <a class="nav-link" href="" [routerLink]="['/All']"
-                >Tất cả sản phẩm</a
-              >
-            </li>
+          <li class="nav-item mx-3">
+            <a class="nav-link" href="" [routerLink]="['Admin/User/Manage']"
+              >Quản lý người dùng</a
+            >
+          </li>
+
+          <li class="nav-item mx-3">
+            <a
+              class="nav-link"
+              href=""
+              [routerLink]="['Admin/Order/Manage/Pending']"
+              >Quản lý đơn hàng</a
+            >
+          </li>
+
+          <li class="nav-item mx-3">
+            <a class="nav-link" href="" [routerLink]="['/Admin/Upload']"
+              >Thêm sản phẩm</a
+            >
+          </li>
+
+          <li class="nav-item mx-3">
+            <a class="nav-link" href="" [routerLink]="['Admin/Category/Manage']"
+              >Quản lý danh mục</a
+            >
+          </li>
+
+          <li class="nav-item mx-3">
+            <a class="nav-link" href="" [routerLink]="['/All']"
+              >Tất cả sản phẩm</a
+            >
+          </li>
           }
         </ul>
       </div>
     </div>
 
     <div
-    [ngClass]="{'offset-lg-2 offset-md-2 offset-xl-4 offset-sm-5': checkRole() == 1}"
-      class="col-lg-2 col-md-2 col-sm-3 col-1 offset-md-2 offset-lg-2 offset-xl-2 flex information-wrapper"
+      [ngClass]="{
+        'offset-lg-2 offset-md-0 offset-xl-4 offset-4': checkRole() == 1
+      }"
+      class="col-lg-2 col-md-2 col-sm-3 col-1 offset-md-0 offset-lg-2 offset-xl-2 flex information-wrapper"
     >
       <div class="search-container">
         <i class="pi pi-search search-icon" (click)="toggleSearch()"></i>
@@ -117,13 +122,19 @@
 
             <div class="search-results-container">
               @if (searching$ | async) {
-                <div class="loading-container">
-                  <i class="pi pi-spin pi-spinner"></i>
-                </div>
-              }
-
-              @for(product of resultProducts$ | async; track $index) {
-              <div class="search-results-item">
+              <div class="loading-container">
+                <i class="pi pi-spin pi-spinner"></i>
+              </div>
+              } @for(product of resultProducts$ | async; track $index) {
+              <div
+                (click)="
+                  goToProductDetail(
+                    product.productId,
+                    product.colorsAImages[0].colorName
+                  )
+                "
+                class="search-results-item"
+              >
                 <div class="result-image">
                   <img
                     [src]="product.colorsAImages[0].thumbnailUrl"
@@ -143,9 +154,9 @@
       </div>
 
       @if (!userInfor.id) {
-      <h3 [routerLink]="['/Login']" class="header-login">
+      <a href="/Login" class="header-login">
         {{ "header.login" | translate }}
-      </h3>
+      </a>
       <h3 [routerLink]="['/Register']" class="header-register">
         {{ "header.register" | translate }}
       </h3>
@@ -163,7 +174,7 @@
       <p-overlaybadge [value]="badgeValue" severity="danger">
         <i
           (click)="toggleCart()"
-          class="pi pi-shopping-cart"
+          class="pi pi-shopping-cart cart-icon"
           style="font-size: 1.6rem"
         ></i>
       </p-overlaybadge>
@@ -215,7 +226,10 @@
                     </button> -->
               </div>
               <div class="item-checkout-btn-wrapper">
-                <button class="item-checkout-btn">
+                <button
+                  (click)="checkOutItemInCart(product)"
+                  class="item-checkout-btn"
+                >
                   <i class="pi pi-check-circle"></i>
                   Checkout
                 </button>
@@ -251,8 +265,87 @@
           (click)="toggleCart()"
         ></div>
       </div>
-    }
+      }
 
+      <i
+        (click)="navbarMobileActive = true"
+        class="fa-solid fa-bars menu-icon"
+      ></i>
+      <p-drawer #drawerRef [(visible)]="navbarMobileActive">
+        <ng-template #header>
+          <h4>Navigation</h4>
+        </ng-template>
+        <ul class="navbar-list">
+          @if (checkRole() == 1) {
+          <li class="navbar-item">
+            <a class="navbar-link" aria-current="true" href="#">{{
+              "header.home" | translate
+            }}</a>
+          </li>
+
+          <li class="navbar-item">
+            <a class="navbar-link" href="" [routerLink]="['/Intro']">{{
+              "header.intro" | translate
+            }}</a>
+          </li>
+
+          <li class="navbar-item">
+            <a class="navbar-link" href="" [routerLink]="['/news']">{{
+              "header.news" | translate
+            }}</a>
+          </li>
+
+          <li class="navbar-item">
+            <a class="navbar-link" href="" [routerLink]="['/contact']">{{
+              "header.contact" | translate
+            }}</a>
+          </li>
+
+          <li class="navbar-item">
+            <a class="navbar-link" href="/All">{{
+              "header.allProducts" | translate
+            }}</a>
+          </li>
+          } @else if (checkRole() == 2) {
+          <li class="navbar-item">
+            <a class="navbar-link" aria-current="true" href="#">Trang chủ</a>
+          </li>
+
+          <li class="navbar-item">
+            <a class="navbar-link" href="" [routerLink]="['Admin/User/Manage']"
+              >Quản lý người dùng</a
+            >
+          </li>
+
+          <li class="navbar-item">
+            <a
+              class="navbar-link"
+              href=""
+              [routerLink]="['Admin/Order/Manage/Pending']"
+              >Quản lý đơn hàng</a
+            >
+          </li>
+
+          <li class="navbar-item">
+            <a class="navbar-link" href="" [routerLink]="['/Admin/Upload']"
+              >Thêm sản phẩm</a
+            >
+          </li>
+
+          <li class="navbar-item">
+            <a class="navbar-link" href="" [routerLink]="['Admin/Category/Manage']"
+              >Quản lý danh mục</a
+            >
+          </li>
+
+          <li class="navbar-item">
+            <a class="navbar-link" href="" [routerLink]="['/All']"
+              >Tất cả sản phẩm</a
+            >
+          </li>
+          }
+        </ul>
+      </p-drawer>
 
       <p-menu #menu [model]="items" [popup]="true">
         <ng-template let-item pTemplate="item">
@@ -312,6 +405,7 @@
       <i
         #settingIcon
         class="setting__icon pi pi-cog"
+        [class.setting-loggedin]="userInfor.id"
         (click)="menu.toggle($event)"
         (mouseenter)="addSpin()"
         (mouseleave)="removeSpin()"

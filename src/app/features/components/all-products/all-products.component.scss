@@ -3,6 +3,7 @@
   background-color: #dfdbdb;
   height: 100vh;
   overflow-y: auto;
+  overflow-x: hidden;
   .row-1 {
     gap: 4.5rem;
     .p-dropdown {
@@ -107,9 +108,42 @@
             user-select: none;
           }
         }
-        
       }
-      
+    }
+  }
+}
+
+@media (min-width: 767px) and (max-width: 1024px) {
+  .all-products {
+    .row-2 {
+      .filter-col {
+        margin: 0;
+      }
+      .filter__button-wrapper {
+        margin-bottom: 12px;
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .all-products {
+    .row-1 {
+      gap: 0;
+      .filter-col {
+        &:last-child {
+          margin-top: 12px;
+        }
+      }
+    }
+
+    .row-2 {
+      .filter-col {
+        margin: 0;
+      }
+      .filter__button-wrapper {
+        margin-bottom: 12px;
+      }
     }
   }
 }

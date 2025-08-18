@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
 import { ProductService } from '../../../core/services/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, catchError, EMPTY, finalize, switchMap, takeUntil, tap } from 'rxjs';
@@ -18,7 +18,7 @@ import { CartService } from '../../../core/services/cart.service';
 import { UserDto } from '../../../core/dtos/user.dto';
 import { ProductCartResponse } from '../../../core/dtos/productCartRes.dto';
 import { EnumProductCart } from '../../../core/enum/enumProductCart';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { CommonService } from '../../../core/services/common.service';
 import { BaseComponent } from '../../../core/commonComponent/base.component';
 import { OrderService } from '../../../core/services/order.service';
@@ -62,6 +62,8 @@ export class DetailProductComponent extends BaseComponent implements OnInit {
   public productImageColors: ProductImageDto[] = [];
   public availableSizes: ProductAvailableSizesDto[] = [];
   public selectedSize!: number;
+  public thumbnailPosition: 'left' | 'bottom' = 'left';
+
   private productSizeId!: string;
   private userInfor!: UserDto;
   constructor(
@@ -83,6 +85,7 @@ export class DetailProductComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.updateThumbnailPosition(window.innerWidth);
     this.productId = this.route.snapshot.paramMap.get('id') ?? '';
     this.productColor = this.route.snapshot.paramMap.get('colorName') ?? '';
     this.productService
@@ -255,5 +258,18 @@ export class DetailProductComponent extends BaseComponent implements OnInit {
       }),
       takeUntil(this.destroyed$)
     ).subscribe();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.updateThumbnailPosition((event.target as Window).innerWidth);
+  }
+
+  private updateThumbnailPosition(width: number) {
+    if (width <= 768) {
+      this.thumbnailPosition = 'bottom';
+    } else {
+      this.thumbnailPosition = 'left';
+    }
   }
 }

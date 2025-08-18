@@ -26,10 +26,10 @@ import { CommonRes } from '../../../../core/dtos/Response/commonRes';
   styleUrl: './order-manage.component.scss',
 })
 export class OrderManageComponent extends BaseComponent implements OnInit {
-  public ordersSubject = new BehaviorSubject<OrdersDto[]>([]);
+  private ordersSubject = new BehaviorSubject<OrdersDto[]>([]);
+
   public orders$: Observable<OrdersDto[]> = this.ordersSubject.asObservable();
 
-  public copyOrdersSubject = new BehaviorSubject<OrdersDto[]>([]);
   public orderStatuses: string[] = [];
   public dateValue!: Date[];
 
@@ -39,6 +39,7 @@ export class OrderManageComponent extends BaseComponent implements OnInit {
   public stepValue: number = 1;
 
   private scrollLoading: boolean = false;
+  private copyOrdersSubject = new BehaviorSubject<OrdersDto[]>([]);
 
   constructor(
     private readonly orderService: OrderService,

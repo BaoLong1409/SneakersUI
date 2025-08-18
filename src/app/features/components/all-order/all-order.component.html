@@ -42,7 +42,7 @@
             <div class="order-container">
                 <p-card>
                   @for(order of allOrders$ | async; track $index) {
-                  @if (order.orderStatus === 'Success') {
+                  @if (order.orderStatus === 'Success' || order.orderStatus === 'Paid') {
                       <p-card>
                         <div class="flex order-item">
                           <img class="order-item-img" [src]="order.imageUrl" alt="" />
@@ -54,7 +54,6 @@
                             >{{ order.orderStatus }}</p>
                           </div>
                         </div>
-      
                         <button (click)="goToOrderDetail(order.orderId)" class="order-detail__button">Detail</button>
                       </p-card>
                   }

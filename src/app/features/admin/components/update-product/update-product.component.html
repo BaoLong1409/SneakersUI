@@ -4,9 +4,9 @@
     <p-blockUI [blocked]="loading">
         <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
     </p-blockUI>
-<div class="container-fluid upload-page">
-    <div class="infor-product-wrapper">
-        <h1 class="upload-title">Update Product</h1>
+<div class="container-fluid update-page-container">
+    <div class="info-product-container">
+        <h1 class="update-title">Update Product</h1>
         <div class="row">
             <p-floatlabel>
                 <input formControlName="productName" style="font-size: 1rem;" pInputText id="over_label" autocomplete="off" />
@@ -80,8 +80,8 @@
         </div>
 
         <div class="row flex">
-            <div class="file-upload-container"  style="margin-top: 12px;">
-                <div class="file-input-wrapper">
+            <div class="file-update-container"  style="margin-top: 12px;">
+                <div class="file-input-container">
                   <input
                     #fileInput
                     type="file"
@@ -91,7 +91,7 @@
                     class="file-input"
                   />
                   <button class="file-input-button">
-                    <span class="upload-icon">📁</span>
+                    <span class="update-icon">📁</span>
                     Choose Images
                   </button>
                 </div>
@@ -109,7 +109,7 @@
               }
         </div>
 
-        <div class="button-wrapper flex gap-4" style="float:right">
+        <div class="button-container flex gap-4" style="float:right">
             <p-button (onClick)="confirmDeleteDialog($event)" label="Delete Product" severity="danger"></p-button>
             <p-button (onClick)="updateProduct()" label="Update Product" severity="contrast"></p-button>
         </div>

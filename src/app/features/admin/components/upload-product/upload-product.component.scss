@@ -4,7 +4,7 @@ p-progressspinner {
   top: 45%;
 }
 
-.upload-page {
+.upload-page-container {
   padding-top: 120px;
   background-color: #dfdbdb;
   height: 100vh;
@@ -12,7 +12,7 @@ p-progressspinner {
   display: flex;
   flex-direction: column;
   align-items: center;
-  .infor-product-wrapper {
+  .info-product-container {
     width: 45%;
     .upload-title {
         margin-bottom: 24px;
@@ -56,7 +56,7 @@ p-progressspinner {
     padding: 0;
     margin-bottom: 1.5rem;
 
-    .file-input-wrapper {
+    .file-input-container {
       position: relative;
       display: inline-block;
       width: 100%;
@@ -169,6 +169,16 @@ p-progressspinner {
           transform: scale(1.1);
         }
       }
+    }
+  }
+}
+
+
+@media (max-width: 767px) {
+  .upload-page-container {
+    padding: 6rem 0;
+    .info-product-container {
+      width: 80%;
     }
   }
 }

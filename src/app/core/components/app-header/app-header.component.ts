@@ -44,11 +44,17 @@ import { EnumProductCart } from '../../enum/enumProductCart';
 import { ProductCartResponse } from '../../dtos/productCartRes.dto';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DrawerModule } from 'primeng/drawer';
 import { InputTextModule } from 'primeng/inputtext';
 import { ProductService } from '../../services/product.service';
 import { AllProductDto } from '../../dtos/allProduct.dto';
 import { BaseComponent } from '../../commonComponent/base.component';
 import { AsyncPipe, CommonModule } from '@angular/common';
+import { OrderAddReq } from '../../dtos/Request/orderAddReq';
+import { OrderDetailDto } from '../../dtos/orderDetail.dto';
+import { CreateOrderReq } from '../../dtos/Request/createOrderReq';
+import { CreateOrderRes } from '../../dtos/Response/createOrderRes';
+import { OrderService } from '../../services/order.service';
 
 @Component({
   selector: 'app-app-header',
@@ -66,14 +72,18 @@ import { AsyncPipe, CommonModule } from '@angular/common';
     ConfirmDialogModule,
     InputTextModule,
     AsyncPipe,
-    CommonModule
+    CommonModule,
+    DrawerModule
   ],
   providers: [MessageService, ToastService, ConfirmationService],
   templateUrl: './app-header.component.html',
   styleUrl: './app-header.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class AppHeaderComponent extends BaseComponent implements OnInit, AfterViewInit {
+export class AppHeaderComponent
+  extends BaseComponent
+  implements OnInit, AfterViewInit
+{
   @ViewChild('settingIcon') settingIcon!: ElementRef;
 
   private updateQuantitySubject = new Subject<ManageProductInCartDto>();
@@ -94,6 +104,7 @@ export class AppHeaderComponent extends BaseComponent implements OnInit, AfterVi
   public isCartOpen: boolean = false;
   public userInfor!: UserDto;
   public isSearchOpen: boolean = false;
+  public navbarMobileActive: boolean = false;
 
   private searchSubject = new Subject<string>();
   public searchTerm: string = '';
@@ -107,7 +118,8 @@ export class AppHeaderComponent extends BaseComponent implements OnInit, AfterVi
     private commonService: CommonService,
     private toastService: ToastService,
     private confirmationService: ConfirmationService,
-    private readonly productService: ProductService
+    private readonly productService: ProductService,
+    private readonly orderService: OrderService
   ) {
     super();
     if (typeof localStorage !== 'undefined') {
@@ -201,19 +213,19 @@ export class AppHeaderComponent extends BaseComponent implements OnInit, AfterVi
     // Search Products
     this.searchSubject
       .pipe(
-        tap(() =>  {
+        tap(() => {
           this.resultProductsSubject.next([]);
-          this.searchingSubject.next(true)
+          this.searchingSubject.next(true);
         }),
         debounceTime(500),
         switchMap((term) => {
           return this.productService.searchProducts(term);
         }),
-        takeUntil(this.destroyed$),
+        takeUntil(this.destroyed$)
       )
       .subscribe((result: AllProductDto[]) => {
-        this.resultProductsSubject.next(result.slice(0,4));
-        this.searchingSubject.next(false)
+        this.resultProductsSubject.next(result.slice(0, 4));
+        this.searchingSubject.next(false);
       });
 
     this.commonService.stateImmediate$
@@ -437,11 +449,101 @@ export class AppHeaderComponent extends BaseComponent implements OnInit, AfterVi
 
   public checkRole(): number {
     if (Object.keys(this.userInfor).length > 0) {
-      if (this.userInfor.rolesName.includes("User")) {
+      if (this.userInfor.rolesName.includes('User')) {
         return 1;
       }
       return 2;
     }
     return 1;
+  }
+
+  public goToProductDetail(productId: string, color: string) {
+    this.toggleSearch();
+    this.router.navigate([`/Detail/${productId}/${color}`]);
+  }
+
+  public checkOutItemInCart(product: ProductInCartDto) {
+    const order: OrderAddReq = {
+      fullName: null,
+      phoneNumber: null,
+      shippingAddress: null,
+      orderDate: new Date(),
+      shippingDate: null,
+      totalMoney: product.price * product.quantity,
+      note: null,
+      userId: this.commonService.userInfor.id,
+      shippingId: null,
+      shippingInforId: null,
+      paymentId: null,
+    };
+
+    const orderDetails: OrderDetailDto[] = [
+      {
+        productId: product.productId,
+        priceAtOrder: product.price,
+        quantity: product.quantity,
+        productName: null,
+        imageUrl: null,
+        colorId: product.colorId,
+        colorName: null,
+        sizeId: product.sizeId,
+        sizeNumber: null,
+      },
+    ];
+
+    const createOrderReq: CreateOrderReq = {
+      order: order,
+      orderDetails: orderDetails,
+    };
+
+    this.cartService
+      .deleteProductInCart(
+        {
+          productId: product.productId,
+          cartId: null,
+          sizeId: product.sizeId,
+          colorId: product.colorId,
+          quantity: 0,
+        },
+        this.commonService.userInfor.id
+      )
+      .pipe(
+        tap((res: ProductCartResponse) => {
+          switch (res.status) {
+            case EnumProductCart.Success:
+              this.commonService.immediateSubject.next(true);
+              break;
+            default:
+              this.toastService.fail(`${res.message}`);
+              break;
+          }
+        }),
+        switchMap(() => {
+          return this.orderService.createOrder(createOrderReq).pipe(
+            tap((res: CreateOrderRes) => {
+              this.isCartOpen = false;
+              this.router.navigateByUrl(`Order/${res.orderId}`);
+            })
+          );
+        }),
+        catchError((error: HttpErrorResponse) => {
+          switch (error.error.status) {
+            case EnumProductCart.CartNotFound:
+              this.toastService.fail(error.error.message);
+              break;
+            case EnumProductCart.ProductNotFound:
+              this.toastService.fail(error.error.message);
+              break;
+            case EnumProductCart.NotEnoughInStock:
+              this.toastService.fail(error.error.message);
+              break;
+            default:
+              this.toastService.fail(error.error.message);
+              break;
+          }
+          return EMPTY;
+        })
+      )
+      .subscribe();
   }
 }

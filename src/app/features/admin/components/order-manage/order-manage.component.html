@@ -36,7 +36,7 @@
                   <ng-template #subtitle>
                     {{ order.orderId }}
                   </ng-template>
-                  <div style="justify-content: space-between;" class="flex">
+                  <div class="order-item-container flex">
                     <div class="flex order-item">
                         <img class="order-item-img" [src]="order.imageUrl" alt="" />
                         <div class="flex order-info">
@@ -66,12 +66,12 @@
             <div class="order-container">
               <p-card>
                 @for(order of orders$ | async; track $index) { @if
-                (order.orderStatus === 'Success') {
+                (order.orderStatus === 'Success' || order.orderStatus === 'Paid') {
                 <p-card>
                   <ng-template #subtitle>
                     {{ order.orderId }}
                   </ng-template>
-                  <div style="justify-content: space-between;" class="flex">
+                  <div class="order-item-container flex">
                     <div class="flex order-item">
                         <img class="order-item-img" [src]="order.imageUrl" alt="" />
                         <div class="flex order-info">
@@ -106,7 +106,7 @@
                   <ng-template #subtitle>
                     {{ order.orderId }}
                   </ng-template>
-                  <div style="justify-content: space-between;" class="flex">
+                  <div class="order-item-container flex">
                     <div class="flex order-item">
                         <img class="order-item-img" [src]="order.imageUrl" alt="" />
                         <div class="flex order-info">
@@ -143,7 +143,7 @@
                   <ng-template #subtitle>
                     {{ order.orderId }}
                   </ng-template>
-                  <div style="justify-content: space-between;" class="flex">
+                  <div class="order-item-container flex">
                     <div class="flex order-item">
                         <img class="order-item-img" [src]="order.imageUrl" alt="" />
                         <div class="flex order-info">

@@ -2,18 +2,18 @@
   <p-toast></p-toast>
   <div class="row first-row">
     <div
-      class="col col-6 col-lg-6 col-md-6 offset-2 offset-lg-2 offset-md-2 galleria-col"
+      class="col col-12 col-lg-6 col-md-6 offset-0 offset-lg-2 offset-md-2 galleria-col"
     >
       <p-galleria
         [value]="detailProduct.productImages"
-        thumbnailsPosition="left"
+        [thumbnailsPosition]="thumbnailPosition"
         [containerStyle]="{ 'max-width': '100%' }"
         [numVisible]="detailProduct.productImages.length"
       >
         <ng-template pTemplate="item" let-item>
           <img
+            class="main-image"
             [src]="item.imageUrl"
-            style="border-radius: 6px; width: 80%; display: block"
           />
         </ng-template>
 
@@ -29,7 +29,7 @@
       </p-galleria>
     </div>
 
-    <div class="col-3-5 col-lg-3-5 col-md-3-5">
+    <div class="col-12 col-lg-3-5 col-md-3-5">
       <div class="product-infor">
         <h2 class="product-name">{{ detailProduct.productName }}</h2>
         <p class="product-price">{{ detailProduct.price }}$</p>
@@ -52,7 +52,7 @@
         </p-scrollpanel>
         } -->
         <div class="quantity-picker-wrapper">
-          <p class="quantity-panel">Số lượng: </p>
+          <p class="quantity-panel">Quantity: </p>
           <p-inputnumber [(ngModel)]="productQuantityAddToCart" [min]="1" [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" [inputStyle]="{ width: '4rem', height: '2rem' }">
             <ng-template #incrementbuttonicon>
                 <span class="pi pi-plus"></span>

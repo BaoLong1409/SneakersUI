@@ -3,7 +3,7 @@ p-progressspinner {
   left: 45%;
   top: 45%;
 }
-.upload-page {
+.update-page-container {
   padding-top: 120px;
   background-color: #dfdbdb;
   height: 100vh;
@@ -11,9 +11,9 @@ p-progressspinner {
   display: flex;
   flex-direction: column;
   align-items: center;
-  .infor-product-wrapper {
+  .info-product-container {
     width: 45%;
-    .upload-title {
+    .update-title {
       margin-bottom: 24px;
     }
     .row {
@@ -51,11 +51,11 @@ p-progressspinner {
     }
   }
 
-  .file-upload-container {
+  .file-update-container {
     padding: 0;
     margin-bottom: 1.5rem;
 
-    .file-input-wrapper {
+    .file-input-container {
       position: relative;
       display: inline-block;
       width: 100%;
@@ -92,7 +92,7 @@ p-progressspinner {
           box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
         }
 
-        .upload-icon {
+        .update-icon {
           font-size: 1.25rem;
         }
       }
@@ -168,6 +168,15 @@ p-progressspinner {
           transform: scale(1.1);
         }
       }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .update-page-container {
+    padding: 6rem 0;
+    .info-product-container {
+      width: 80%;
     }
   }
 }

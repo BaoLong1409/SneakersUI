@@ -1,4 +1,4 @@
-.order-wrapper {
+.order-container {
   padding-top: 6rem;
   min-height: 100vh;
   .row-header {
@@ -7,7 +7,7 @@
 
   .order-main-section {
     .user-info {
-      .user-info-wrapper {
+      .user-info-container {
         display: flex;
         flex-direction: column;
         gap: 2rem;
@@ -33,37 +33,44 @@
       }
     }
     .shipNPaySelection {
-      .shipping-wrapper {
+      .shipping-container {
         display: flex;
         flex-direction: column;
         gap: 2rem;
       }
 
-      .payment-wrapper {
+      .payment-container {
         display: flex;
         gap: 2rem;
-
+        .card-container {
+          width: fit-content;
+          min-width: 12rem;
+          max-width: 13rem;
+          height: 9rem;
+          .p-card {
+            height: 100%;
+          }
+        }
       }
 
       .card-container {
         cursor: pointer;
         transition: all 0.3s ease;
-        
+
         &.selected {
           border: 2px solid #007ad9;
           border-radius: 4px;
           box-shadow: 0 0 8px rgba(0, 122, 217, 0.4);
         }
-        
+
         &:hover {
           transform: translateY(-2px);
         }
       }
 
-
       .info {
         padding: 10px;
-        
+
         p {
           margin: 5px 0;
           font-size: 14px;
@@ -76,39 +83,38 @@
           width: 4rem;
         }
       }
-      
     }
 
-    .button-wrapper {
+    .button-container {
       margin-top: 2rem;
       display: flex;
       gap: 1rem;
     }
   }
 
-  .products-wrapper {
+  .products-container {
     .card-container {
       margin-bottom: 1.5rem;
-      
+
       ::ng-deep .p-card {
         .p-card-title {
           margin-bottom: 1rem;
         }
-        
+
         .p-card-content {
           padding: 0;
         }
       }
     }
-    
+
     .product-item {
       display: flex;
       padding: 1rem;
       gap: 1rem;
-      
+
       .product-image {
         flex: 0 0 80px;
-        
+
         .thumbnail {
           width: 80px;
           height: 80px;
@@ -117,40 +123,41 @@
           border: 1px solid var(--surface-200);
         }
       }
-      
+
       .product-details {
         flex: 1;
         display: flex;
         flex-direction: column;
-        
+
         .product-name {
           margin: 0 0 0.5rem 0;
           font-weight: 600;
           color: var(--text-color);
         }
-        
+
         .product-specs {
           display: flex;
           gap: 1rem;
           margin-bottom: 0.5rem;
           font-size: 0.875rem;
           color: var(--text-color-secondary);
-          
-          .color, .size {
+
+          .color,
+          .size {
             display: inline-block;
           }
         }
-        
+
         .product-price-info {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-top: auto;
-          
+
           .quantity {
             font-weight: 500;
           }
-          
+
           .price {
             font-weight: 600;
             font-size: 1.1rem;
@@ -163,6 +170,27 @@
       font-weight: 600;
     }
   }
-  
-  
+}
+
+@media (max-width: 767px) {
+  .order-container {
+    padding: 6rem 1rem;
+    .order-main-section {
+      flex-direction: column-reverse;
+      .user-info {
+        .user-info-container {
+          .address-field {
+            .p-floatlabel {
+              max-width: 70%;
+            }
+          }
+        }
+      }
+      .shipNPaySelection {
+        .payment-container {
+          flex-direction: column;
+        }
+      }
+    }
+  }
 }
