@@ -741,7 +741,7 @@
   }
 }
 
-@media (min-width: 767px) and (max-width: 1024px) {
+@media (min-width: 767px) and (max-width: 1023px) {
   #navbarNavAltMarkup {
     display: none;
   }
@@ -759,9 +759,9 @@
     margin-top: 1rem;
   }
 
-  .menu-icon {
-    margin-left: -1rem;
-  }
+  // .menu-icon {
+  //   margin-left: -1rem;
+  // }
 
   .setting-loggedin {
     margin-left: 0;

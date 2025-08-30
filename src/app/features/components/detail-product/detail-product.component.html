@@ -1,5 +1,5 @@
-<div class="container-fluid detail-product-wrapper">
-  <p-toast></p-toast>
+<div class="detail-product-container">
+  <p-toast [breakpoints]="{ '420px': { width: '100%', right: '0', left: '0' } }"></p-toast>
   <div class="row first-row">
     <div
       class="col col-12 col-lg-6 col-md-6 offset-0 offset-lg-2 offset-md-2 galleria-col"
@@ -29,7 +29,7 @@
       </p-galleria>
     </div>
 
-    <div class="col-12 col-lg-3-5 col-md-3-5">
+    <div class="col-12 col-lg-3-5 col-md-10 info-col">
       <div class="product-infor">
         <h2 class="product-name">{{ detailProduct.productName }}</h2>
         <p class="product-price">{{ detailProduct.price }}$</p>
@@ -51,7 +51,7 @@
           <p>{{ detailProduct.description }}</p>
         </p-scrollpanel>
         } -->
-        <div class="quantity-picker-wrapper">
+        <div class="quantity-picker-container">
           <p class="quantity-panel">Quantity: </p>
           <p-inputnumber [(ngModel)]="productQuantityAddToCart" [min]="1" [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" [inputStyle]="{ width: '4rem', height: '2rem' }">
             <ng-template #incrementbuttonicon>
@@ -81,7 +81,7 @@
         </div>
       </div>
 
-      <div class="buy-wrapper">
+      <div class="buy-container">
         <div class="add-to-cart">
           <!-- From Uiverse.io by vinodjangid07 -->
           <button (click)="addProductToCart()" class="cartBtn">

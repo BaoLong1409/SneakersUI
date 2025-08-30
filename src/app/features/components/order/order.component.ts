@@ -25,7 +25,7 @@ import { PaymentService } from '../../../core/services/payment.service';
 import { PaymentDto } from '../../../core/dtos/payment.dto';
 import { OrderService } from '../../../core/services/order.service';
 import { OrderDetailDto } from '../../../core/dtos/orderDetail.dto';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonRes } from '../../../core/dtos/Response/commonRes';
 import { MessageService } from 'primeng/api';
 import { ToastService } from '../../../core/services/toast.service';
@@ -93,7 +93,8 @@ export class OrderComponent extends BaseComponent implements OnInit, AfterViewIn
     private readonly toastService: ToastService,
     private readonly commonService: CommonService,
     private readonly fb: FormBuilder,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly router: Router
   ) {
     super();
     this.orderForm = this.fb.group({
@@ -208,6 +209,7 @@ export class OrderComponent extends BaseComponent implements OnInit, AfterViewIn
       this.orderSerivce.updateOrder(updateOrderReq).pipe(
         tap((res: CommonRes) => {
           this.toastService.success(res.message);
+          this.router.navigateByUrl("Home");
         }),
         takeUntil(this.destroyed$)
       ).subscribe();

@@ -1,8 +1,8 @@
 <div class="container-fluid app-header">
-  <p-toast></p-toast>
+  <p-toast [breakpoints]="{'420px' : {width: '100%', right: '0', left: '0' }}"></p-toast>
   <p-confirmdialog />
   <div class="row">
-    <div class="col-lg-10 col-md-10 col-8 offset-md-0 offset-1 navbar-wrapper">
+    <div class="col-lg-10 col-md-10 col-8 offset-md-0 offset-lg-1 offset-1 navbar-wrapper">
       <div
         class="collapse navbar-collapse justify-content-center"
         id="navbarNavAltMarkup"
@@ -84,7 +84,7 @@
       [ngClass]="{
         'offset-lg-2 offset-md-0 offset-xl-4 offset-4': checkRole() == 1
       }"
-      class="col-lg-2 col-md-2 col-sm-3 col-1 offset-md-0 offset-lg-2 offset-xl-2 flex information-wrapper"
+      class="col-lg-0 col-md-2 col-sm-3 col-1 offset-md-0 offset-lg-1 offset-xl-3 flex information-wrapper"
     >
       <div class="search-container">
         <i class="pi pi-search search-icon" (click)="toggleSearch()"></i>
@@ -250,7 +250,7 @@
               <span>${{ calculateTotal().toFixed(2) }}</span>
             </div>
             <div class="cart-actions">
-              <button class="checkout-btn">Checkout</button>
+              <button (click)="checkOutAllProducts($event)" class="checkout-btn">Checkout</button>
               <button (click)="toggleCart()" class="continue-btn">
                 Continue Shopping
               </button>

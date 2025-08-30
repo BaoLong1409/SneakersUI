@@ -73,7 +73,7 @@ import { OrderService } from '../../services/order.service';
     InputTextModule,
     AsyncPipe,
     CommonModule,
-    DrawerModule
+    DrawerModule,
   ],
   providers: [MessageService, ToastService, ConfirmationService],
   templateUrl: './app-header.component.html',
@@ -545,5 +545,104 @@ export class AppHeaderComponent
         })
       )
       .subscribe();
+  }
+
+  public checkOutAllProducts(event: Event) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Do you want to checkout all of products in your cart?',
+      header: 'Checkout Confirmation',
+      icon: 'pi pi-info-circle',
+      rejectLabel: 'Cancel',
+      rejectButtonProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Confirm',
+      },
+      accept: () => {
+        const order: OrderAddReq = {
+          fullName: null,
+          phoneNumber: null,
+          shippingAddress: null,
+          orderDate: new Date(),
+          shippingDate: null,
+          totalMoney: this.productsInCart.reduce(
+            (acc, curr) => curr.price * curr.quantity + acc,
+            0
+          ),
+          note: null,
+          userId: this.commonService.userInfor.id,
+          shippingId: null,
+          shippingInforId: null,
+          paymentId: null,
+        };
+
+        const orderDetails: OrderDetailDto[] = this.productsInCart.map(
+          (product) => ({
+            productId: product.productId,
+            priceAtOrder: product.price,
+            quantity: product.quantity,
+            productName: null,
+            imageUrl: null,
+            colorId: product.colorId,
+            colorName: null,
+            sizeId: product.sizeId,
+            sizeNumber: null,
+          })
+        );
+
+        const createOrderReq: CreateOrderReq = {
+          order: order,
+          orderDetails: orderDetails,
+        };
+
+        this.cartService
+          .deleteAllProductsInCart(this.commonService.userInfor.id)
+          .pipe(
+            tap((res: ProductCartResponse) => {
+              switch (res.status) {
+                case EnumProductCart.Success:
+                  this.commonService.immediateSubject.next(true);
+                  break;
+                default:
+                  this.toastService.fail(`${res.message}`);
+                  break;
+              }
+            }),
+            switchMap(() => {
+              return this.orderService.createOrder(createOrderReq).pipe(
+                tap((res: CreateOrderRes) => {
+                  this.isCartOpen = false;
+                  this.router.navigateByUrl(`Order/${res.orderId}`);
+                })
+              );
+            }),
+            catchError((error: HttpErrorResponse) => {
+              switch (error.error.status) {
+                case EnumProductCart.CartNotFound:
+                  this.toastService.fail(error.error.message);
+                  break;
+                case EnumProductCart.ProductNotFound:
+                  this.toastService.fail(error.error.message);
+                  break;
+                case EnumProductCart.NotEnoughInStock:
+                  this.toastService.fail(error.error.message);
+                  break;
+                default:
+                  this.toastService.fail(error.error.message);
+                  break;
+              }
+              return EMPTY;
+            })
+          )
+          .subscribe();
+      },
+      reject: () => {
+        this.toastService.info('You canceled checkout all of products!');
+      },
+    });
   }
 }
