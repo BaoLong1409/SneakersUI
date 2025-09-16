@@ -131,8 +131,6 @@ export class DetailProductComponent extends BaseComponent implements OnInit {
       this.reviewService.getCommentsOfProduct({productId: this.productId, colorName: this.productColor}).pipe(
         tap((comments: ProductReviewDto[]) => {
           this.commentsSubject.next(comments);
-          console.log(comments);
-          
         }),
         catchError((err: HttpErrorResponse) => {
           this.toastService.fail(err.error.message);

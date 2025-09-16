@@ -117,7 +117,6 @@ export class AllProductsComponent
   }
 
   public goToDetailProduct(productId: string, colorName: string) {
-    console.log(Object.keys(this.commonService.userInfor).length);
     if (Object.keys(this.commonService.userInfor).length > 0) {
       if (this.commonService.userInfor.rolesName.includes("Admin")) {
         this.router.navigateByUrl(`Admin/Update/${productId}/${colorName}`);

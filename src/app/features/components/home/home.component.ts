@@ -56,7 +56,6 @@ export class HomeComponent extends BaseComponent implements OnInit, AfterViewIni
       this.productService.getRecommendProducts(this.userInfor.id).pipe(
         tap((recommendProducts: AllProductDto[]) => {
           this.recommendationProducts = recommendProducts;
-          console.log(this.recommendationProducts);
         })
       )
       .subscribe();

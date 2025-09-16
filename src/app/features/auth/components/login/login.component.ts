@@ -71,8 +71,6 @@ export class LoginComponent extends BaseComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     (window as any).handleCredentialResponse = (response: any) => {
       this.ngZone.run(() => {
-        console.log("Google Token:", response.credential);
-
         this.userService.googleLogin(response.credential).pipe(
           tap((loginVal: loginDetailDto) => {
             this.toastService.success(loginVal.message);

@@ -18,8 +18,10 @@ import {
   catchError,
   debounce,
   debounceTime,
+  delay,
   EMPTY,
   finalize,
+  map,
   of,
   Subject,
   switchMap,
@@ -55,6 +57,7 @@ import { OrderDetailDto } from '../../dtos/orderDetail.dto';
 import { CreateOrderReq } from '../../dtos/Request/createOrderReq';
 import { CreateOrderRes } from '../../dtos/Response/createOrderRes';
 import { OrderService } from '../../services/order.service';
+import { EnumOrder } from '../../enum/enumOrder';
 
 @Component({
   selector: 'app-app-header',
@@ -293,7 +296,6 @@ export class AppHeaderComponent
   }
 
   public changeLanguage(languageCode: string): void {
-    console.log(languageCode);
     this.translate.use(languageCode);
     localStorage.setItem('language', languageCode);
     this.initMenu();
@@ -434,7 +436,7 @@ export class AppHeaderComponent
     if (this.isSearchOpen) {
       document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = 'auto';
     }
   }
 
@@ -496,35 +498,39 @@ export class AppHeaderComponent
       orderDetails: orderDetails,
     };
 
-    this.cartService
-      .deleteProductInCart(
-        {
-          productId: product.productId,
-          cartId: null,
-          sizeId: product.sizeId,
-          colorId: product.colorId,
-          quantity: 0,
-        },
-        this.commonService.userInfor.id
-      )
+    this.orderService
+      .createOrder(createOrderReq)
       .pipe(
-        tap((res: ProductCartResponse) => {
-          switch (res.status) {
-            case EnumProductCart.Success:
-              this.commonService.immediateSubject.next(true);
-              break;
-            default:
-              this.toastService.fail(`${res.message}`);
-              break;
-          }
+        switchMap((createOrderRes: CreateOrderRes) => {
+          return this.cartService
+            .deleteProductInCart(
+              {
+                productId: product.productId,
+                cartId: null,
+                sizeId: product.sizeId,
+                colorId: product.colorId,
+                quantity: 0,
+              },
+              this.commonService.userInfor.id
+            )
+            .pipe(
+              tap((res: ProductCartResponse) => {
+                switch (res.status) {
+                  case EnumProductCart.Success:
+                    this.commonService.immediateSubject.next(true);
+                    break;
+                  default:
+                    this.toastService.fail(`${res.message}`);
+                    break;
+                }
+              }),
+              map(() => createOrderRes)
+            );
         }),
-        switchMap(() => {
-          return this.orderService.createOrder(createOrderReq).pipe(
-            tap((res: CreateOrderRes) => {
-              this.isCartOpen = false;
-              this.router.navigateByUrl(`Order/${res.orderId}`);
-            })
-          );
+        delay(2000),
+        tap((createOrderRes) => {
+          this.isCartOpen = false;
+          this.router.navigateByUrl(`Order/${createOrderRes.orderId}`);
         }),
         catchError((error: HttpErrorResponse) => {
           switch (error.error.status) {
@@ -535,6 +541,9 @@ export class AppHeaderComponent
               this.toastService.fail(error.error.message);
               break;
             case EnumProductCart.NotEnoughInStock:
+              this.toastService.fail(error.error.message);
+              break;
+            case EnumOrder.CreateOrderFail:
               this.toastService.fail(error.error.message);
               break;
             default:
@@ -599,26 +608,29 @@ export class AppHeaderComponent
           orderDetails: orderDetails,
         };
 
-        this.cartService
-          .deleteAllProductsInCart(this.commonService.userInfor.id)
+        this.orderService
+          .createOrder(createOrderReq)
           .pipe(
-            tap((res: ProductCartResponse) => {
-              switch (res.status) {
-                case EnumProductCart.Success:
-                  this.commonService.immediateSubject.next(true);
-                  break;
-                default:
-                  this.toastService.fail(`${res.message}`);
-                  break;
-              }
+            switchMap((createOrderRes: CreateOrderRes) => {
+              return this.cartService
+                .deleteAllProductsInCart(this.commonService.userInfor.id)
+                .pipe(
+                  tap((res: ProductCartResponse) => {
+                    switch (res.status) {
+                      case EnumProductCart.Success:
+                        this.commonService.immediateSubject.next(true);
+                        break;
+                      default:
+                        this.toastService.fail(`${res.message}`);
+                        break;
+                    }
+                  }),
+                  map(() => createOrderRes)
+                );
             }),
-            switchMap(() => {
-              return this.orderService.createOrder(createOrderReq).pipe(
-                tap((res: CreateOrderRes) => {
-                  this.isCartOpen = false;
-                  this.router.navigateByUrl(`Order/${res.orderId}`);
-                })
-              );
+            tap((createOrderRes: CreateOrderRes) => {
+              this.isCartOpen = false;
+              this.router.navigateByUrl(`Order/${createOrderRes.orderId}`);
             }),
             catchError((error: HttpErrorResponse) => {
               switch (error.error.status) {
