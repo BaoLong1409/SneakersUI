@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment.prod';
 import { ProductsAreWaitingReviewDto } from '../dtos/productsAreWaitingReview.dto';
 import { ProductReviewRequest } from '../dtos/Request/productReviewReq';
 import { ResponseMessageDto } from '../dtos/responseMessage.dto';

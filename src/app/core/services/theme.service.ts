@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { UserDto } from '../dtos/user.dto';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment.prod';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 

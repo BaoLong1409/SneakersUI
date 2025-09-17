@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment.prod';
 import { registerReq } from '../requestTypes/registerReq';
 import { loginReq } from '../requestTypes/loginReq';
 import { loginDetailDto } from '../dtos/loginDetail.dto';

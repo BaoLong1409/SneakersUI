@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
 import { ManageProductInCartDto } from '../dtos/manageProductInCart.dto';
 import { ProductCartResponse } from '../dtos/productCartRes.dto';

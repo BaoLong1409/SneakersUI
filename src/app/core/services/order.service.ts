@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment.prod';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { OrderDetailDto } from '../dtos/orderDetail.dto';
 import { UpdateOrderReq } from '../dtos/Request/updateOrderReq';

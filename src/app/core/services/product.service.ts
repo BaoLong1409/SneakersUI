@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FeatureProductDto } from '../dtos/featureProduct.dto';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment.prod';
 import { AllProductDto } from '../dtos/allProduct.dto';
 import { DetailProductDto } from '../dtos/detailProduct.dto';
 import { ProductImageDto } from '../dtos/productImage.dto';

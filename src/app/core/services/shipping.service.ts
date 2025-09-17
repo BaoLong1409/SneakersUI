@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment.prod';
 import { ShippingMethodDto } from '../dtos/shippingMethod.dto';
 import { ShippingInfoDto } from '../dtos/shippingInfo.dto';
 import { ShippingInfoRes } from '../dtos/Response/shippingInfoRes';
